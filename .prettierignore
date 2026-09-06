@@ -1,0 +1,15 @@
+node_modules/
+.next/
+out/
+dist/
+build/
+coverage/
+package-lock.json
+next-env.d.ts
+*.tsbuildinfo
+.env*
+!.env.example
+# Preserve agent contracts and reference material verbatim.
+AGENTS.md
+CLAUDE.md
+**/*.html
