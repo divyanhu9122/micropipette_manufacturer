@@ -1,3 +1,6 @@
+/* MicropipetteManufacturer.com — Design Tokens v1.0
+   Extracted from the approved visual master.
+*/
 :root {
   --midnight-navy: #051f44;
   --deep-navy-blue: #082f68;
@@ -10,10 +13,31 @@
   --dark-blue-gray: #18334f;
   --slate-blue-gray: #62758d;
   --mist-blue: #bcd3ee;
-  --container-max: 1240px;
-  --page-padding: 18px;
-  --radius-button: 16px;
-  --radius-section: 24px;
+
   --shadow-soft: 8px 10px 18px rgba(24, 51, 79, 0.11);
   --shadow-card: 10px 12px 20px rgba(24, 51, 79, 0.13);
+  --shadow-panel: 0 12px 28px rgba(18, 58, 112, 0.1);
+  --shadow-dark-panel: 0 14px 30px rgba(6, 29, 64, 0.2);
+  --shadow-partner: 0 16px 34px rgba(5, 31, 68, 0.22);
+  --shadow-card-hover: 0 12px 24px rgba(0, 0, 0, 0.4);
+
+  --radius-nav-shell: 22px;
+  --radius-button: 16px;
+  --radius-panel: 24px;
+  --radius-card: 18px;
+  --radius-premium-card: 22px;
+  --radius-partner: 28px;
+  --radius-pill: 999px;
+
+  --container-max: 1240px;
+  --container-pad: 18px;
+
+  --transition-button: 300ms ease;
+  --transition-nav: 0.3s ease;
+  --transition-card: 150ms cubic-bezier(0, 0, 0.2, 1);
+  --transition-hero: 0.7s ease;
+  --transition-dot: 0.25s ease;
+
+  --topbar-height: 40px;
+  --navbar-height: 86px;
 }

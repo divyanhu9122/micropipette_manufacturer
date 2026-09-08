@@ -24,3 +24,6 @@ next-env.d.ts
 *.tmp
 *.swp
 .vercel/
+micropipette manufacturer/
+micropipette_codex_context_pack/
+
