@@ -30,15 +30,15 @@ export default function Home() {
 
       <HeroSlider onOpenQuote={() => handleOpenQuote()} />
 
-      <CategoriesSection onSelectCategory={(cat) => handleOpenQuote(cat)} />
+      <CategoriesSection />
 
       <BrandShowcase onSelectBrand={(brand) => handleOpenQuote(`${brand} Range`)} />
 
-      <OemSection onOpenQuote={() => handleOpenQuote("OEM / Private Label Manufacturing")} />
+      <OemSection />
 
       <ApplicationsSection />
 
-      <FeaturedProductsCarousel onOpenQuote={(product) => handleOpenQuote(product)} />
+      <FeaturedProductsCarousel />
 
       <QualityBar />
 

@@ -1,0 +1,12 @@
+.icon {
+  width: 52px;
+  height: 52px;
+  border: 3px solid #0d418a;
+  border-radius: 12px;
+  margin: 0 auto 10px;
+  display: grid;
+  place-items: center;
+  color: #0d418a;
+  font-weight: 900;
+  font-size: 19px;
+}

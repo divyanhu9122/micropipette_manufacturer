@@ -1,0 +1,137 @@
+.proof {
+  margin-top: 18px;
+}
+.section {
+  background: linear-gradient(180deg, #dcecff, #dcedff);
+  border: 1px solid #bcd3ee;
+  border-radius: 24px;
+  padding: 22px 18px;
+  box-shadow: 0 12px 28px rgba(18, 58, 112, 0.1);
+  overflow: hidden;
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 600ms ease,
+    transform 600ms cubic-bezier(0, 0, 0.2, 1);
+}
+.section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.section .title::after {
+  transform: translateX(-50%) scaleX(0);
+  transform-origin: center;
+  transition: transform 650ms cubic-bezier(0, 0, 0.2, 1);
+}
+.section.visible .title::after {
+  transform: translateX(-50%) scaleX(1);
+}
+.subtitle {
+  max-width: 760px;
+  margin: -4px auto 16px;
+  text-align: center;
+  color: #62758d;
+  font-size: 14px;
+}
+.shell {
+  position: relative;
+  overflow: visible;
+  padding: 10px 0 6px;
+}
+.mask {
+  position: relative;
+  overflow: hidden;
+  padding: 10px 0 18px;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+}
+.track {
+  display: flex;
+  align-items: center;
+  width: max-content;
+  gap: 18px;
+  animation: partnerMarquee 26s linear infinite;
+  will-change: transform;
+}
+.mask:hover .track {
+  animation-play-state: paused;
+}
+.item {
+  flex: 0 0 auto;
+  width: 210px;
+  height: 92px;
+  border-radius: 18px;
+  border: 1px solid rgba(188, 211, 238, 0.52);
+  background: rgba(251, 253, 255, 0.92);
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(24, 51, 79, 0.08);
+}
+.logo {
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-manrope), var(--font-inter), Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  color: #082f68;
+  filter: grayscale(100%) opacity(0.6);
+  transition:
+    filter 220ms ease,
+    transform 220ms ease;
+}
+.item:hover .logo {
+  filter: grayscale(0%) opacity(1);
+  transform: scale(1.02);
+}
+@keyframes partnerMarquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-50% - 9px));
+  }
+}
+@media (max-width: 640px) {
+  .item {
+    width: 170px;
+    height: 78px;
+    border-radius: 16px;
+  }
+  .logo {
+    font-size: 15px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .section {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .section .title::after {
+    transform: translateX(-50%) scaleX(1);
+    transition: none;
+  }
+  .track {
+    animation: none;
+  }
+  .logo {
+    transition: none;
+  }
+}

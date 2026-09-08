@@ -1,0 +1,178 @@
+/* OEM-only translation of the confirmed homepage prototype. */
+.section {
+  padding: 30px 0;
+  background: transparent;
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.container {
+  background: linear-gradient(180deg, #dcecff, #dcedff);
+  border: 1px solid #bcd3ee;
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 12px 28px rgba(18, 58, 112, 0.1);
+}
+.title,
+.panelTitle {
+  position: relative;
+  font-family:
+    var(--font-manrope), var(--font-inter), Arial, Helvetica, sans-serif;
+  font-size: clamp(26px, 3vw, 34px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  margin: 0 0 16px;
+}
+.title {
+  text-align: center;
+  color: #051f44;
+  padding-bottom: 16px;
+}
+.title::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 44px;
+  height: 4px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #ff3b00 0%, #ff6b00 100%);
+  box-shadow: 0 2px 8px rgba(255, 59, 0, 0.35);
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.panel {
+  background: linear-gradient(180deg, #082f68, #0a3265);
+  color: #fff;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 10px 12px 20px rgba(24, 51, 79, 0.2);
+}
+.panelTitle {
+  text-align: left;
+  color: #fff;
+  padding-bottom: 14px;
+}
+.panel p {
+  color: #d8e4f5;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 12px;
+}
+.list {
+  margin: 0 0 18px 18px;
+  padding: 0;
+}
+.list li {
+  margin: 8px 0;
+}
+.section .cta {
+  font-weight: 700;
+}
+.showcase {
+  background: #fbfdff;
+  border: 1px solid #d5e2f1;
+  border-radius: 20px;
+  padding: 18px;
+  min-height: 230px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 10px 12px 20px rgba(24, 51, 79, 0.14);
+}
+.illustration {
+  width: 100%;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: center;
+}
+.package {
+  width: 220px;
+  height: 86px;
+  border: 1px solid #dbe4f2;
+  border-radius: 8px;
+  background: #fff;
+  position: relative;
+  padding: 12px 14px;
+  font-weight: 900;
+  color: #111;
+}
+.package::before {
+  content: "YOUR\A BRAND";
+  white-space: pre;
+  position: absolute;
+  left: 14px;
+  top: 10px;
+  line-height: 1;
+  font-size: 20px;
+}
+.package::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 26px;
+  width: 92px;
+  height: 14px;
+  background: #e8eef6;
+  border-radius: 4px;
+}
+.pipette {
+  width: 44px;
+  height: 138px;
+  transform: rotate(28deg);
+}
+.top {
+  height: 14px;
+  background: #9db4d5;
+  border-radius: 6px;
+}
+.body {
+  height: 72px;
+  margin: 0 auto;
+  width: 30px;
+  background: #fff;
+  border: 1px solid #d5dfea;
+  border-radius: 8px;
+  position: relative;
+}
+.body::before {
+  content: "LABXE";
+  position: absolute;
+  left: 50%;
+  top: 20px;
+  transform: translateX(-50%) rotate(90deg);
+  font-size: 8px;
+  color: #0d57bf;
+  font-weight: 900;
+}
+.shaft {
+  height: 34px;
+  width: 8px;
+  background: #4d7fbe;
+  margin: 0 auto;
+}
+.nozzle {
+  height: 18px;
+  width: 4px;
+  background: #fff;
+  border: 1px solid #d8e3f2;
+  border-top: none;
+  margin: 0 auto;
+}
+@media (max-width: 860px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 640px) {
+  .title,
+  .panelTitle {
+    font-size: 26px;
+  }
+}

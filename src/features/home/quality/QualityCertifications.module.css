@@ -1,0 +1,77 @@
+.bar {
+  margin-top: 18px;
+  background: linear-gradient(180deg, #082f68, #051f44);
+  border-radius: 24px;
+  color: #fff;
+  padding: 20px 16px;
+  display: grid;
+  grid-template-columns: 1.35fr repeat(5, 1fr);
+  gap: 12px;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 14px 30px rgba(6, 29, 64, 0.2);
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+}
+.copy h3 {
+  font-family:
+    var(--font-manrope), var(--font-inter), Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 6px;
+}
+.copy p {
+  margin: 0;
+  color: #d2dff2;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.copy .note {
+  margin: 8px 0 0;
+  color: #ffcdbd;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.cert {
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  border-radius: 18px;
+  padding: 12px 8px;
+  text-align: center;
+  min-height: 82px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 10px 12px 20px rgba(2, 18, 40, 0.2);
+}
+.cert strong {
+  display: block;
+  font-family: var(--font-manrope), var(--font-inter), Arial, Helvetica, sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+}
+.cert span {
+  display: block;
+  font-size: 12px;
+  color: #d2dff1;
+  margin-top: 3px;
+}
+@media (max-width: 1100px) {
+  .bar {
+    grid-template-columns: 1.3fr repeat(3, 1fr);
+  }
+  /* The copy is the first child: show ISO, ISO, CE; hide the final two. */
+  .bar .cert:nth-child(n + 5) {
+    display: none;
+  }
+}
+@media (max-width: 640px) {
+  .bar {
+    grid-template-columns: 1fr;
+  }
+  .bar .cert:nth-child(n + 2) {
+    display: flex;
+  }
+}

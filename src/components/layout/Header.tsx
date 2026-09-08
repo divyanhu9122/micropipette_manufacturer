@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface HeaderProps {
   onOpenQuote?: () => void;
@@ -9,26 +10,84 @@ interface HeaderProps {
 
 export default function Header({ onOpenQuote }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [headerHidden, setHeaderHidden] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const tolerance = 8;
+    const getScrollY = () => Math.max(0, Math.min(
+      window.scrollY,
+      document.documentElement.scrollHeight - window.innerHeight,
+    ));
+    let previousY = getScrollY();
+    let travel = 0;
+    let frame: number | null = null;
+
+    const updateHeader = () => {
+      frame = null;
+      const currentY = getScrollY();
+      const delta = currentY - previousY;
+      previousY = currentY;
+
+      // Keep the initial header visible; clamp overscroll at both page edges.
+      if (currentY <= (headerRef.current?.offsetHeight ?? 0) || mobileMenuOpen) {
+        travel = 0;
+        setHeaderHidden(false);
+        return;
+      }
+      if (delta === 0) return;
+      travel = Math.sign(delta) === Math.sign(travel) ? travel + delta : delta;
+      if (Math.abs(travel) >= tolerance) {
+        setHeaderHidden(travel > 0);
+        travel = 0;
+      }
+    };
+
+    const onScroll = () => {
+      if (frame === null) frame = window.requestAnimationFrame(updateHeader);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame !== null) window.cancelAnimationFrame(frame);
+    };
+  }, [mobileMenuOpen]);
 
   return (
     <>
       <div className="topbar">
         <div className="wrap">
-          <span>Direct OEM & Factory Sales Support</span>
-          <a href="mailto:sales@micropipettemanufacturer.com">sales@micropipettemanufacturer.com</a>
-          <a href="tel:+18005550199">+1 (800) 555-0199</a>
-          <span style={{ color: "#79a4d8" }}>ISO 9001:2015 & ISO 13485:2016 Certified</span>
+          <span className="topbar-platform">B2B Scientific & Laboratory Equipment Platform</span>
+          <div className="topbar-actions">
+            <a href="mailto:sales@micropipettemanufacturer.com">
+              <span aria-hidden="true">✉</span> sales@micropipettemanufacturer.com
+            </a>
+            <a href="tel:+18005550199">
+              <span aria-hidden="true">☎</span> +1 (800) 555-0199
+            </a>
+            <button className="topbar-quote" type="button" onClick={onOpenQuote}>
+              Request a Quote
+            </button>
+          </div>
         </div>
       </div>
 
-      <header className="header">
+      <header
+        ref={headerRef}
+        className={`header${headerHidden && !mobileMenuOpen ? " header--hidden" : ""}`}
+      >
         <div className="wrap">
           <Link href="/" className="logo">
-            <div className="logo-mark" aria-hidden="true" />
-            <div className="logo-text">
-              MicropipetteManufacturer<span style={{ color: "#dcecff" }}>.com</span>
-              <small>Precision. Performance. Partnership.</small>
-            </div>
+            <Image
+              className="logo-image"
+              src="/images/brand/micropipette-manufacturer-logo.png"
+              alt="Micropipette Manufacturer logo"
+              width={255}
+              height={61}
+              priority
+            />
           </Link>
 
           <div className="nav-shell">
@@ -56,13 +115,15 @@ export default function Header({ onOpenQuote }: HeaderProps) {
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation menu"
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
           >
             {mobileMenuOpen ? "✕ Close" : "☰ Menu"}
           </button>
         </div>
 
         {mobileMenuOpen && (
-          <div className="mobile-menu-drawer">
+          <div className="mobile-menu-drawer" id="mobile-navigation">
             <Link href="/" onClick={() => setMobileMenuOpen(false)}>
               Home
             </Link>
