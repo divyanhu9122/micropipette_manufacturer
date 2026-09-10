@@ -77,7 +77,7 @@ export default function HeroSlider({ onOpenQuote }: HeroSliderProps) {
     if (isPaused) return;
     const timer = setInterval(() => {
       nextSlide();
-    }, 6000);
+    }, 2800);
     return () => clearInterval(timer);
   }, [isPaused, nextSlide]);
 

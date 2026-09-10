@@ -117,6 +117,10 @@ export default function TestimonialCarousel({
     track.addEventListener(
       "pointerdown",
       (event) => {
+        if (event.pointerType !== "mouse") {
+          stop();
+          return;
+        }
         if (drag || (event.pointerType === "mouse" && event.button !== 0))
           return;
         drag = {
@@ -139,6 +143,10 @@ export default function TestimonialCarousel({
       options,
     );
     const finish = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse") {
+        start();
+        return;
+      }
       if (!drag || event.pointerId !== drag.id) return;
       const id = drag.id;
       drag = null;
@@ -150,6 +158,11 @@ export default function TestimonialCarousel({
     track.addEventListener("pointerup", finish, options);
     track.addEventListener("pointercancel", finish, options);
     track.addEventListener("lostpointercapture", finish, options);
+    track.addEventListener(
+      "scroll",
+      () => setDot(Math.round(track.scrollLeft / step())),
+      { ...options, passive: true },
+    );
     motion.addEventListener("change", start, options);
     start();
     return () => {

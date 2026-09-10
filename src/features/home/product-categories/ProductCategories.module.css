@@ -69,12 +69,13 @@
   -ms-overflow-style: none;
   overscroll-behavior-inline: contain;
   cursor: grab;
-  touch-action: pan-y;
+  touch-action: pan-x pan-y pinch-zoom;
 }
 .track::-webkit-scrollbar {
   display: none;
 }
 .track.dragging {
+  scroll-snap-type: none;
   cursor: grabbing;
   scroll-behavior: auto;
   -webkit-user-select: none;
@@ -313,14 +314,26 @@
   border-radius: 3px;
 }
 @media (max-width: 640px) {
+  .carouselSection {
+    padding-inline: 0;
+  }
+  .shell {
+    padding-inline: 0;
+  }
+  .track {
+    padding-inline: 8px;
+    scroll-padding-inline: 8px;
+  }
   .title {
     font-size: 26px;
   }
   .card {
-    flex-basis: 280px;
-    min-width: 280px;
+    flex-basis: min(280px, 100%);
+    min-width: 0;
   }
   .arrow {
+    /* Center controls on the media, clear of longer mobile card text. */
+    top: calc(min(280px, 100vw - 90px) / 2 + 17px);
     width: 42px;
     height: 42px;
   }

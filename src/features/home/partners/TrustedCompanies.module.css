@@ -44,14 +44,14 @@
   position: relative;
   overflow: hidden;
   padding: 10px 0 18px;
-  mask-image: linear-gradient(
+  -webkit-mask-image: linear-gradient(
     to right,
     transparent 0%,
     #000 8%,
     #000 92%,
     transparent 100%
   );
-  -webkit-mask-image: linear-gradient(
+  mask-image: linear-gradient(
     to right,
     transparent 0%,
     #000 8%,
@@ -61,14 +61,19 @@
 }
 .track {
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   width: max-content;
-  gap: 18px;
-  animation: partnerMarquee 26s linear infinite;
   will-change: transform;
 }
-.mask:hover .track {
-  animation-play-state: paused;
+.logoGroup {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 18px;
+  /* Include the seam gap in each half of the animated track. */
+  padding-right: 18px;
 }
 .item {
   flex: 0 0 auto;
@@ -100,14 +105,6 @@
   filter: grayscale(0%) opacity(1);
   transform: scale(1.02);
 }
-@keyframes partnerMarquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(calc(-50% - 9px));
-  }
-}
 @media (max-width: 640px) {
   .item {
     width: 170px;
@@ -127,9 +124,6 @@
   .section .title::after {
     transform: translateX(-50%) scaleX(1);
     transition: none;
-  }
-  .track {
-    animation: none;
   }
   .logo {
     transition: none;

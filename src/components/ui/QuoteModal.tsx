@@ -75,7 +75,7 @@ export default function QuoteModal({ isOpen, onClose, defaultProduct = "" }: Quo
             </p>
 
             <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div className="quote-fields">
                 <div>
                   <label style={{ display: "block", fontSize: 12, fontWeight: 700, marginBottom: 4 }}>
                     Full Name *
@@ -116,7 +116,7 @@ export default function QuoteModal({ isOpen, onClose, defaultProduct = "" }: Quo
                 </div>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div className="quote-fields">
                 <div>
                   <label style={{ display: "block", fontSize: 12, fontWeight: 700, marginBottom: 4 }}>
                     Business Email *
@@ -156,7 +156,7 @@ export default function QuoteModal({ isOpen, onClose, defaultProduct = "" }: Quo
                 </div>
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: 12 }}>
+              <div className="quote-fields quote-fields-interest">
                 <div>
                   <label style={{ display: "block", fontSize: 12, fontWeight: 700, marginBottom: 4 }}>
                     Product Category / Interest
@@ -225,7 +225,7 @@ export default function QuoteModal({ isOpen, onClose, defaultProduct = "" }: Quo
                 />
               </div>
 
-              <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, marginTop: 6 }}>
+              <div className="quote-actions">
                 <button type="button" className="btn ghost" style={{ color: "var(--slate-blue-gray)" }} onClick={onClose}>
                   Cancel
                 </button>

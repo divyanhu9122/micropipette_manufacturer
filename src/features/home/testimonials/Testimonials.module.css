@@ -19,7 +19,8 @@
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   padding: 12px 8px 26px;
-  touch-action: pan-y;
+  touch-action: pan-x pan-y pinch-zoom;
+  overscroll-behavior-inline: contain;
   cursor: grab;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -28,6 +29,7 @@
   display: none;
 }
 .track.dragging {
+  scroll-snap-type: none;
   cursor: grabbing;
   scroll-behavior: auto;
   user-select: none;
@@ -139,7 +141,31 @@
 @media (max-width: 640px) {
   .card {
     flex-basis: 88%;
-    min-width: 280px;
+    min-width: min(280px, 100%);
+  }
+}
+@media (pointer: coarse) {
+  .dot {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    border: 0;
+    background: transparent;
+  }
+  .dot::after {
+    content: "";
+    position: absolute;
+    inset: 7px;
+    border: 1px solid #aac4e6;
+    border-radius: 50%;
+    background: #c7d9f1;
+  }
+  .dot[data-active="true"] {
+    background: transparent;
+  }
+  .dot[data-active="true"]::after {
+    background: #f04a2a;
+    border-color: #f04a2a;
   }
 }
 @media (prefers-reduced-motion: reduce) {

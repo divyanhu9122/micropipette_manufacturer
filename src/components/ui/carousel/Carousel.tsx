@@ -38,7 +38,15 @@ export default function Carousel({
   };
 
   const startDrag = (event: PointerEvent<HTMLDivElement>) => {
-    if (drag.current || (event.pointerType === "mouse" && event.button !== 0))
+    // Native touch scrolling supports both axes and momentum without capture.
+    if (
+      drag.current ||
+      event.pointerType !== "mouse" ||
+      event.button !== 0 ||
+      (event.target as HTMLElement).closest(
+        "a, button, input, select, textarea",
+      )
+    )
       return;
     const track = event.currentTarget;
     drag.current = {

@@ -12,6 +12,26 @@ export default function Header({ onOpenQuote }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [headerHidden, setHeaderHidden] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 1101px)");
+    const closeOnDesktop = () => {
+      if (desktop.matches) setMobileMenuOpen(false);
+    };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    desktop.addEventListener("change", closeOnDesktop);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      desktop.removeEventListener("change", closeOnDesktop);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [mobileMenuOpen]);
 
   useEffect(() => {
     const tolerance = 8;
@@ -84,8 +104,8 @@ export default function Header({ onOpenQuote }: HeaderProps) {
               className="logo-image"
               src="/images/brand/micropipette-manufacturer-logo.png"
               alt="Micropipette Manufacturer logo"
-              width={255}
-              height={61}
+              width={98}
+              height={32}
               priority
             />
           </Link>
@@ -111,6 +131,7 @@ export default function Header({ onOpenQuote }: HeaderProps) {
           </div>
 
           <button
+            ref={menuButtonRef}
             className="btn ghost menu-toggle"
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -118,8 +139,9 @@ export default function Header({ onOpenQuote }: HeaderProps) {
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-navigation"
           >
-            {mobileMenuOpen ? "✕ Close" : "☰ Menu"}
+            {mobileMenuOpen ? "Close" : "Menu"}
           </button>
+
         </div>
 
         {mobileMenuOpen && (
@@ -134,20 +156,20 @@ export default function Header({ onOpenQuote }: HeaderProps) {
               Brands
             </a>
             <a href="#oem" onClick={() => setMobileMenuOpen(false)}>
-              OEM / Private Label
+              OEM
             </a>
             <a href="#applications" onClick={() => setMobileMenuOpen(false)}>
               Applications
             </a>
             <a href="#resources" onClick={() => setMobileMenuOpen(false)}>
-              Resources & Catalogs
+              Resources
             </a>
             <button
               className="btn primary"
-              style={{ marginTop: 8 }}
+              type="button"
               onClick={() => {
                 setMobileMenuOpen(false);
-                if (onOpenQuote) onOpenQuote();
+                onOpenQuote?.();
               }}
             >
               Get Quote →

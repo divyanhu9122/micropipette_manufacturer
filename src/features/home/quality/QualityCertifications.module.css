@@ -48,7 +48,8 @@
 }
 .cert strong {
   display: block;
-  font-family: var(--font-manrope), var(--font-inter), Arial, Helvetica, sans-serif;
+  font-family:
+    var(--font-manrope), var(--font-inter), Arial, Helvetica, sans-serif;
   font-size: 26px;
   font-weight: 700;
 }
@@ -60,11 +61,7 @@
 }
 @media (max-width: 1100px) {
   .bar {
-    grid-template-columns: 1.3fr repeat(3, 1fr);
-  }
-  /* The copy is the first child: show ISO, ISO, CE; hide the final two. */
-  .bar .cert:nth-child(n + 5) {
-    display: none;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 @media (max-width: 640px) {

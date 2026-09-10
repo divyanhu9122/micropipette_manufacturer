@@ -167,10 +167,29 @@
 }
 @media (max-width: 860px) {
   .grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 @media (max-width: 640px) {
+  .panel {
+    min-width: 0;
+    padding: 24px 18px;
+  }
+  .illustration {
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  .package {
+    flex-shrink: 0;
+    max-width: 100%;
+  }
+  .illustration .pipette {
+    flex-shrink: 0;
+    margin-inline: 30px;
+  }
+  .cta {
+    max-width: 100%;
+  }
   .title,
   .panelTitle {
     font-size: 26px;
