@@ -1,0 +1,132 @@
+/* Approved prototype: Micropipette Category.html (Phase 3, exact design system v13)
+   Micropipette Category page only; scoped selectors, no shared/global overrides.
+   Hero/breadcrumb/section/panel/title treatment is reused directly from the
+   already-migrated Product Listing feature (identical rules in both confirmed
+   prototypes) instead of being redefined here. */
+
+.categoryPanel {
+  padding: 20px;
+}
+
+.categoryGrid {
+  display: grid;
+  padding-top: 4px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.categoryCard {
+  padding: 0;
+  overflow: hidden;
+  text-align: left;
+}
+
+.categoryMedia {
+  min-height: 220px;
+  aspect-ratio: 1.18 / 1;
+  background: linear-gradient(180deg, #f8fbff, #e9f3ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 26px;
+  border-bottom: 1px solid #dbe7f4;
+}
+
+/* Category illustrations reuse the shared pipette/controller primitives from
+   Homepage's product-categories and OEM features; these two classes apply
+   just the category-page-specific scale/size on top of them. */
+.multiPipetteScale {
+  transform: scale(1.35);
+}
+.controllerScale {
+  transform: scale(1.35);
+}
+.singlePipette {
+  width: 60px;
+  height: 175px;
+}
+
+.categoryBody {
+  padding: 18px;
+}
+.categoryBody h3 {
+  margin: 10px 0 7px;
+  font-family: var(--font-manrope), var(--font-inter), Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: var(--midnight-navy);
+}
+.categoryBody p {
+  min-height: 42px;
+  margin: 0 0 16px;
+  color: var(--slate-blue-gray);
+  font-size: 13px;
+}
+.categoryBody .btn {
+  width: 100%;
+}
+
+.featuredWrap {
+  margin-top: 24px;
+}
+
+/* ===== Need Help CTA ===== */
+.helpCta {
+  margin-top: 24px;
+  background: linear-gradient(135deg, var(--midnight-navy) 0%, var(--dark-corporate-navy) 65%, var(--deep-navy-blue) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 28px;
+  box-shadow: 0 16px 34px rgba(5, 31, 68, 0.22);
+  padding: 26px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  color: #fff;
+}
+.helpCta h2 {
+  margin: 10px 0 6px;
+  font-family: var(--font-manrope), var(--font-inter), Arial, Helvetica, sans-serif;
+  font-size: 30px;
+  color: #fff;
+}
+.helpCta p {
+  margin: 0;
+  max-width: 700px;
+  color: #d8e4f5;
+}
+.ctaActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 1100px) {
+  .categoryGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 760px) {
+  .categoryGrid {
+    grid-template-columns: 1fr;
+  }
+  .helpCta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+@media (max-width: 640px) {
+  .categoryPanel {
+    padding: 14px;
+  }
+  .categoryMedia {
+    min-height: 190px;
+  }
+  .ctaActions {
+    width: 100%;
+    flex-direction: column;
+  }
+  .ctaActions .btn {
+    width: 100%;
+  }
+}
