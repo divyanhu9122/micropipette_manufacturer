@@ -1,4 +1,4 @@
-# MicropipetteManufacturer.com
+# Micropipette Manufacturer
 
 ## Project Overview
 
