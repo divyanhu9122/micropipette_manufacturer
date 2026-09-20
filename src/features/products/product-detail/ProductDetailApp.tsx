@@ -92,7 +92,10 @@ export default function ProductDetailApp({ product }: ProductDetailAppProps) {
               />
 
               {/* Technical Support & Quote Enquiry */}
-              <ProductEnquiryBanner onOpenQuote={handleOpenQuote} />
+              <ProductEnquiryBanner
+                onOpenQuote={handleOpenQuote}
+                slug={product.slug}
+              />
             </div>
           </div>
 

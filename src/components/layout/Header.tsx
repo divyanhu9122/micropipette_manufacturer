@@ -121,13 +121,19 @@ export default function Header({ onOpenQuote }: HeaderProps) {
               <a href="#applications">Applications</a>
               <a href="#resources">Resources</a>
             </nav>
-            <button
-              className="btn primary"
-              type="button"
-              onClick={onOpenQuote}
-            >
-              Get Quote →
-            </button>
+            {onOpenQuote ? (
+              <button
+                className="btn primary"
+                type="button"
+                onClick={onOpenQuote}
+              >
+                Get Quote →
+              </button>
+            ) : (
+              <Link className="btn primary" href="/request-quote">
+                Get Quote →
+              </Link>
+            )}
           </div>
 
           <button
@@ -164,16 +170,26 @@ export default function Header({ onOpenQuote }: HeaderProps) {
             <a href="#resources" onClick={() => setMobileMenuOpen(false)}>
               Resources
             </a>
-            <button
-              className="btn primary"
-              type="button"
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onOpenQuote?.();
-              }}
-            >
-              Get Quote →
-            </button>
+            {onOpenQuote ? (
+              <button
+                className="btn primary"
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenQuote();
+                }}
+              >
+                Get Quote →
+              </button>
+            ) : (
+              <Link
+                className="btn primary"
+                href="/request-quote"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Get Quote →
+              </Link>
+            )}
           </div>
         )}
       </header>

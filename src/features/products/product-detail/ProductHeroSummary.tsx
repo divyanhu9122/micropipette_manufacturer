@@ -1,16 +1,16 @@
 "use client";
 
+import Link from "next/link";
 import styles from "./ProductDetail.module.css";
 import type { ProductDetailItem } from "./product-detail.data";
 
 interface ProductHeroSummaryProps {
   product: ProductDetailItem;
-  onOpenQuote: () => void;
+  onOpenQuote?: () => void;
 }
 
 export default function ProductHeroSummary({
   product,
-  onOpenQuote,
 }: ProductHeroSummaryProps) {
   return (
     <div className={styles.pdSummary}>
@@ -50,13 +50,12 @@ export default function ProductHeroSummary({
       </div>
 
       <div className={styles.pdActions}>
-        <button
-          type="button"
+        <Link
+          href={`/products/${product.slug}/request-quote`}
           className={styles.actionBtnPrimary}
-          onClick={onOpenQuote}
         >
           Request Quote →
-        </button>
+        </Link>
         <a href="#downloads" className={styles.actionBtnSecondary}>
           Download Datasheet
         </a>

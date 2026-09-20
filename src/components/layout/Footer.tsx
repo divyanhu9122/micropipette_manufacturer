@@ -1,6 +1,10 @@
 import Link from "next/link";
 
-export default function Footer() {
+interface FooterProps {
+  onOpenCatalogue?: () => void;
+}
+
+export default function Footer({ onOpenCatalogue }: FooterProps) {
   return (
     <footer>
       <div className="wrap footer-top">
@@ -36,8 +40,47 @@ export default function Footer() {
 
           <div id="resources">
             <h4>RESOURCES</h4>
-            <a href="#resources">Product Catalogs</a>
-            <a href="#resources">Technical Brochures</a>
+            {onOpenCatalogue ? (
+              <>
+                <button
+                  type="button"
+                  onClick={onOpenCatalogue}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "inherit",
+                    font: "inherit",
+                    padding: 0,
+                    cursor: "pointer",
+                    textAlign: "left",
+                    display: "block",
+                  }}
+                >
+                  Product Catalogs
+                </button>
+                <button
+                  type="button"
+                  onClick={onOpenCatalogue}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "inherit",
+                    font: "inherit",
+                    padding: 0,
+                    cursor: "pointer",
+                    textAlign: "left",
+                    display: "block",
+                  }}
+                >
+                  Technical Brochures
+                </button>
+              </>
+            ) : (
+              <>
+                <a href="#resources">Product Catalogs</a>
+                <a href="#resources">Technical Brochures</a>
+              </>
+            )}
             <a href="#quality">ISO Certificates</a>
             <a href="#applications">Application Notes</a>
           </div>
