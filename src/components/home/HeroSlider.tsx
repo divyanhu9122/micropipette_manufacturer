@@ -9,7 +9,7 @@ interface HeroSliderProps {
 const slides = [
   {
     id: 1,
-    image: "/images/hero/hero-slide-01.jpg",
+    image: "/images/hero/hero-slide-01.webp",
     eyebrow: "PRECISION ENGINEERED. GLOBALLY TRUSTED.",
     isEyebrow: true,
     title: "Global Micropipette Manufacturing & Laboratory Solutions",
@@ -22,7 +22,7 @@ const slides = [
   },
   {
     id: 2,
-    image: "/images/hero/hero-slide-02.jpg",
+    image: "/images/hero/hero-slide-02.webp",
     eyebrow: "PRODUCT PORTFOLIO",
     isEyebrow: false,
     title: "One Portal for Micropipettes, Tips, Controllers and More",
@@ -35,7 +35,7 @@ const slides = [
   },
   {
     id: 3,
-    image: "/images/hero/hero-slide-03.jpg",
+    image: "/images/hero/hero-slide-03.webp",
     eyebrow: "OUR BRANDS",
     isEyebrow: false,
     title: "LABXE, SSCIENCES and DANWER Under One Strong B2B Structure",
@@ -48,7 +48,7 @@ const slides = [
   },
   {
     id: 4,
-    image: "/images/hero/hero-slide-04.jpg",
+    image: "/images/hero/hero-slide-04.webp",
     eyebrow: "OEM / PRIVATE LABEL",
     isEyebrow: false,
     title: "Build Your Own Micropipette Brand With Custom Printing",
