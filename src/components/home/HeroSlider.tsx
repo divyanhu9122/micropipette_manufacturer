@@ -9,7 +9,7 @@ interface HeroSliderProps {
 const slides = [
   {
     id: 1,
-    image: "/images/hero/all%20micropipette.webp",
+    image: "/images/hero/Bottle%20Top%20Dispenser%20Easy%20Drop1.webp",
     eyebrow: "PRECISION ENGINEERED. GLOBALLY TRUSTED.",
     isEyebrow: true,
     title: "Global Micropipette Manufacturing & Laboratory Solutions",
@@ -35,7 +35,7 @@ const slides = [
   },
   {
     id: 3,
-    image: "/images/hero/Bottle%20Top%20Dispenser%20Easy%20Drop.webp",
+    image: "/images/hero/all%20micropipette.webp",
     eyebrow: "OUR BRANDS",
     isEyebrow: false,
     title: "LABXE, SSCIENCES and DANWER Under One Strong B2B Structure",
