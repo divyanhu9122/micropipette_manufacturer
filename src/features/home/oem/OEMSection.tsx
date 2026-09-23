@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "./OEMSection.module.css";
 
 export default function OEMSection() {
@@ -30,13 +31,12 @@ export default function OEMSection() {
                 <li>Low MOQ &amp; scalable production</li>
                 <li>Global quality standards</li>
               </ul>
-              {/* Preserve the source destination until its production route is confirmed. */}
-              <a
+              <Link
                 className={`btn secondary ${styles.cta}`}
-                href="micropipette_manufacturer_contact_partnership_v2.html"
+                href="/oem"
               >
                 Explore OEM Solutions →
-              </a>
+              </Link>
             </div>
             <div className={styles.showcase}>
               <div
