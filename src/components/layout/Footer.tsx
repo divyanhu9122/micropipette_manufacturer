@@ -82,7 +82,7 @@ export default function Footer({ onOpenCatalogue }: FooterProps) {
               </>
             )}
             <a href="#quality">ISO Certificates</a>
-            <a href="#applications">Application Notes</a>
+            <Link href="/applications">Application Notes</Link>
           </div>
 
           <div>
