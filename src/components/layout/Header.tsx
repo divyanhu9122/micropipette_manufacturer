@@ -116,7 +116,7 @@ export default function Header({ onOpenQuote }: HeaderProps) {
                 Home
               </Link>
               <Link href="/products">Products</Link>
-              <a href="#brands">Brands</a>
+              <Link href="/brands">Brands</Link>
               <Link href="/oem">OEM</Link>
               <a href="#applications">Applications</a>
               <a href="#resources">Resources</a>
@@ -158,9 +158,9 @@ export default function Header({ onOpenQuote }: HeaderProps) {
             <Link href="/products" onClick={() => setMobileMenuOpen(false)}>
               Products
             </Link>
-            <a href="#brands" onClick={() => setMobileMenuOpen(false)}>
+            <Link href="/brands" onClick={() => setMobileMenuOpen(false)}>
               Brands
-            </a>
+            </Link>
             <Link href="/oem" onClick={() => setMobileMenuOpen(false)}>
               OEM
             </Link>

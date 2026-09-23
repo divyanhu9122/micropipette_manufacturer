@@ -1,0 +1,762 @@
+/* ============================================================
+   BRAND PORTFOLIO & REUSABLE BRAND DETAIL STYLES
+   Source of Truth:
+   - MicropipetteManufacturer_Phase3_Brand_Listing_v2(1).html
+   - MicropipetteManufacturer_Phase3_Brand_Detail_Reusable_Template_v1(1).html
+   ============================================================ */
+
+.brandPage {
+  background: linear-gradient(180deg, var(--ice-blue) 0%, #eaf3ff 44%, #f1f7ff 100%);
+  min-height: 100vh;
+}
+
+/* ============================================================
+   SHARED COMPACT HERO & BREADCRUMB
+   ============================================================ */
+.heroCompact {
+  padding: 32px 0 24px;
+  background: linear-gradient(180deg, var(--pale-sky-blue) 0%, var(--ice-blue) 100%);
+  border-bottom: 1px solid rgba(24, 51, 79, 0.08);
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--slate-blue-gray);
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.breadcrumb a {
+  color: var(--corporate-blue);
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.breadcrumb a:hover {
+  color: var(--vermilion);
+  text-decoration: underline;
+}
+
+.breadcrumbSep {
+  color: var(--slate-blue-gray);
+  font-weight: 400;
+}
+
+.heroCompact h1 {
+  margin: 0;
+  font-family: var(--font-heading, "Manrope", sans-serif);
+  font-size: clamp(28px, 3.5vw, 42px);
+  color: var(--midnight-navy);
+  font-weight: 800;
+}
+
+/* ============================================================
+   TAGS & BADGES
+   ============================================================ */
+.typeTag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(13, 65, 138, 0.08);
+  border: 1px solid rgba(13, 65, 138, 0.18);
+  color: var(--corporate-blue);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.brandTag {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: var(--ice-blue);
+  border: 1px solid var(--mist-blue);
+  color: var(--deep-navy-blue);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   BRAND LISTING SECTION (/brands)
+   ============================================================ */
+.brandSection {
+  padding: 24px 0 48px;
+  background: linear-gradient(180deg, #f7fbff 0%, #edf5ff 100%);
+}
+
+.brandIntro {
+  padding: 24px 26px;
+  margin-bottom: 24px;
+  border-radius: var(--radius-panel, 24px);
+  background: rgba(251, 253, 255, 0.85);
+  border: 1px solid rgba(188, 211, 238, 0.72);
+  box-shadow: 8px 10px 18px rgba(24, 51, 79, 0.08);
+}
+
+.brandIntro h2 {
+  margin: 10px 0 8px;
+  font-family: var(--font-heading, "Manrope", sans-serif);
+  color: var(--midnight-navy);
+  font-size: clamp(22px, 2.5vw, 28px);
+  font-weight: 800;
+}
+
+.brandIntro p {
+  margin: 0;
+  max-width: 900px;
+  color: var(--slate-blue-gray);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.brandGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.brandMasterCard {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--radius-card, 24px);
+  background: var(--cool-white);
+  border: 1px solid #d5e1f0;
+  box-shadow: 10px 12px 20px rgba(24, 51, 79, 0.12);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.brandMasterCard:hover {
+  transform: translateY(-5px) scale(1.012);
+  box-shadow: 0 14px 28px rgba(24, 51, 79, 0.14);
+}
+
+.brandLogoArea {
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #f9fcff, #eaf3ff);
+  border-bottom: 1px solid #dbe7f4;
+  color: #748aa6;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+}
+
+.brandBadge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(13, 65, 138, 0.09);
+  border: 1px solid rgba(13, 65, 138, 0.15);
+  color: var(--corporate-blue);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.brandLogoTitle {
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  font-family: var(--font-heading, "Manrope", sans-serif);
+}
+
+.brandLogoTitle.labxe {
+  color: #0d57bf;
+}
+.brandLogoTitle.labxe b {
+  color: var(--vermilion);
+}
+
+.brandLogoTitle.ssciences {
+  color: #111111;
+}
+.brandLogoTitle.ssciences b {
+  color: var(--vermilion);
+}
+
+.brandLogoTitle.danwer {
+  color: #d72d2d;
+}
+
+.brandLogoSubtitle {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--slate-blue-gray);
+  font-weight: 600;
+}
+
+.brandContent {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.brandContent h2 {
+  margin: 10px 0 8px;
+  font-family: var(--font-heading, "Manrope", sans-serif);
+  color: var(--midnight-navy);
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.brandContent p {
+  margin: 0 0 14px;
+  min-height: 62px;
+  color: var(--slate-blue-gray);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.brandProductTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.brandProductTags span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: rgba(220, 236, 255, 0.64);
+  border: 1px solid rgba(13, 65, 138, 0.14);
+  color: var(--deep-navy-blue);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.brandActions {
+  display: grid;
+  gap: 9px;
+  margin-top: auto;
+}
+
+.brandFuture {
+  margin-top: 28px;
+  padding: 26px 28px;
+  border-radius: var(--radius-panel, 26px);
+  background: linear-gradient(
+    135deg,
+    var(--midnight-navy) 0%,
+    var(--dark-corporate-navy) 64%,
+    var(--deep-navy-blue) 100%
+  );
+  color: #fff;
+  box-shadow: 0 16px 34px rgba(5, 31, 68, 0.22);
+}
+
+.brandFuture h2 {
+  margin: 10px 0 6px;
+  font-family: var(--font-heading, "Manrope", sans-serif);
+  color: #fff;
+  font-size: clamp(22px, 2.5vw, 27px);
+  font-weight: 800;
+}
+
+.brandFuture p {
+  margin: 0;
+  max-width: 760px;
+  color: #d8e4f5;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   BRAND DETAIL SECTION (/brands/[slug])
+   ============================================================ */
+.bdSection {
+  padding: 24px 0 48px;
+  background: linear-gradient(180deg, #f7fbff 0%, #edf5ff 100%);
+}
+
+.bdHeroCard {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 28px;
+  align-items: center;
+  padding: 24px;
+  border-radius: var(--radius-panel, 28px);
+  background: var(--cool-white);
+  border: 1px solid #d5e1f0;
+  box-shadow: 10px 12px 20px rgba(24, 51, 79, 0.12);
+}
+
+.bdLogoPanel {
+  width: 100%;
+}
+
+.bdLogoBox {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #f9fcff, #eaf3ff);
+  border: 1px solid #dbe7f4;
+  color: #748aa6;
+  padding: 24px;
+  text-align: center;
+  position: relative;
+}
+
+.bdHeroContent h2 {
+  margin: 12px 0 8px;
+  font-family: var(--font-heading, "Manrope", sans-serif);
+  font-size: clamp(32px, 4vw, 48px);
+  color: var(--midnight-navy);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.bdHeroContent p {
+  margin: 0;
+  max-width: 760px;
+  color: var(--slate-blue-gray);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.bdTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.bdTags span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(220, 236, 255, 0.64);
+  border: 1px solid rgba(13, 65, 138, 0.14);
+  color: var(--deep-navy-blue);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.bdPanel {
+  margin-top: 24px;
+  padding: 24px;
+  border-radius: var(--radius-panel, 26px);
+  background: var(--cool-white);
+  border: 1px solid #d5e1f0;
+  box-shadow: 10px 12px 20px rgba(24, 51, 79, 0.1);
+}
+
+.bdSectionHead {
+  margin-bottom: 18px;
+}
+
+.bdSectionTitle {
+  position: relative;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--midnight-navy);
+  margin: 0;
+  padding-bottom: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.bdSectionTitle::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 44px;
+  height: 4px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #ff3b00 0%, #ff6b00 100%);
+  box-shadow: 0 2px 8px rgba(255, 59, 0, 0.35);
+}
+
+.bdSectionHeadRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.bdSectionLink {
+  color: var(--corporate-blue);
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.bdSectionLink:hover {
+  color: var(--vermilion);
+  text-decoration: underline;
+}
+
+.bdTwoCol {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 24px;
+}
+
+.bdTwoCol p {
+  margin: 0 0 14px;
+  color: var(--slate-blue-gray);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.bdFacts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.bdFacts div {
+  padding: 14px;
+  border-radius: 15px;
+  background: rgba(237, 245, 255, 0.72);
+  border: 1px solid rgba(188, 211, 238, 0.64);
+}
+
+.bdFacts span {
+  display: block;
+  font-size: 11px;
+  color: var(--slate-blue-gray);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.bdFacts strong {
+  display: block;
+  margin-top: 5px;
+  font-size: 13px;
+  color: var(--deep-navy-blue);
+  font-weight: 700;
+}
+
+.bdFacts a {
+  color: var(--corporate-blue);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.bdFacts a:hover {
+  color: var(--vermilion);
+  text-decoration: underline;
+}
+
+/* Featured Products in Brand Detail */
+.bdProductGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.bdProductItem {
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--cool-white);
+  border: 1px solid #d5e1f0;
+  box-shadow: 10px 12px 20px rgba(24, 51, 79, 0.1);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.bdProductItem:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 12px 24px rgba(24, 51, 79, 0.14);
+}
+
+.bdProductMedia {
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #f8fbff, #eaf3ff);
+  border-bottom: 1px solid #dbe7f4;
+  color: #748aa6;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 16px;
+  position: relative;
+}
+
+.pipetteIconGraphic {
+  width: 38px;
+  height: 100px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pipetteIconTop {
+  width: 14px;
+  height: 12px;
+  background: #9db4d5;
+  border-radius: 4px 4px 1px 1px;
+}
+
+.pipetteIconBody {
+  width: 24px;
+  height: 52px;
+  background: #ffffff;
+  border: 1px solid #d5dfea;
+  border-radius: 6px;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  font-weight: 800;
+  color: var(--corporate-blue);
+}
+
+.pipetteIconShaft {
+  width: 6px;
+  height: 24px;
+  background: #4d7fbe;
+}
+
+.pipetteIconTip {
+  width: 3px;
+  height: 12px;
+  background: #ffffff;
+  border: 1px solid #d8e3f2;
+  border-top: none;
+}
+
+.bdProductBody {
+  padding: 18px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.bdProductBody h3 {
+  margin: 10px 0 6px;
+  font-family: var(--font-heading, "Manrope", sans-serif);
+  font-size: 17px;
+  color: var(--midnight-navy);
+  font-weight: 800;
+}
+
+.bdProductBody p {
+  margin: 0 0 16px;
+  color: var(--slate-blue-gray);
+  font-size: 13px;
+  line-height: 1.55;
+  min-height: 48px;
+}
+
+.bdProductBody .ctaBtn {
+  margin-top: auto;
+  width: 100%;
+}
+
+/* Capabilities Grid */
+.bdCapabilityGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.bdCapabilityCard {
+  padding: 20px;
+  border-radius: 18px;
+  background: rgba(237, 245, 255, 0.66);
+  border: 1px solid rgba(188, 211, 238, 0.68);
+}
+
+.bdCapabilityNum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(240, 74, 42, 0.1);
+  color: var(--vermilion);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.bdCapabilityCard h3 {
+  margin: 12px 0 6px;
+  font-family: var(--font-heading, "Manrope", sans-serif);
+  font-size: 17px;
+  color: var(--midnight-navy);
+  font-weight: 800;
+}
+
+.bdCapabilityCard p {
+  margin: 0;
+  color: var(--slate-blue-gray);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* Resource List */
+.bdResourceList {
+  display: grid;
+  gap: 12px;
+}
+
+.bdResourceCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: rgba(237, 245, 255, 0.58);
+  border: 1px solid rgba(188, 211, 238, 0.62);
+}
+
+.bdResourceInfo strong {
+  display: block;
+  color: var(--deep-navy-blue);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.bdResourceInfo span {
+  display: block;
+  margin-top: 3px;
+  color: var(--slate-blue-gray);
+  font-size: 11px;
+}
+
+/* Detail CTA Banner */
+.bdCta {
+  margin-top: 26px;
+  padding: 28px 30px;
+  border-radius: var(--radius-panel, 26px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  color: #fff;
+  background: linear-gradient(
+    135deg,
+    var(--midnight-navy) 0%,
+    var(--dark-corporate-navy) 64%,
+    var(--deep-navy-blue) 100%
+  );
+  box-shadow: 0 16px 34px rgba(5, 31, 68, 0.22);
+}
+
+.bdCta h2 {
+  margin: 10px 0 6px;
+  font-family: var(--font-heading, "Manrope", sans-serif);
+  color: #fff;
+  font-size: clamp(22px, 2.5vw, 28px);
+  font-weight: 800;
+}
+
+.bdCta p {
+  margin: 0;
+  max-width: 760px;
+  color: #d8e4f5;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.bdCtaActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex: 0 0 auto;
+}
+
+.bdCtaSecondary {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.46) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.bdCtaSecondary:hover {
+  background: rgba(255, 255, 255, 0.16) !important;
+  border-color: #ffffff !important;
+}
+
+/* ============================================================
+   RESPONSIVE MEDIA QUERIES
+   ============================================================ */
+@media (max-width: 980px) {
+  .brandGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .bdHeroCard {
+    grid-template-columns: 1fr;
+  }
+  .bdLogoBox {
+    min-height: 220px;
+  }
+  .bdTwoCol {
+    grid-template-columns: 1fr;
+  }
+  .bdProductGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .bdCapabilityGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .brandGrid {
+    grid-template-columns: 1fr;
+  }
+  .bdProductGrid {
+    grid-template-columns: 1fr;
+  }
+  .bdFacts {
+    grid-template-columns: 1fr;
+  }
+  .bdSectionHeadRow,
+  .bdCta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .bdCtaActions {
+    width: 100%;
+  }
+  .bdCtaActions a,
+  .bdCtaActions button {
+    width: 100%;
+  }
+  .bdResourceCard {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .bdResourceCard button,
+  .bdResourceCard a {
+    width: 100%;
+    text-align: center;
+  }
+}

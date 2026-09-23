@@ -24,8 +24,8 @@ export default function Footer({ onOpenCatalogue }: FooterProps) {
 
           <div>
             <h4>COMPANY</h4>
-            <Link href="#categories">Products</Link>
-            <Link href="#brands">Our Brands</Link>
+            <Link href="/products">Products</Link>
+            <Link href="/brands">Our Brands</Link>
             <Link href="/oem">OEM Manufacturing</Link>
             <Link href="#quality">Quality Policy</Link>
           </div>

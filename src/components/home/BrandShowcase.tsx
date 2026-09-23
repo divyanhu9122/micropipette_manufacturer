@@ -1,6 +1,4 @@
-interface BrandShowcaseProps {
-  onSelectBrand?: (brand: string) => void;
-}
+import Link from "next/link";
 
 const brands = [
   {
@@ -29,7 +27,7 @@ const brands = [
   },
 ];
 
-export default function BrandShowcase({ onSelectBrand }: BrandShowcaseProps) {
+export default function BrandShowcase() {
   return (
     <section className="section" id="brands">
       <div className="wrap">
@@ -58,14 +56,13 @@ export default function BrandShowcase({ onSelectBrand }: BrandShowcaseProps) {
                 </div>
                 <h4>{brand.tagline}</h4>
                 <p>{brand.desc}</p>
-                <button
-                  type="button"
+                <Link
+                  href={`/brands/${brand.id}`}
                   className="btn secondary"
-                  style={{ width: "100%", padding: "10px 14px", fontSize: 13 }}
-                  onClick={() => onSelectBrand && onSelectBrand(brand.name)}
+                  style={{ width: "100%", padding: "10px 14px", fontSize: 13, textAlign: "center" }}
                 >
                   Explore {brand.name} Products →
-                </button>
+                </Link>
               </article>
             ))}
           </div>

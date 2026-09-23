@@ -32,7 +32,7 @@ export default function Home() {
 
       <CategoriesSection />
 
-      <BrandShowcase onSelectBrand={(brand) => handleOpenQuote(`${brand} Range`)} />
+      <BrandShowcase />
 
       <OemSection />
 
