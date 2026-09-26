@@ -24,6 +24,7 @@ export default function Footer({ onOpenCatalogue }: FooterProps) {
 
           <div>
             <h4>COMPANY</h4>
+            <Link href="/about">About Us</Link>
             <Link href="/products">Products</Link>
             <Link href="/brands">Our Brands</Link>
             <Link href="/oem">OEM Manufacturing</Link>
@@ -33,9 +34,10 @@ export default function Footer({ onOpenCatalogue }: FooterProps) {
           <div>
             <h4>SUPPORT</h4>
             <Link href="#resources">Downloads & Manuals</Link>
-            <Link href="#partner">Technical Support</Link>
+            <Link href="/faq">FAQs</Link>
+            <Link href="/contact">Technical Support</Link>
             <Link href="#testimonials">Client Testimonials</Link>
-            <Link href="#partner">Contact Sales</Link>
+            <Link href="/contact">Contact Sales</Link>
           </div>
 
           <div id="resources">

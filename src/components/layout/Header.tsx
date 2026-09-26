@@ -3,12 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 interface HeaderProps {
   onOpenQuote?: () => void;
 }
 
 export default function Header({ onOpenQuote }: HeaderProps) {
+  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [headerHidden, setHeaderHidden] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
@@ -112,13 +114,35 @@ export default function Header({ onOpenQuote }: HeaderProps) {
 
           <div className="nav-shell">
             <nav className="nav">
-              <Link className="active" href="/">
+              <Link className={pathname === "/" ? "active" : ""} href="/">
                 Home
               </Link>
-              <Link href="/products">Products</Link>
-              <Link href="/brands">Brands</Link>
-              <Link href="/oem">OEM</Link>
-              <Link href="/applications">Applications</Link>
+              <Link
+                className={pathname?.startsWith("/products") ? "active" : ""}
+                href="/products"
+              >
+                Products
+              </Link>
+              <Link
+                className={pathname?.startsWith("/brands") ? "active" : ""}
+                href="/brands"
+              >
+                Brands
+              </Link>
+              <Link
+                className={pathname?.startsWith("/oem") ? "active" : ""}
+                href="/oem"
+              >
+                OEM
+              </Link>
+              <Link
+                className={
+                  pathname?.startsWith("/applications") ? "active" : ""
+                }
+                href="/applications"
+              >
+                Applications
+              </Link>
               <a href="#resources">Resources</a>
             </nav>
             {onOpenQuote ? (
