@@ -83,7 +83,7 @@ export default function HeroSlider({ onOpenQuote }: HeroSliderProps) {
 
   return (
     <section
-      className="hero hero-full-slider"
+      className="hero hero-full-slider hero-lab-background"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       aria-label="Micropipette Manufacturing Hero Slideshow"
@@ -98,7 +98,7 @@ export default function HeroSlider({ onOpenQuote }: HeroSliderProps) {
               style={{ backgroundImage: `url(${slide.image})` }}
               aria-hidden={!isActive}
             >
-              <div className="hero-image-overlay" />
+              <div className="hero-image-overlay" aria-hidden="true" />
               <div className="wrap hero-image-content">
                 <div className="hero-image-copy">
                   {slide.isEyebrow ? (

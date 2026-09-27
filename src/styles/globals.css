@@ -325,17 +325,192 @@ textarea {
   visibility: visible;
 }
 
-.hero-image-overlay {
-  position: absolute;
-  inset: 0;
+.hero-lab-background {
+  --lab-warm-white: #fff9f2;
+  --lab-pearl-white: #f5f7f8;
+  --lab-ice-blue: #dcecff;
+  --lab-sky-blue: #b9d5e9;
+  --lab-corporate-blue: #0d418a;
+  --lab-midnight: #051f44;
+  isolation: isolate;
+  /* The base also fills any space around the uncropped banner images. */
   background: linear-gradient(
     90deg,
-    rgba(64, 20, 12, 0.94) 0%,
-    rgba(112, 34, 18, 0.84) 38%,
-    rgba(240, 74, 42, 0.32) 68%,
-    rgba(255, 132, 72, 0.08) 100%
+    var(--lab-warm-white) 0%,
+    var(--lab-pearl-white) 20%,
+    var(--lab-ice-blue) 40%,
+    var(--lab-sky-blue) 58%,
+    var(--lab-corporate-blue) 80%,
+    var(--lab-midnight) 100%
   );
+}
+
+/* ==========================================
+   PREMIUM LAB HERO BACKGROUND
+   Warm White → Cool Pearl → Ice Blue → Navy
+   Left-to-Right Focused Spotlight Effect
+========================================== */
+
+.hero-lab-background .hero-image-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
   z-index: 1;
+
+  background:
+
+    /* 1. Focused warm-white light source
+       entering from the upper-left side */
+
+    radial-gradient(
+      ellipse 45% 42% at 0% 26%,
+      rgba(255, 249, 242, 0.96) 0%,
+      rgba(255, 250, 245, 0.78) 22%,
+      rgba(255, 255, 255, 0.38) 55%,
+      transparent 100%
+    ),
+
+    /* 2. Horizontal torch-like beam
+       spreading from left to right */
+
+    radial-gradient(
+      ellipse 76% 26% at 0% 30%,
+      rgba(255, 255, 255, 0.88) 0%,
+      rgba(250, 251, 252, 0.56) 32%,
+      rgba(235, 246, 255, 0.22) 65%,
+      transparent 100%
+    ),
+
+    /* 3. Subtle cool-white atmospheric glow
+       across the left and middle sections */
+
+    radial-gradient(
+      ellipse 58% 65% at 24% 48%,
+      rgba(245, 247, 248, 0.38) 0%,
+      rgba(220, 236, 255, 0.16) 55%,
+      transparent 100%
+    ),
+
+    /* 4. Soft icy-blue illumination
+       behind the central product */
+
+    radial-gradient(
+      ellipse 30% 65% at 61% 48%,
+      rgba(185, 220, 245, 0.32) 0%,
+      rgba(90, 160, 215, 0.14) 48%,
+      transparent 100%
+    ),
+
+    /* 5. Main cinematic color transition
+       with controlled transparency to
+       preserve the original product image */
+
+    linear-gradient(
+      90deg,
+      rgba(255, 249, 242, 0.82) 0%,
+      rgba(245, 247, 248, 0.72) 20%,
+      rgba(220, 236, 255, 0.52) 38%,
+      rgba(185, 213, 233, 0.22) 52%,
+      rgba(13, 65, 138, 0.10) 72%,
+      rgba(5, 31, 68, 0.42) 100%
+    );
+}
+
+
+/* ==========================================
+   HERO TEXT STYLING
+   Maintain readability on illuminated area
+========================================== */
+
+.hero-lab-background .hero-image-copy,
+.hero-lab-background .hero-image-copy h1 {
+  color: var(--lab-midnight);
+
+  text-shadow:
+    0 1px 8px rgba(245, 247, 248, 0.65);
+}
+
+.hero-lab-background .hero-image-copy p,
+.hero-lab-background .hero-eyebrow {
+  color: #18334f;
+
+  text-shadow:
+    0 1px 6px rgba(245, 247, 248, 0.8);
+}
+
+
+/* ==========================================
+   HERO BUTTON STYLING
+========================================== */
+
+.hero-lab-background .hero-catalog {
+  color: var(--lab-midnight);
+  background: rgba(245, 247, 248, 0.9);
+  border-color: var(--lab-corporate-blue);
+}
+
+
+/* ==========================================
+   SLIDER NAVIGATION
+========================================== */
+
+.hero-lab-background .hero-slider-nav {
+  background: var(--lab-corporate-blue);
+  border-color: rgba(245, 247, 248, 0.65);
+}
+
+.hero-lab-background .hero-slider-nav:hover {
+  background: var(--lab-midnight);
+}
+
+
+/* ==========================================
+   RESPONSIVE DESIGN
+========================================== */
+
+@media (max-width: 1100px) {
+
+  .hero-lab-background .hero-image-copy {
+    background: rgba(245, 247, 248, 0.90);
+
+    box-shadow:
+      0 0 32px 20px rgba(245, 247, 248, 0.90);
+
+    border-radius: 16px;
+  }
+
+}
+
+
+/* ==========================================
+   MOBILE BACKGROUND ADJUSTMENT
+========================================== */
+
+@media (max-width: 600px) {
+
+  .hero-lab-background .hero-image-overlay {
+
+    background:
+
+      /* Focused light near the text area */
+
+      radial-gradient(
+        ellipse 90% 48% at 0% 24%,
+        rgba(255, 249, 242, 0.90) 0%,
+        rgba(245, 247, 248, 0.60) 55%,
+        transparent 100%
+      ),
+
+      /* Smooth white-to-blue transition */
+
+      linear-gradient(
+        90deg,
+        rgba(255, 249, 242, 0.72) 0%,
+        rgba(220, 236, 255, 0.35) 48%,
+        rgba(5, 31, 68, 0.30) 100%
+      );
+  }
+
 }
 
 .hero-image-content {
