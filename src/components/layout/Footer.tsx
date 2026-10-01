@@ -28,20 +28,21 @@ export default function Footer({ onOpenCatalogue }: FooterProps) {
             <Link href="/products">Products</Link>
             <Link href="/brands">Our Brands</Link>
             <Link href="/oem">OEM Manufacturing</Link>
-            <Link href="#quality">Quality Policy</Link>
+            <Link href="/about">Quality Policy</Link>
           </div>
 
           <div>
             <h4>SUPPORT</h4>
-            <Link href="#resources">Downloads & Manuals</Link>
+            <Link href="/resources">Downloads & Manuals</Link>
             <Link href="/faq">FAQs</Link>
             <Link href="/contact">Technical Support</Link>
-            <Link href="#testimonials">Client Testimonials</Link>
-            <Link href="/contact">Contact Sales</Link>
+            <Link href="/privacy-policy">Privacy Policy</Link>
+            <Link href="/terms">Terms & Conditions</Link>
           </div>
 
           <div id="resources">
             <h4>RESOURCES</h4>
+            <Link href="/resources">Documentation Hub</Link>
             {onOpenCatalogue ? (
               <>
                 <button
@@ -79,11 +80,11 @@ export default function Footer({ onOpenCatalogue }: FooterProps) {
               </>
             ) : (
               <>
-                <a href="#resources">Product Catalogs</a>
-                <a href="#resources">Technical Brochures</a>
+                <Link href="/resources">Product Catalogs</Link>
+                <Link href="/resources">Technical Brochures</Link>
               </>
             )}
-            <a href="#quality">ISO Certificates</a>
+            <Link href="/resources">ISO Certificates</Link>
             <Link href="/applications">Application Notes</Link>
           </div>
 
@@ -103,7 +104,16 @@ export default function Footer({ onOpenCatalogue }: FooterProps) {
       </div>
 
       <div className="copyright">
-        © {new Date().getFullYear()} MicropipetteManufacturer.com — Precision Liquid Handling Laboratory Solutions. All rights reserved.
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, maxWidth: 1240, margin: "0 auto", padding: "0 18px" }}>
+          <div>
+            © {new Date().getFullYear()} MicropipetteManufacturer.com — Precision Liquid Handling Laboratory Solutions. All rights reserved.
+          </div>
+          <div style={{ display: "flex", gap: 14 }}>
+            <Link href="/privacy-policy" style={{ color: "inherit", textDecoration: "none" }}>Privacy Policy</Link>
+            <span aria-hidden="true">•</span>
+            <Link href="/terms" style={{ color: "inherit", textDecoration: "none" }}>Terms & Conditions</Link>
+          </div>
+        </div>
       </div>
     </footer>
   );
