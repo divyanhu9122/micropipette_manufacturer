@@ -812,3 +812,61 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================================
+   TECHNICAL SPECIFICATIONS TABLE
+   ============================================================ */
+.pdSpecTableWrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 14px;
+  border: 1px solid var(--mist-blue);
+  background: var(--cool-white);
+  box-shadow: var(--shadow-soft);
+  margin-top: 12px;
+}
+
+.pdSpecTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+.pdSpecTable tr {
+  border-bottom: 1px solid rgba(24, 51, 79, 0.08);
+  transition: background 150ms ease;
+}
+
+.pdSpecTable tr:last-child {
+  border-bottom: none;
+}
+
+.pdSpecTable tr:hover {
+  background: #f4f8fe;
+}
+
+.pdSpecTable th {
+  padding: 12px 18px;
+  font-weight: 700;
+  color: var(--midnight-navy);
+  background: rgba(237, 245, 255, 0.65);
+  width: 38%;
+  vertical-align: top;
+  border-right: 1px solid rgba(24, 51, 79, 0.06);
+}
+
+.pdSpecTable td {
+  padding: 12px 18px;
+  color: var(--dark-blue-gray);
+  vertical-align: top;
+}
+
+@media (max-width: 600px) {
+  .pdSpecTable th,
+  .pdSpecTable td {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}

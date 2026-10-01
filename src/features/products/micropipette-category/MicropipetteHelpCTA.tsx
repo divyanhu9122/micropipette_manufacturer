@@ -1,3 +1,4 @@
+import Link from "next/link";
 import featuredStyles from "@/features/home/featured-products/FeaturedProducts.module.css";
 import styles from "./MicropipetteCategory.module.css";
 
@@ -13,14 +14,12 @@ export default function MicropipetteHelpCTA() {
         </p>
       </div>
       <div className={styles.ctaActions}>
-        {/* No production Request Quote / Contact Sales route is migrated yet;
-            preserved as a safe placeholder pending that decision (see report). */}
-        <a className="btn primary" href="#">
+        <Link className="btn primary" href="/request-quote">
           Request Quote →
-        </a>
-        <a className="btn secondary" href="#">
+        </Link>
+        <Link className="btn secondary" href="/contact">
           Contact Sales
-        </a>
+        </Link>
       </div>
     </div>
   );

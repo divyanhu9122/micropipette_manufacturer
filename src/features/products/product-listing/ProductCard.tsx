@@ -37,13 +37,15 @@ export default function ProductCard({
         ))}
       </div>
       <div className={styles.actions}>
-        {/* Product Detail is not migrated yet; this points to its intended route. */}
         <Link className="btn secondary" href={`/products/${product.slug}`}>
           View Details →
         </Link>
-        <a className="btn primary" href="#">
+        <Link
+          className="btn primary"
+          href={`/products/${product.slug}/request-quote`}
+        >
           Get Quote
-        </a>
+        </Link>
       </div>
     </article>
   );

@@ -6,19 +6,19 @@ import shared from "../product-categories/ProductCategories.module.css";
 import styles from "./TrustedCompanies.module.css";
 
 const placeholders = [
-  "PARTNER 01",
-  "PARTNER 02",
-  "PARTNER 03",
-  "PARTNER 04",
-  "PARTNER 05",
-  "PARTNER 06",
-  "PARTNER 07",
-  "PARTNER 08",
-  "PARTNER 09",
-  "PARTNER 10",
-  "PARTNER 11",
-  "PARTNER 12",
-  "PARTNER 13",
+  "GENOMICS LAB",
+  "MOLECULAR BIOTECH",
+  "CLINICAL DIAGNOSTICS",
+  "PHARMA QC LABS",
+  "ACADEMIC SCIENCES",
+  "BIO-REPOSITORY",
+  "PATHOLOGY NETWORK",
+  "ANALYTICAL TESTING",
+  "FOOD SAFETY LAB",
+  "PETROCHEMICAL QC",
+  "FORENSIC SCIENCES",
+  "BIOPROCESS LAB",
+  "MICROBIOLOGY INSTITUTE",
 ] as const;
 
 export default function TrustedCompanies() {

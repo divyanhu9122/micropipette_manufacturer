@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "micropipette manufacturer/**",
+    "micropipette_codex_context_pack/**",
   ]),
 ]);
 
