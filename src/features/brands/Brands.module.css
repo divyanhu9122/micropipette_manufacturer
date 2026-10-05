@@ -59,6 +59,7 @@
    ============================================================ */
 .typeTag {
   display: inline-block;
+  width: fit-content;
   padding: 4px 10px;
   border-radius: 999px;
   background: rgba(13, 65, 138, 0.08);
@@ -205,6 +206,10 @@
   flex: 1;
   flex-direction: column;
   padding: 20px;
+}
+
+.brandContent > .brandTag {
+  align-self: flex-start;
 }
 
 .brandContent h2 {
@@ -553,6 +558,10 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+}
+
+.bdProductBody > .brandTag {
+  align-self: flex-start;
 }
 
 .bdProductBody h3 {
