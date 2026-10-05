@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 interface PartnerCtaBlockProps {
   onOpenQuote?: () => void;
 }
@@ -23,9 +25,9 @@ export default function PartnerCtaBlock({ onOpenQuote }: PartnerCtaBlockProps) {
                 >
                   Request Partnership Call →
                 </button>
-                <a className="btn secondary" href="#resources">
+                <Link className="btn secondary" href="/resources">
                   Download Catalog & Specifications ↓
-                </a>
+                </Link>
               </div>
 
               <div className="partner-highlights">

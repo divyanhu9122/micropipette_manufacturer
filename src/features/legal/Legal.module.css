@@ -1,0 +1,213 @@
+/* ============================================================
+   LEGAL PAGES STYLES (Privacy Policy & Terms of Service)
+   Design Token Compliant & Responsive
+   ============================================================ */
+
+.legalPage {
+  background: linear-gradient(180deg, var(--ice-blue) 0%, #eaf3ff 44%, #f1f7ff 100%);
+  min-height: 100vh;
+}
+
+/* ============================================================
+   HERO & BREADCRUMB
+   ============================================================ */
+.heroCompact {
+  padding: 32px 0 24px;
+  background: linear-gradient(180deg, var(--pale-sky-blue) 0%, var(--ice-blue) 100%);
+  border-bottom: 1px solid rgba(24, 51, 79, 0.08);
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--slate-blue-gray);
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.breadcrumb a {
+  color: var(--corporate-blue);
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.breadcrumb a:hover {
+  color: var(--vermilion);
+  text-decoration: underline;
+}
+
+.breadcrumbSep {
+  color: var(--slate-blue-gray);
+  font-weight: 400;
+}
+
+.heroCompact h1 {
+  margin: 0;
+  font-family: var(--font-heading, "Manrope", sans-serif);
+  font-size: clamp(28px, 3.5vw, 42px);
+  color: var(--midnight-navy);
+  font-weight: 800;
+}
+
+.lastUpdated {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--slate-blue-gray);
+}
+
+/* ============================================================
+   CONTENT LAYOUT
+   ============================================================ */
+.legalSection {
+  padding: 40px 0 72px;
+}
+
+.legalGrid {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+}
+
+/* Sticky Sidebar Table of Contents */
+.tocSidebar {
+  position: sticky;
+  top: 90px;
+  background: var(--cool-white);
+  border: 1px solid var(--mist-blue);
+  border-radius: 16px;
+  padding: 24px 20px;
+  box-shadow: var(--shadow-soft);
+}
+
+.tocTitle {
+  font-family: var(--font-heading, "Manrope", sans-serif);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--midnight-navy);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(24, 51, 79, 0.08);
+}
+
+.tocList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tocLink {
+  font-size: 13px;
+  color: var(--slate-blue-gray);
+  text-decoration: none;
+  line-height: 1.4;
+  transition: color 150ms ease, padding-left 150ms ease;
+  display: block;
+}
+
+.tocLink:hover {
+  color: var(--corporate-blue);
+  padding-left: 4px;
+}
+
+/* Main Legal Body */
+.legalContent {
+  background: #ffffff;
+  border: 1px solid var(--mist-blue);
+  border-radius: 20px;
+  padding: 40px 48px;
+  box-shadow: var(--shadow-soft);
+  color: var(--dark-blue-gray);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+.legalContent h2 {
+  font-family: var(--font-heading, "Manrope", sans-serif);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--midnight-navy);
+  margin: 36px 0 14px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(24, 51, 79, 0.08);
+}
+
+.legalContent h2:first-of-type {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.legalContent h3 {
+  font-family: var(--font-heading, "Manrope", sans-serif);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--corporate-blue);
+  margin: 20px 0 10px;
+}
+
+.legalContent p {
+  margin: 0 0 16px;
+  color: #2c4a68;
+}
+
+.legalContent ul,
+.legalContent ol {
+  margin: 0 0 20px;
+  padding-left: 24px;
+}
+
+.legalContent li {
+  margin-bottom: 8px;
+  color: #2c4a68;
+}
+
+.calloutBox {
+  background: var(--ice-blue);
+  border-left: 4px solid var(--corporate-blue);
+  border-radius: 0 12px 12px 0;
+  padding: 18px 22px;
+  margin: 24px 0;
+}
+
+.calloutBox p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--midnight-navy);
+  font-weight: 600;
+}
+
+.contactBox {
+  background: #f7fafe;
+  border: 1px solid var(--mist-blue);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 24px;
+}
+
+.contactBox strong {
+  color: var(--midnight-navy);
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .legalGrid {
+    grid-template-columns: 1fr;
+  }
+  .tocSidebar {
+    display: none;
+  }
+  .legalContent {
+    padding: 28px 24px;
+  }
+}

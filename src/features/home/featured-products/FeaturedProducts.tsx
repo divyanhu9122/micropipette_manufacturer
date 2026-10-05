@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Carousel from "@/components/ui/carousel/Carousel";
 import shared from "../product-categories/ProductCategories.module.css";
 import oem from "../oem/OEMSection.module.css";
@@ -102,9 +103,12 @@ export default function FeaturedProducts() {
                 </div>
                 <div className={styles.footer}>
                   <span className={styles.meta}>{product.meta}</span>
-                  <a className={`btn secondary ${styles.details}`} href="#">
+                  <Link
+                    className={`btn secondary ${styles.details}`}
+                    href="/products"
+                  >
                     View Details →
-                  </a>
+                  </Link>
                 </div>
               </article>
             ))}

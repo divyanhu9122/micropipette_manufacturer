@@ -143,7 +143,14 @@ export default function Header({ onOpenQuote }: HeaderProps) {
               >
                 Applications
               </Link>
-              <a href="#resources">Resources</a>
+              <Link
+                className={
+                  pathname?.startsWith("/resources") ? "active" : ""
+                }
+                href="/resources"
+              >
+                Resources
+              </Link>
             </nav>
             {onOpenQuote ? (
               <button
@@ -191,9 +198,9 @@ export default function Header({ onOpenQuote }: HeaderProps) {
             <Link href="/applications" onClick={() => setMobileMenuOpen(false)}>
               Applications
             </Link>
-            <a href="#resources" onClick={() => setMobileMenuOpen(false)}>
+            <Link href="/resources" onClick={() => setMobileMenuOpen(false)}>
               Resources
-            </a>
+            </Link>
             {onOpenQuote ? (
               <button
                 className="btn primary"

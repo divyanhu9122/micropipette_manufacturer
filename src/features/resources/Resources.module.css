@@ -1,0 +1,434 @@
+/* ============================================================
+   RESOURCES & DOCUMENTATION CENTER STYLES
+   Design Token Compliant & Responsive
+   ============================================================ */
+
+.resourcesPage {
+  background: linear-gradient(180deg, var(--ice-blue) 0%, #eaf3ff 44%, #f1f7ff 100%);
+  min-height: 100vh;
+}
+
+/* ============================================================
+   COMPACT HERO & BREADCRUMB
+   ============================================================ */
+.heroCompact {
+  padding: 32px 0 24px;
+  background: linear-gradient(180deg, var(--pale-sky-blue) 0%, var(--ice-blue) 100%);
+  border-bottom: 1px solid rgba(24, 51, 79, 0.08);
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--slate-blue-gray);
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.breadcrumb a {
+  color: var(--corporate-blue);
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.breadcrumb a:hover {
+  color: var(--vermilion);
+  text-decoration: underline;
+}
+
+.breadcrumbSep {
+  color: var(--slate-blue-gray);
+  font-weight: 400;
+}
+
+.heroCompact h1 {
+  margin: 0;
+  font-family: var(--font-heading, "Manrope", sans-serif);
+  font-size: clamp(28px, 3.5vw, 42px);
+  color: var(--midnight-navy);
+  font-weight: 800;
+}
+
+/* ============================================================
+   INTRO & FILTER CONTROLS
+   ============================================================ */
+.resourcesSection {
+  padding: 32px 0 64px;
+}
+
+.resourcesIntro {
+  max-width: 820px;
+  margin-bottom: 32px;
+}
+
+.typeTag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--corporate-blue);
+  margin-bottom: 8px;
+}
+
+.resourcesIntro h2 {
+  font-family: var(--font-heading, "Manrope", sans-serif);
+  font-size: clamp(22px, 2.5vw, 32px);
+  color: var(--midnight-navy);
+  font-weight: 800;
+  margin: 0 0 12px;
+}
+
+.resourcesIntro p {
+  color: var(--slate-blue-gray);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Toolbar & Filters */
+.toolbar {
+  background: var(--cool-white);
+  border: 1px solid var(--mist-blue);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow-soft);
+  margin-bottom: 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.searchBox {
+  position: relative;
+  width: 100%;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 12px 18px 12px 44px;
+  font-size: 14px;
+  font-family: inherit;
+  border: 1px solid var(--mist-blue);
+  border-radius: 12px;
+  background: #fbfdff;
+  color: var(--dark-blue-gray);
+  outline: none;
+  transition: all 200ms ease;
+  box-sizing: border-box;
+}
+
+.searchInput:focus {
+  border-color: var(--corporate-blue);
+  box-shadow: 0 0 0 3px rgba(13, 65, 138, 0.12);
+  background: #ffffff;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: var(--slate-blue-gray);
+  pointer-events: none;
+}
+
+.filterRows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filterLabel {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--dark-blue-gray);
+  min-width: 90px;
+}
+
+.pillList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pillBtn {
+  background: #edf5ff;
+  border: 1px solid #d4e4f7;
+  color: var(--dark-blue-gray);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.pillBtn:hover {
+  background: #dcecff;
+  border-color: var(--corporate-blue);
+  color: var(--corporate-blue);
+}
+
+.pillBtn.active {
+  background: var(--corporate-blue);
+  border-color: var(--corporate-blue);
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(13, 65, 138, 0.25);
+}
+
+/* ============================================================
+   FEATURED BANNER
+   ============================================================ */
+.featuredBanner {
+  background: linear-gradient(135deg, var(--midnight-navy) 0%, var(--deep-navy-blue) 100%);
+  border-radius: 20px;
+  padding: 28px 32px;
+  color: #ffffff;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  box-shadow: 0 12px 28px rgba(5, 31, 68, 0.2);
+}
+
+.featuredContent h3 {
+  font-family: var(--font-heading, "Manrope", sans-serif);
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0 0 8px;
+}
+
+.featuredContent p {
+  color: #cce0f5;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 650px;
+}
+
+/* ============================================================
+   GRID OF RESOURCE CARDS
+   ============================================================ */
+.gridHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.gridCount {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--slate-blue-gray);
+}
+
+.resourceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: var(--cool-white);
+  border: 1px solid var(--mist-blue);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card);
+  border-color: var(--corporate-blue);
+}
+
+.cardTop {
+  margin-bottom: 16px;
+}
+
+.badges {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.formatBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #fff0ed;
+  color: var(--vermilion);
+  border: 1px solid rgba(240, 74, 42, 0.25);
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+}
+
+.brandBadge {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--corporate-blue);
+  background: var(--ice-blue);
+  border: 1px solid var(--pale-sky-blue);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.cardTitle {
+  font-family: var(--font-heading, "Manrope", sans-serif);
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--midnight-navy);
+  line-height: 1.35;
+  margin: 0 0 10px;
+}
+
+.cardDesc {
+  color: var(--slate-blue-gray);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.cardBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid rgba(24, 51, 79, 0.08);
+  gap: 12px;
+}
+
+.fileMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--slate-blue-gray);
+}
+
+.downloadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--cool-white);
+  color: var(--corporate-blue);
+  border: 1px solid var(--corporate-blue);
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 180ms ease;
+}
+
+.downloadBtn:hover {
+  background: var(--corporate-blue);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(13, 65, 138, 0.25);
+}
+
+.downloadBtnSvg {
+  width: 15px;
+  height: 15px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  background: #ffffff;
+  border: 1px dashed var(--mist-blue);
+  border-radius: 16px;
+  color: var(--slate-blue-gray);
+}
+
+.emptyState h3 {
+  font-size: 18px;
+  color: var(--midnight-navy);
+  margin: 0 0 8px;
+}
+
+/* ============================================================
+   CUSTOM DOCUMENTATION INQUIRY CTA
+   ============================================================ */
+.customCta {
+  margin-top: 56px;
+  background: linear-gradient(135deg, #ffffff 0%, #f4f8fe 100%);
+  border: 1px solid var(--mist-blue);
+  border-radius: 20px;
+  padding: 36px 32px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.customCtaContent h3 {
+  font-family: var(--font-heading, "Manrope", sans-serif);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--midnight-navy);
+  margin: 0 0 6px;
+}
+
+.customCtaContent p {
+  color: var(--slate-blue-gray);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 680px;
+}
+
+/* Responsive */
+@media (max-width: 860px) {
+  .featuredBanner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .customCta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .resourceGrid {
+    grid-template-columns: 1fr;
+  }
+  .toolbar {
+    padding: 16px;
+  }
+  .filterGroup {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
