@@ -718,6 +718,10 @@
   flex: 1 1 auto;
 }
 
+.pdRelatedBody > .brandTag {
+  align-self: flex-start;
+}
+
 .pdRelatedBody h3 {
   margin: 10px 0 6px;
   font-family: var(--font-manrope), sans-serif;

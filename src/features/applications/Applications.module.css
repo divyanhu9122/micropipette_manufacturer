@@ -169,11 +169,14 @@
 }
 
 .appMediaTag {
+  width: fit-content;
+  max-width: 100%;
   font-size: 11px;
   font-weight: 800;
   color: var(--slate-blue-gray);
   letter-spacing: 0.05em;
   text-transform: uppercase;
+  text-align: center;
 }
 
 .appBody {
@@ -181,6 +184,10 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+}
+
+.appBody > .typeTag {
+  align-self: flex-start;
 }
 
 .appBody h2 {
