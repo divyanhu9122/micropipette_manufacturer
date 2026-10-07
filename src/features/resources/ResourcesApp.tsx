@@ -56,7 +56,7 @@ export default function ResourcesApp() {
       <section className={styles.resourcesSection}>
         <div className="wrap">
           <div className={styles.resourcesIntro}>
-            <span className={styles.typeTag}>CENTRAL DOWNLOAD REPOSITORY</span>
+            <span className={styles.typeTag}>Central download repository</span>
             <h2>Product Catalogues, Datasheets, Protocols & Quality Certificates</h2>
             <p>
               Access certified technical documentation across our manufacturing portfolio.

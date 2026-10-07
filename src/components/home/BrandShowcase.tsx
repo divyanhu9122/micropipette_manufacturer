@@ -25,6 +25,22 @@ const brands = [
     desc: "Robust autoclaved dispensers, chemical-resistant fluid transfer devices, and heavy-duty volumetric laboratory equipment.",
     badge: "Industrial Grade",
   },
+  {
+    id: "dr-pipette",
+    name: "dr.pipette",
+    tagline: "Liquid Handling & Pipetting",
+    class: "",
+    desc: "Precision micropipettes and liquid handling instruments engineered for laboratory accuracy.",
+    badge: "Specialized Brand",
+  },
+  {
+    id: "sscientific",
+    name: "sscientific",
+    tagline: "Scientific & Measurement Systems",
+    class: "",
+    desc: "Volumetric laboratory instruments and scientific measurement tools.",
+    badge: "Specialized Brand",
+  },
 ];
 
 export default function BrandShowcase() {
@@ -34,7 +50,7 @@ export default function BrandShowcase() {
         <div className="brand-section">
           <h2 className="section-title">OUR SPECIALIZED MANUFACTURING BRANDS</h2>
           <p className="section-subtitle" style={{ color: "#cce0ff" }}>
-            Three trusted product portfolios united under one unified manufacturing, quality assurance, and export umbrella.
+            Trusted product portfolios united under one unified manufacturing, quality assurance, and export umbrella.
           </p>
 
           <div className="brand-grid">

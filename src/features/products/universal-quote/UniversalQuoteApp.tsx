@@ -208,7 +208,7 @@ export default function UniversalQuoteApp() {
       <section className={styles.uqSection}>
         <div className={styles.wrap}>
           <div className={styles.uqIntro}>
-            <span className={styles.typeTag}>UNIVERSAL QUOTE</span>
+            <span className={styles.typeTag}>Universal quote</span>
             <h2>Tell Us What You Need</h2>
             <p>
               One quotation flow for product-specific, brand-specific, general,

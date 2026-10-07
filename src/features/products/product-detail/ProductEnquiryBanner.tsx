@@ -13,7 +13,7 @@ export default function ProductEnquiryBanner({
   return (
     <section className={styles.pdEnquiry} id="enquiry">
       <div>
-        <span className={styles.typeTag}>PRODUCT ENQUIRY</span>
+        <span className={styles.typeTag}>Product enquiry</span>
         <h2>Need a Quote or Technical Support?</h2>
         <p>
           Product and model information will be automatically pre-filled when

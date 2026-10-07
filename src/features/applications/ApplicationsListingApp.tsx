@@ -146,7 +146,7 @@ export default function ApplicationsListingApp() {
       <section className={styles.appSection}>
         <div className="wrap">
           <div className={styles.appIntro}>
-            <span className={styles.typeTag}>APPLICATION WORKFLOWS</span>
+            <span className={styles.typeTag}>Application workflows</span>
             <h2>Liquid Handling Instruments Engineered for Critical Workflows</h2>
             <p>
               Explore dedicated laboratory application areas served by our

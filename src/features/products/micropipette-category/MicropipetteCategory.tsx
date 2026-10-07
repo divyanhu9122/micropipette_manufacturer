@@ -1,13 +1,9 @@
 import Link from "next/link";
-// Reuses the already-migrated hero/breadcrumb/section/panel/title treatment
-// from Product Listing (identical rules in both confirmed prototypes)
-// instead of redefining it, and instead of the stale globals.css
-// `.section-title`/`.section-panel` (pre-refinement, doesn't match the
-// confirmed v13 design).
 import pl from "@/features/products/product-listing/ProductListing.module.css";
 import styles from "./MicropipetteCategory.module.css";
 import MicropipetteCategoryGrid from "./MicropipetteCategoryGrid";
-import FeaturedMicropipettes from "./FeaturedMicropipettes";
+import MicropipetteSeriesSection from "./MicropipetteSeriesSection";
+import ComingSoonSection from "./ComingSoonSection";
 import MicropipetteHelpCTA from "./MicropipetteHelpCTA";
 
 export default function MicropipetteCategory() {
@@ -37,7 +33,10 @@ export default function MicropipetteCategory() {
             <MicropipetteCategoryGrid />
           </div>
 
-          <FeaturedMicropipettes />
+          <MicropipetteSeriesSection />
+
+          <ComingSoonSection />
+
           <MicropipetteHelpCTA />
         </div>
       </section>

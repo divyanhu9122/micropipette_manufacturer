@@ -21,7 +21,7 @@ export default function BrandListingApp() {
       <section className={styles.brandSection}>
         <div className="wrap">
           <div className={styles.brandIntro}>
-            <span className={styles.typeTag}>BRAND PORTFOLIO</span>
+            <span className={styles.typeTag}>Brand portfolio</span>
             <h2>Scientific Brands Under One Manufacturing Network</h2>
             <p>
               Explore our brand portfolio. Each brand page works as a compact
@@ -53,7 +53,7 @@ export default function BrandListingApp() {
                       )}
                     </div>
                   ) : (
-                    <div className={styles.brandLogoTitle}>[{item.name} LOGO]</div>
+                    <div className={styles.brandLogoTitle}>{item.name}</div>
                   )}
                   <span className={styles.brandLogoSubtitle}>
                     {item.isFuturePlaceholder

@@ -90,6 +90,24 @@ export const BRAND_LISTING_ITEMS: BrandListingCard[] = [
     tags: ["Balances", "Micropipettes", "Laboratory Instruments"],
   },
   {
+    id: "dr-pipette",
+    slug: "dr-pipette",
+    name: "dr.pipette",
+    badge: "Specialized Brand",
+    shortIntro:
+      "Precision liquid handling and pipetting solutions manufactured for scientific and clinical laboratories.",
+    tags: ["Micropipettes", "Liquid Handling"],
+  },
+  {
+    id: "sscientific",
+    slug: "sscientific",
+    name: "sscientific",
+    badge: "Specialized Brand",
+    shortIntro:
+      "Scientific instrumentation and volumetric measurement solutions engineered for high laboratory accuracy.",
+    tags: ["Micropipettes", "Laboratory Instruments"],
+  },
+  {
     id: "brand-4",
     name: "BRAND 4",
     badge: "Future Brand Slot",
@@ -421,6 +439,64 @@ export const BRAND_DETAILS: Record<string, BrandDetailItem> = {
       },
     ],
     officialWebsiteUrl: "https://danwer.com",
+  },
+  "dr-pipette": {
+    id: "dr-pipette",
+    slug: "dr-pipette",
+    name: "dr.pipette",
+    brandLogoClass: "",
+    badge: "Specialized Brand",
+    tagline: "Liquid Handling & Pipetting",
+    shortIntro:
+      "Precision liquid handling and pipetting solutions manufactured for scientific and clinical laboratories.",
+    tags: ["Micropipettes", "Liquid Handling"],
+    aboutStory: [
+      "dr.pipette provides specialized liquid handling solutions built under strict ISO quality standards.",
+      "As part of our specialized manufacturing and export network, dr.pipette instruments undergo rigorous testing and calibration before dispatch to international partners.",
+    ],
+    facts: [
+      { label: "Brand Type", value: "Manufacturing Network Brand" },
+      { label: "Product Category", value: "Liquid Handling & Micropipettes" },
+    ],
+    featuredProducts: [],
+    capabilities: [
+      {
+        num: "01",
+        title: "Quality Assurance",
+        desc: "Precision manufacturing according to ISO standards.",
+      },
+    ],
+    resources: [],
+    officialWebsiteUrl: "",
+  },
+  sscientific: {
+    id: "sscientific",
+    slug: "sscientific",
+    name: "sscientific",
+    brandLogoClass: "",
+    badge: "Specialized Brand",
+    tagline: "Scientific & Measurement Systems",
+    shortIntro:
+      "Scientific instrumentation and volumetric measurement solutions engineered for high laboratory accuracy.",
+    tags: ["Micropipettes", "Laboratory Instruments"],
+    aboutStory: [
+      "sscientific provides laboratory instruments and measurement solutions for demanding analytical workflows.",
+      "Manufactured within our ISO-accredited network, sscientific products deliver reproducible accuracy across clinical and research environments.",
+    ],
+    facts: [
+      { label: "Brand Type", value: "Manufacturing Network Brand" },
+      { label: "Product Category", value: "Laboratory Instruments" },
+    ],
+    featuredProducts: [],
+    capabilities: [
+      {
+        num: "01",
+        title: "Analytical Reliability",
+        desc: "Engineered for high accuracy and long-term reproducibility.",
+      },
+    ],
+    resources: [],
+    officialWebsiteUrl: "",
   },
 };
 

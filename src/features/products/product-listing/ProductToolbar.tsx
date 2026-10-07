@@ -11,12 +11,16 @@ export default function ProductToolbar({
   onToggleFilters,
   sortValue,
   onSortChange,
+  searchQuery,
+  onSearchChange,
 }: {
   filtersId: string;
   isFiltersOpen: boolean;
   onToggleFilters: () => void;
   sortValue: SortValue;
   onSortChange: (value: SortValue) => void;
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
 }) {
   const [isSortOpen, setIsSortOpen] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
@@ -50,7 +54,7 @@ export default function ProductToolbar({
       ref={revealRef}
       className={`${styles.toolbar} ${styles.reveal} ${isVisible ? styles.revealVisible : ""}`}
     >
-      <label className={styles.search} aria-label="Search products">
+      <label className={styles.search} aria-label="Search products in listing">
         <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path
             d="m21 21-4.3-4.3m1.3-5.2a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0Z"
@@ -59,7 +63,29 @@ export default function ProductToolbar({
             strokeLinecap="round"
           />
         </svg>
-        <input type="search" placeholder="Search product, model, SKU or brand" />
+        <input
+          type="search"
+          placeholder="Search product, model, SKU or brand"
+          value={searchQuery}
+          onChange={(e) => onSearchChange(e.target.value)}
+        />
+        {searchQuery && (
+          <button
+            type="button"
+            onClick={() => onSearchChange("")}
+            style={{
+              background: "transparent",
+              border: "none",
+              color: "#8aa0ba",
+              cursor: "pointer",
+              padding: "0 8px",
+              fontSize: "14px",
+            }}
+            aria-label="Clear filter search"
+          >
+            ✕
+          </button>
+        )}
       </label>
 
       <button

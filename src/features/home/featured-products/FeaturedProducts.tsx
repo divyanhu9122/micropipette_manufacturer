@@ -64,7 +64,7 @@ export default function FeaturedProducts() {
       <div className={shared.wrap}>
         <div className={shared.panel}>
           <h2 id="featured-products-title" className={shared.title}>
-            FEATURED PRODUCTS
+            Featured Products
           </h2>
           <p id="featured-products-verification" className={styles.verifyNote}>
             Product specifications shown in this prototype require verification

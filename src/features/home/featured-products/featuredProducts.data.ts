@@ -39,12 +39,12 @@ export const featuredProducts: readonly FeaturedProduct[] = [
   {
     id: "tips",
     brand: "LABXE",
-    type: "Consumables",
+    type: "Lab Plasticware",
     title: "Universal Pipette Tips",
     description:
       "High-quality compatible tips built for dependable fit, contamination control and consistent transfer accuracy.",
     specs: ["10 µL – 1250 µL", "Universal Fit"],
-    meta: "Daily Use",
+    meta: "Pipette Tips",
     visual: "tips",
     verificationStatus: "requires-verification",
   },

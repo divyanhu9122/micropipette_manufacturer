@@ -13,7 +13,7 @@ export default function ProductCategories() {
       <div className={styles.wrap}>
         <div className={styles.panel}>
           <h2 id="product-categories-title" className={styles.title}>
-            PRODUCT CATEGORIES
+            Product Categories
           </h2>
           <ProductCategoryCarousel>
             {productCategories.map((category) => (

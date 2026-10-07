@@ -50,7 +50,7 @@ export default function BrandDetailApp({ brand }: BrandDetailAppProps) {
               <div className={styles.bdLogoBox}>
                 <span className={styles.brandBadge}>{brand.badge}</span>
                 <div
-                  className={`${styles.brandLogoTitle} ${styles[brand.brandLogoClass]}`}
+                  className={`${styles.brandLogoTitle} ${brand.brandLogoClass ? styles[brand.brandLogoClass] : ""}`}
                 >
                   {brand.name === "LABXE" ? (
                     <>
@@ -69,7 +69,7 @@ export default function BrandDetailApp({ brand }: BrandDetailAppProps) {
             </div>
 
             <div className={styles.bdHeroContent}>
-              <span className={styles.typeTag}>BRAND PROFILE</span>
+              <span className={styles.typeTag}>Brand profile</span>
               <h2>{brand.name}</h2>
               <p>{brand.shortIntro}</p>
 
@@ -124,34 +124,40 @@ export default function BrandDetailApp({ brand }: BrandDetailAppProps) {
               </Link>
             </div>
 
-            <div className={styles.bdProductGrid}>
-              {brand.featuredProducts.map((product) => (
-                <article key={product.id} className={styles.bdProductItem}>
-                  <div className={styles.bdProductMedia}>
-                    <div className={styles.pipetteIconGraphic}>
-                      <div className={styles.pipetteIconTop} />
-                      <div className={styles.pipetteIconBody}>
-                        {brand.name.slice(0, 4)}
+            {brand.featuredProducts.length > 0 ? (
+              <div className={styles.bdProductGrid}>
+                {brand.featuredProducts.map((product) => (
+                  <article key={product.id} className={styles.bdProductItem}>
+                    <div className={styles.bdProductMedia}>
+                      <div className={styles.pipetteIconGraphic}>
+                        <div className={styles.pipetteIconTop} />
+                        <div className={styles.pipetteIconBody}>
+                          {brand.name.slice(0, 4)}
+                        </div>
+                        <div className={styles.pipetteIconShaft} />
+                        <div className={styles.pipetteIconTip} />
                       </div>
-                      <div className={styles.pipetteIconShaft} />
-                      <div className={styles.pipetteIconTip} />
+                      <span>{product.typeLabel}</span>
                     </div>
-                    <span>{product.typeLabel}</span>
-                  </div>
-                  <div className={styles.bdProductBody}>
-                    <span className={styles.brandTag}>{product.brandTag}</span>
-                    <h3>{product.title}</h3>
-                    <p>{product.description}</p>
-                    <Link
-                      href={`/products/${product.slug}`}
-                      className={`btn secondary ${styles.ctaBtn}`}
-                    >
-                      View Details →
-                    </Link>
-                  </div>
-                </article>
-              ))}
-            </div>
+                    <div className={styles.bdProductBody}>
+                      <span className={styles.brandTag}>{product.brandTag}</span>
+                      <h3>{product.title}</h3>
+                      <p>{product.description}</p>
+                      <Link
+                        href={`/products/${product.slug}`}
+                        className={`btn secondary ${styles.ctaBtn}`}
+                      >
+                        View Details →
+                      </Link>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <p style={{ color: "#62758d", margin: "16px 0" }}>
+                Verified product listings for {brand.name} are currently being updated. Contact our sales team for available models and custom inquiries.
+              </p>
+            )}
           </section>
 
           {/* Capabilities & Support Panel */}
@@ -177,25 +183,31 @@ export default function BrandDetailApp({ brand }: BrandDetailAppProps) {
               <h2 className={styles.bdSectionTitle}>CATALOGUES & RESOURCES</h2>
             </div>
 
-            <div className={styles.bdResourceList}>
-              {brand.resources.map((res) => (
-                <article key={res.id} className={styles.bdResourceCard}>
-                  <div className={styles.bdResourceInfo}>
-                    <strong>{res.title}</strong>
-                    <span>
-                      {res.format} • {res.size} • Official Manufacturer Edition
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    className="btn secondary"
-                    onClick={handleOpenCatalogue}
-                  >
-                    Download
-                  </button>
-                </article>
-              ))}
-            </div>
+            {brand.resources.length > 0 ? (
+              <div className={styles.bdResourceList}>
+                {brand.resources.map((res) => (
+                  <article key={res.id} className={styles.bdResourceCard}>
+                    <div className={styles.bdResourceInfo}>
+                      <strong>{res.title}</strong>
+                      <span>
+                        {res.format} • {res.size} • Official Manufacturer Edition
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      className="btn secondary"
+                      onClick={handleOpenCatalogue}
+                    >
+                      Download
+                    </button>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <p style={{ color: "#62758d", margin: "16px 0" }}>
+                Technical datasheets and documentation for {brand.name} are available upon request through our engineering support desk.
+              </p>
+            )}
           </section>
 
           {/* B2B Enquiry CTA Banner */}

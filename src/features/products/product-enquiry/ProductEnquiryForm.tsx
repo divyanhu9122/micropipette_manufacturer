@@ -89,7 +89,7 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
   return (
     <section className={styles.rqFormCard}>
       <div className={styles.rqHead}>
-        <span className={styles.typeTag}>PRODUCT ENQUIRY</span>
+        <span className={styles.typeTag}>Product enquiry</span>
         <h2>Tell Us Your Requirement</h2>
         <p>Share your contact and requirement details. Fields marked with * are required.</p>
       </div>

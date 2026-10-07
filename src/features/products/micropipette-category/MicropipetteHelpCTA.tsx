@@ -6,7 +6,7 @@ export default function MicropipetteHelpCTA() {
   return (
     <div className={styles.helpCta}>
       <div>
-        <span className={featuredStyles.typeTag}>B2B SUPPORT</span>
+        <span className={featuredStyles.typeTag}>B2B support</span>
         <h2>Need Help Choosing a Micropipette?</h2>
         <p>
           Connect with the sales team for product selection, quotation,

@@ -75,7 +75,7 @@ export default function CatalogueModal({
       >
         <div className={styles.catalogModalHead}>
           <div>
-            <span className={styles.typeTag}>CATALOGUE DOWNLOAD</span>
+            <span className={styles.typeTag}>Catalogue download</span>
             <h2 id="catalogModalTitle">Get the Complete Catalogue</h2>
             <p>
               Share your basic contact details and the catalogue will be available immediately after submission.
