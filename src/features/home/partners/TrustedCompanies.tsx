@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
 import PartnerReveal from "./PartnerReveal";
 import shared from "../product-categories/ProductCategories.module.css";
 import styles from "./TrustedCompanies.module.css";
 
-const placeholders = [
+const partnerNames = [
   "GENOMICS LAB",
   "MOLECULAR BIOTECH",
   "CLINICAL DIAGNOSTICS",
@@ -20,6 +21,45 @@ const placeholders = [
   "BIOPROCESS LAB",
   "MICROBIOLOGY INSTITUTE",
 ] as const;
+
+interface Partner {
+  name: string;
+  logo: string;
+}
+
+const partners: Partner[] = partnerNames.map((name, index) => ({
+  name,
+  logo: `/images/partners/partner-${String(index + 1).padStart(2, "0")}.png`,
+}));
+
+function PartnerLogo({ partner }: { partner: Partner }) {
+  const [loaded, setLoaded] = useState(false);
+
+  return (
+    <div className={styles.logo}>
+      <Image
+        src={partner.logo}
+        alt={`${partner.name} logo`}
+        fill
+        sizes="(max-width: 640px) 132px, 172px"
+        loading="eager"
+        unoptimized
+        className={`${styles.logoImage} ${loaded ? styles.logoLoaded : styles.logoPending}`}
+        onLoad={() => setLoaded(true)}
+        onError={() => setLoaded(false)}
+      />
+      {!loaded && (
+        <span
+          className={styles.logoPlaceholder}
+          role="img"
+          aria-label={`${partner.name} logo placeholder`}
+        >
+          [COMPANY LOGO]
+        </span>
+      )}
+    </div>
+  );
+}
 
 export default function TrustedCompanies() {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -90,13 +130,12 @@ export default function TrustedCompanies() {
                     className={styles.logoGroup}
                     aria-hidden={isDuplicate ? true : undefined}
                   >
-                    {placeholders.map((partner) => (
+                    {partners.map((partner) => (
                       <div
-                        key={partner}
+                        key={partner.logo}
                         className={styles.item}
-                        data-placeholder="true"
                       >
-                        <div className={styles.logo}>{partner}</div>
+                        <PartnerLogo partner={partner} />
                       </div>
                     ))}
                   </div>

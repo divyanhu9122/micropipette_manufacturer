@@ -159,6 +159,7 @@ textarea {
 .logo-image {
   width: 255px;
   height: auto;
+  object-fit: contain;
   display: block;
 }
 
@@ -503,12 +504,18 @@ textarea {
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--transition-hero), visibility var(--transition-hero);
-  /* Preserve the complete banner at every viewport aspect ratio. */
+  display: flex;
+  align-items: center;
+}
+
+.hero-slide-image {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
   background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-  display: flex;
-  align-items: center;
+  filter: contrast(1.04) saturate(1.04);
 }
 
 .hero-full-slide.active {
@@ -537,9 +544,9 @@ textarea {
 }
 
 /* ==========================================
-   PREMIUM LAB HERO BACKGROUND
-   Warm White → Cool Pearl → Ice Blue → Navy
-   Left-to-Right Focused Spotlight Effect
+   SOFT LEFT-TO-RIGHT HERO SCRIM
+   Light text zone fading to a clear image on the right
+   Clear text on the left; reveal product imagery on the right
 ========================================== */
 
 .hero-lab-background .hero-image-overlay {
@@ -547,64 +554,15 @@ textarea {
   inset: 0;
   pointer-events: none;
   z-index: 1;
-
-  background:
-
-    /* 1. Focused warm-white light source
-       entering from the upper-left side */
-
-    radial-gradient(
-      ellipse 45% 42% at 0% 26%,
-      rgba(255, 249, 242, 0.96) 0%,
-      rgba(255, 250, 245, 0.78) 22%,
-      rgba(255, 255, 255, 0.38) 55%,
-      transparent 100%
-    ),
-
-    /* 2. Horizontal torch-like beam
-       spreading from left to right */
-
-    radial-gradient(
-      ellipse 76% 26% at 0% 30%,
-      rgba(255, 255, 255, 0.88) 0%,
-      rgba(250, 251, 252, 0.56) 32%,
-      rgba(235, 246, 255, 0.22) 65%,
-      transparent 100%
-    ),
-
-    /* 3. Subtle cool-white atmospheric glow
-       across the left and middle sections */
-
-    radial-gradient(
-      ellipse 58% 65% at 24% 48%,
-      rgba(245, 247, 248, 0.38) 0%,
-      rgba(220, 236, 255, 0.16) 55%,
-      transparent 100%
-    ),
-
-    /* 4. Soft icy-blue illumination
-       behind the central product */
-
-    radial-gradient(
-      ellipse 30% 65% at 61% 48%,
-      rgba(185, 220, 245, 0.32) 0%,
-      rgba(90, 160, 215, 0.14) 48%,
-      transparent 100%
-    ),
-
-    /* 5. Main cinematic color transition
-       with controlled transparency to
-       preserve the original product image */
-
-    linear-gradient(
-      90deg,
-      rgba(255, 249, 242, 0.82) 0%,
-      rgba(245, 247, 248, 0.72) 20%,
-      rgba(220, 236, 255, 0.52) 38%,
-      rgba(185, 213, 233, 0.22) 52%,
-      rgba(13, 65, 138, 0.10) 72%,
-      rgba(5, 31, 68, 0.42) 100%
-    );
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.98) 0%,
+    rgba(255, 255, 255, 0.94) 18%,
+    rgba(255, 255, 255, 0.78) 38%,
+    rgba(255, 255, 255, 0.42) 52%,
+    rgba(255, 255, 255, 0.1) 66%,
+    rgba(255, 255, 255, 0) 78%
+  );
 }
 
 
@@ -616,17 +574,13 @@ textarea {
 .hero-lab-background .hero-image-copy,
 .hero-lab-background .hero-image-copy h1 {
   color: var(--lab-midnight);
-
-  text-shadow:
-    0 1px 8px rgba(245, 247, 248, 0.65);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.35);
 }
 
 .hero-lab-background .hero-image-copy p,
 .hero-lab-background .hero-eyebrow {
   color: #18334f;
-
-  text-shadow:
-    0 1px 6px rgba(245, 247, 248, 0.8);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.35);
 }
 
 
@@ -660,16 +614,28 @@ textarea {
 ========================================== */
 
 @media (max-width: 1100px) {
-
-  .hero-lab-background .hero-image-copy {
-    background: rgba(245, 247, 248, 0.90);
-
-    box-shadow:
-      0 0 32px 20px rgba(245, 247, 248, 0.90);
-
-    border-radius: 16px;
+  .hero-lab-background .hero-image-overlay {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.98) 0%,
+      rgba(255, 255, 255, 0.94) 38%,
+      rgba(255, 255, 255, 0.78) 60%,
+      rgba(255, 255, 255, 0.32) 78%,
+      rgba(255, 255, 255, 0) 96%
+    );
   }
+}
 
+@media (max-width: 900px) {
+  .hero-lab-background .hero-image-overlay {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.98) 0%,
+      rgba(255, 255, 255, 0.92) 50%,
+      rgba(255, 255, 255, 0.76) 85%,
+      rgba(255, 255, 255, 0.38) 100%
+    );
+  }
 }
 
 
@@ -677,31 +643,15 @@ textarea {
    MOBILE BACKGROUND ADJUSTMENT
 ========================================== */
 
-@media (max-width: 600px) {
-
+@media (max-width: 640px) {
   .hero-lab-background .hero-image-overlay {
-
-    background:
-
-      /* Focused light near the text area */
-
-      radial-gradient(
-        ellipse 90% 48% at 0% 24%,
-        rgba(255, 249, 242, 0.90) 0%,
-        rgba(245, 247, 248, 0.60) 55%,
-        transparent 100%
-      ),
-
-      /* Smooth white-to-blue transition */
-
-      linear-gradient(
-        90deg,
-        rgba(255, 249, 242, 0.72) 0%,
-        rgba(220, 236, 255, 0.35) 48%,
-        rgba(5, 31, 68, 0.30) 100%
-      );
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.97) 0%,
+      rgba(255, 255, 255, 0.9) 58%,
+      rgba(255, 255, 255, 0.58) 100%
+    );
   }
-
 }
 
 .hero-image-content {
@@ -1889,6 +1839,19 @@ footer {
   margin-bottom: 12px;
 }
 
+.footer-brand .footer-brand-logo {
+  width: 100%;
+  max-width: 255px;
+  min-width: 0;
+}
+
+.footer-brand-logo-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
 .footer-brand p {
   margin: 12px 0 0;
   color: #d5e1f2;
@@ -1937,6 +1900,8 @@ footer a:hover {
 .social:hover {
   background: var(--vermilion);
   border-color: var(--vermilion);
+  color: #ffffff;
+  opacity: 1;
 }
 
 .copyright {
@@ -1945,6 +1910,19 @@ footer a:hover {
   color: #bed0ea;
   font-size: 12px;
   text-align: center;
+}
+
+.footer-legal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.footer-legal-separator {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
 }
 
 /* ============================================================

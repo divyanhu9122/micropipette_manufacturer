@@ -1,0 +1,159 @@
+.carouselSection {
+  margin-top: 18px;
+}
+
+.shell {
+  position: relative;
+  min-width: 0;
+}
+
+.track {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 8px 8px 24px;
+  scroll-padding-inline: 8px;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  overscroll-behavior-inline: contain;
+  touch-action: pan-x pan-y pinch-zoom;
+  cursor: grab;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.track.dragging {
+  scroll-snap-type: none;
+  scroll-behavior: auto;
+  user-select: none;
+  cursor: grabbing;
+}
+
+.card {
+  display: flex;
+  flex: 0 0 calc((100% - 32px - 16px) / 3);
+  flex-direction: column;
+  min-width: 0;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.card a {
+  margin-top: auto;
+}
+
+.brandLogoArea {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 100%;
+  height: 126px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  border: 1px solid #d7e3f2;
+  border-radius: 10px;
+  background: #f6f9fd;
+}
+
+.brandLogo {
+  padding: 8px;
+  object-fit: contain;
+}
+
+.logoPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: #62758d;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  transform: translateY(-50%);
+  border: 1px solid rgba(13, 65, 138, 0.24);
+  border-radius: 50%;
+  background: rgba(251, 253, 255, 0.94);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
+  color: #082f68;
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: 900;
+  transition: background-color 150ms ease, box-shadow 150ms ease;
+}
+
+.arrow:hover {
+  background: #e8f2ff;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.24);
+}
+
+.previous {
+  left: -10px;
+}
+
+.next {
+  right: -10px;
+}
+
+@media (max-width: 1100px) {
+  .card {
+    flex-basis: calc((100% - 16px - 16px) / 2);
+  }
+}
+
+@media (max-width: 640px) {
+  .track {
+    padding-bottom: 16px;
+  }
+
+  .card {
+    flex-basis: calc(100% - 32px);
+  }
+
+  .arrow {
+    top: auto;
+    bottom: -38px;
+    transform: none;
+    width: 38px;
+    height: 38px;
+  }
+
+  .previous {
+    left: calc(50% - 46px);
+  }
+
+  .next {
+    right: calc(50% - 46px);
+  }
+
+  .carouselSection {
+    padding-bottom: 42px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    scroll-behavior: auto;
+  }
+
+  .arrow {
+    transition: none;
+  }
+}

@@ -167,8 +167,8 @@ export default function Header({ onOpenQuote }: HeaderProps) {
               className="logo-image"
               src="/images/brand/micropipette-manufacturer-logo.png"
               alt="Micropipette Manufacturer logo"
-              width={98}
-              height={32}
+              width={866}
+              height={288}
               priority
             />
           </Link>

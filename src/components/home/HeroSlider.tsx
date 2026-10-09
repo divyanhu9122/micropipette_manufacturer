@@ -95,9 +95,13 @@ export default function HeroSlider({ onOpenQuote }: HeroSliderProps) {
             <article
               key={slide.id}
               className={`hero-full-slide ${isActive ? "active" : ""}`}
-              style={{ backgroundImage: `url(${slide.image})` }}
               aria-hidden={!isActive}
             >
+              <div
+                className="hero-slide-image"
+                style={{ backgroundImage: `url(${slide.image})` }}
+                aria-hidden="true"
+              />
               <div className="hero-image-overlay" aria-hidden="true" />
               <div className="wrap hero-image-content">
                 <div className="hero-image-copy">

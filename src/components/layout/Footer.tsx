@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 interface FooterProps {
   onOpenCatalogue?: () => void;
@@ -10,13 +11,15 @@ export default function Footer({ onOpenCatalogue }: FooterProps) {
       <div className="wrap footer-top">
         <div className="footer-grid">
           <div className="footer-brand">
-            <div className="logo">
-              <div className="logo-mark" aria-hidden="true" />
-              <div className="logo-text">
-                MicropipetteManufacturer<span style={{ color: "#dcecff" }}>.com</span>
-                <small>Precision. Performance. Partnership.</small>
-              </div>
-            </div>
+            <Link href="/" className="logo footer-brand-logo">
+              <Image
+                className="footer-brand-logo-image"
+                src="/images/brand/micropipette-manufacturer-logo.png"
+                alt="MicropipetteManufacturer"
+                width={866}
+                height={288}
+              />
+            </Link>
             <p>
               Central B2B platform for LABXE, SSCIENCES and DANWER product discovery, OEM solutions and global laboratory inquiries.
             </p>
@@ -108,9 +111,9 @@ export default function Footer({ onOpenCatalogue }: FooterProps) {
           <div>
             © {new Date().getFullYear()} MicropipetteManufacturer.com — Precision Liquid Handling Laboratory Solutions. All rights reserved.
           </div>
-          <div style={{ display: "flex", gap: 14 }}>
+          <div className="footer-legal">
             <Link href="/privacy-policy" style={{ color: "inherit", textDecoration: "none" }}>Privacy Policy</Link>
-            <span aria-hidden="true">•</span>
+            <span className="footer-legal-separator" aria-hidden="true">•</span>
             <Link href="/terms" style={{ color: "inherit", textDecoration: "none" }}>Terms & Conditions</Link>
           </div>
         </div>

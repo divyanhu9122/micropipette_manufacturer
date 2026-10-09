@@ -1,6 +1,19 @@
+import Image from "next/image";
 import Link from "next/link";
+import Carousel from "@/components/ui/carousel/Carousel";
+import styles from "./BrandShowcase.module.css";
 
-const brands = [
+interface ShowcaseBrand {
+  id: string;
+  name: string;
+  tagline: string;
+  class: string;
+  desc: string;
+  badge: string;
+  logo?: string;
+}
+
+const brands: ShowcaseBrand[] = [
   {
     id: "labxe",
     name: "LABXE",
@@ -53,21 +66,28 @@ export default function BrandShowcase() {
             Trusted product portfolios united under one unified manufacturing, quality assurance, and export umbrella.
           </p>
 
-          <div className="brand-grid">
+          <Carousel
+            styles={styles}
+            label="Specialized manufacturing brands"
+            previousLabel="Previous brands"
+            nextLabel="Next brands"
+          >
             {brands.map((brand) => (
-              <article key={brand.id} className="brand-card">
+              <article key={brand.id} className={`brand-card ${styles.card}`}>
                 <div className="brand-tagline">{brand.badge}</div>
-                <div className={`brand-logo-text ${brand.class}`}>
-                  {brand.name === "LABXE" ? (
-                    <>
-                      LAB<b>XE</b>
-                    </>
-                  ) : brand.name === "SSCIENCES" ? (
-                    <>
-                      S<b>SCIENCES</b>
-                    </>
+                <div className={styles.brandLogoArea}>
+                  {brand.logo ? (
+                    <Image
+                      src={brand.logo}
+                      alt={`${brand.name} logo`}
+                      fill
+                      sizes="(max-width: 640px) 240px, 300px"
+                      className={styles.brandLogo}
+                    />
                   ) : (
-                    brand.name
+                    <div className={styles.logoPlaceholder} aria-label={`${brand.name} logo placeholder`}>
+                      [BRAND LOGO]
+                    </div>
                   )}
                 </div>
                 <h4>{brand.tagline}</h4>
@@ -81,7 +101,7 @@ export default function BrandShowcase() {
                 </Link>
               </article>
             ))}
-          </div>
+          </Carousel>
         </div>
       </div>
     </section>
