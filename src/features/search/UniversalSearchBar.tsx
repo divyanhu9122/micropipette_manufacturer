@@ -1,10 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition, type FormEvent, type KeyboardEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+  type FormEvent,
+  type KeyboardEvent,
+} from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./UniversalSearchBar.module.css";
-import { searchItems, type SearchItem } from "./search.data";
+import { searchItems, type SearchContentType } from "./search.data";
 
 interface UniversalSearchBarProps {
   id?: string;
@@ -13,13 +20,25 @@ interface UniversalSearchBarProps {
   onClose?: () => void;
   autoFocus?: boolean;
   className?: string;
+  panel?: boolean;
 }
+
+const RESULT_GROUPS: { type: SearchContentType; label: string }[] = [
+  { type: "Product", label: "Products" },
+  { type: "Micropipette Series", label: "Micropipette Series" },
+  { type: "Category", label: "Categories" },
+  { type: "Brand", label: "Brands" },
+  { type: "Page", label: "Pages" },
+];
 
 const POPULAR_SUGGESTIONS = [
   { label: "Micropipette", href: "/products/micropipettes" },
   { label: "Lab Plasticware", href: "/products?category=Lab+Plasticware" },
   { label: "Science Plus", href: "/products/micropipettes#science-plus" },
-  { label: "FAC Plus (Autoclavable)", href: "/products/micropipettes#fac-plus" },
+  {
+    label: "FAC Plus (Autoclavable)",
+    href: "/products/micropipettes#fac-plus",
+  },
   { label: "LABXE", href: "/brands/labxe" },
   { label: "SSCIENCES", href: "/brands/ssciences" },
   { label: "dr.pipette", href: "/brands/dr-pipette" },
@@ -33,6 +52,7 @@ export default function UniversalSearchBar({
   onClose,
   autoFocus = false,
   className,
+  panel = false,
 }: UniversalSearchBarProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -45,12 +65,13 @@ export default function UniversalSearchBar({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const listRef = useRef<HTMLUListElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const [prevUrlQuery, setPrevUrlQuery] = useState(initialUrlQuery);
   if (prevUrlQuery !== initialUrlQuery) {
     setPrevUrlQuery(initialUrlQuery);
     setQuery(initialUrlQuery);
+    setActiveIndex(-1);
   }
 
   // Auto focus input when requested
@@ -71,16 +92,49 @@ export default function UniversalSearchBar({
         setActiveIndex(-1);
       }
     };
-    document.addEventListener("mousedown", handleOutsideClick);
-    return () => document.removeEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("pointerdown", handleOutsideClick);
+    return () =>
+      document.removeEventListener("pointerdown", handleOutsideClick);
   }, []);
 
-  const results: SearchItem[] = query.trim() ? searchItems(query).slice(0, 7) : [];
+  const matches = query.trim() ? searchItems(query).slice(0, 7) : [];
+  const groups = RESULT_GROUPS.map((group) => ({
+    ...group,
+    items: matches.filter((item) => item.type === group.type),
+  })).filter((group) => group.items.length > 0);
+  const results = groups.flatMap((group) => group.items);
+  const suggestions = query.trim()
+    ? POPULAR_SUGGESTIONS.slice(0, 4)
+    : POPULAR_SUGGESTIONS;
+  const choices = results.length > 0 ? results : suggestions;
+  const activeOptionId =
+    isOpen && activeIndex >= 0 && activeIndex < choices.length
+      ? `${id}-option-${activeIndex}`
+      : undefined;
 
-  const handleSelectResult = (href: string) => {
+  useEffect(() => {
+    if (!activeOptionId) return;
+    const activeOption = document.getElementById(activeOptionId);
+    const dropdown = dropdownRef.current;
+    if (!activeOption || !dropdown) return;
+    const optionBounds = activeOption.getBoundingClientRect();
+    const dropdownBounds = dropdown.getBoundingClientRect();
+    if (optionBounds.bottom > dropdownBounds.bottom) {
+      dropdown.scrollTop += optionBounds.bottom - dropdownBounds.bottom;
+    } else if (optionBounds.top < dropdownBounds.top) {
+      dropdown.scrollTop -= dropdownBounds.top - optionBounds.top;
+    }
+  }, [activeOptionId]);
+
+  const handleNavigate = () => {
     setIsOpen(false);
+    setActiveIndex(-1);
     onNavigate?.();
     onClose?.();
+  };
+
+  const handleSelectResult = (href: string) => {
+    handleNavigate();
     router.push(href);
   };
 
@@ -89,9 +143,7 @@ export default function UniversalSearchBar({
     const trimmed = query.trim();
     if (!trimmed) return;
 
-    setIsOpen(false);
-    onNavigate?.();
-    onClose?.();
+    handleNavigate();
     startTransition(() => {
       router.push(`/search?q=${encodeURIComponent(trimmed)}`);
     });
@@ -99,42 +151,53 @@ export default function UniversalSearchBar({
 
   const handleClear = () => {
     setQuery("");
+    setIsOpen(true);
     setActiveIndex(-1);
     inputRef.current?.focus();
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Escape") {
+      e.preventDefault();
+      if (onClose) e.stopPropagation();
       setIsOpen(false);
       setActiveIndex(-1);
       onClose?.();
       return;
     }
 
-    if (!isOpen && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
       setIsOpen(true);
+      setActiveIndex((prev) => {
+        if (e.key === "ArrowDown")
+          return isOpen && prev + 1 < choices.length ? prev + 1 : 0;
+        return isOpen && prev > 0 ? prev - 1 : choices.length - 1;
+      });
       return;
     }
 
-    if (results.length > 0) {
-      if (e.key === "ArrowDown") {
-        e.preventDefault();
-        setActiveIndex((prev) => (prev + 1 < results.length ? prev + 1 : 0));
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-        setActiveIndex((prev) => (prev > 0 ? prev - 1 : results.length - 1));
-      } else if (e.key === "Enter" && activeIndex >= 0 && activeIndex < results.length) {
-        e.preventDefault();
-        const selected = results[activeIndex];
-        handleSelectResult(selected.href);
-      }
+    if (
+      e.key === "Enter" &&
+      isOpen &&
+      activeIndex >= 0 &&
+      activeIndex < choices.length
+    ) {
+      e.preventDefault();
+      handleSelectResult(choices[activeIndex].href);
     }
   };
 
   return (
     <div
       ref={containerRef}
-      className={`${styles.searchContainer} ${className || ""}`}
+      className={`${styles.searchContainer} ${panel ? styles.panel : ""} ${className || ""}`}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          setIsOpen(false);
+          setActiveIndex(-1);
+        }
+      }}
     >
       <form
         role="search"
@@ -158,10 +221,12 @@ export default function UniversalSearchBar({
             onFocus={() => setIsOpen(true)}
             onKeyDown={handleKeyDown}
             role="combobox"
-            aria-label="Search laboratory products, micropipette series, categories, and brands"
+            aria-label="Search products, micropipette series, categories, brands, and pages"
             aria-autocomplete="list"
-            aria-controls={`${id}-results`}
+            aria-controls={isOpen ? `${id}-results` : undefined}
+            aria-activedescendant={activeOptionId}
             aria-expanded={isOpen}
+            aria-haspopup="listbox"
             autoComplete="off"
             spellCheck="false"
           />
@@ -204,7 +269,7 @@ export default function UniversalSearchBar({
       {/* Interactive Dropdown */}
       {isOpen && (
         <div
-          id={`${id}-results`}
+          ref={dropdownRef}
           className={styles.dropdown}
           role="region"
           aria-label="Search suggestions and matching results"
@@ -212,18 +277,26 @@ export default function UniversalSearchBar({
           {query.trim().length === 0 ? (
             /* Empty Query State: Suggestions */
             <div className={styles.suggestionBlock}>
-              <div className={styles.suggestionHeading}>Popular Categories & Searches</div>
-              <div className={styles.tagPills}>
-                {POPULAR_SUGGESTIONS.map((sug) => (
+              <div className={styles.suggestionHeading}>
+                Popular Categories & Searches
+              </div>
+              <div
+                id={`${id}-results`}
+                className={styles.tagPills}
+                role="listbox"
+                aria-label="Popular searches"
+              >
+                {suggestions.map((sug, index) => (
                   <Link
                     key={sug.label}
                     href={sug.href}
-                    className={styles.tagPill}
-                    onClick={() => {
-                      setIsOpen(false);
-                      onNavigate?.();
-                      onClose?.();
-                    }}
+                    id={`${id}-option-${index}`}
+                    role="option"
+                    aria-selected={activeIndex === index}
+                    tabIndex={-1}
+                    className={`${styles.tagPill} ${activeIndex === index ? styles.tagPillActive : ""}`}
+                    onClick={handleNavigate}
+                    onMouseEnter={() => setActiveIndex(index)}
                   >
                     {sug.label}
                   </Link>
@@ -234,45 +307,70 @@ export default function UniversalSearchBar({
             /* Live Results */
             <>
               <div className={styles.dropdownHeader}>
-                <span>Matching Results ({results.length})</span>
-                <span>Press Enter to view all</span>
+                <span role="status">Matching Results ({results.length})</span>
+                <span>Use ↑ ↓ to select</span>
               </div>
-              <ul ref={listRef} className={styles.resultsList} role="listbox">
-                {results.map((item, index) => (
-                  <li key={item.id} role="option" aria-selected={activeIndex === index}>
-                    <Link
-                      href={item.href}
-                      className={`${styles.resultItem} ${activeIndex === index ? styles.resultItemActive : ""}`}
-                      onClick={() => {
-                        setIsOpen(false);
-                        onNavigate?.();
-                        onClose?.();
-                      }}
-                      onMouseEnter={() => setActiveIndex(index)}
+              <div
+                id={`${id}-results`}
+                className={styles.resultsList}
+                role="listbox"
+                aria-label="Matching search results"
+              >
+                {groups.map((group) => (
+                  <div
+                    key={group.type}
+                    role="group"
+                    aria-labelledby={`${id}-group-${group.type.replaceAll(" ", "-")}`}
+                  >
+                    <div
+                      id={`${id}-group-${group.type.replaceAll(" ", "-")}`}
+                      className={styles.groupHeading}
                     >
-                      <div className={styles.resultHead}>
-                        <span className={styles.resultTitle}>{item.title}</span>
-                        <div>
-                          <span className={styles.typeBadge}>{item.type}</span>
-                          {item.isComingSoon && (
-                            <span className={styles.comingSoonBadge}>Coming Soon</span>
-                          )}
-                        </div>
-                      </div>
-                      <p className={styles.resultSnippet}>{item.description}</p>
-                    </Link>
-                  </li>
+                      {group.label}
+                    </div>
+                    {group.items.map((item) => {
+                      const index = results.indexOf(item);
+                      return (
+                        <Link
+                          key={item.id}
+                          href={item.href}
+                          id={`${id}-option-${index}`}
+                          role="option"
+                          aria-selected={activeIndex === index}
+                          tabIndex={-1}
+                          className={`${styles.resultItem} ${activeIndex === index ? styles.resultItemActive : ""}`}
+                          onClick={handleNavigate}
+                          onMouseEnter={() => setActiveIndex(index)}
+                        >
+                          <div className={styles.resultHead}>
+                            <span className={styles.resultTitle}>
+                              {item.title}
+                            </span>
+                            <div>
+                              <span className={styles.typeBadge}>
+                                {item.type}
+                              </span>
+                              {item.isComingSoon && (
+                                <span className={styles.comingSoonBadge}>
+                                  Coming Soon
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          <p className={styles.resultSnippet}>
+                            {item.description}
+                          </p>
+                        </Link>
+                      );
+                    })}
+                  </div>
                 ))}
-              </ul>
+              </div>
               <div className={styles.dropdownFooter}>
                 <Link
                   href={`/search?q=${encodeURIComponent(query.trim())}`}
                   className={styles.viewAllLink}
-                  onClick={() => {
-                    setIsOpen(false);
-                    onNavigate?.();
-                    onClose?.();
-                  }}
+                  onClick={handleNavigate}
                 >
                   View all results for &ldquo;{query.trim()}&rdquo; →
                 </Link>
@@ -281,21 +379,33 @@ export default function UniversalSearchBar({
           ) : (
             /* No Results State */
             <div className={styles.noResults}>
-              <div className={styles.noResultsTitle}>No results found</div>
+              <div className={styles.noResultsTitle} role="status">
+                No results found
+              </div>
               <p className={styles.noResultsDesc}>
-                We couldn&rsquo;t find anything matching &ldquo;{query.trim()}&rdquo;. Try checking the spelling or searching for a broader term like &ldquo;micropipette&rdquo;, &ldquo;LABXE&rdquo;, or &ldquo;plasticware&rdquo;.
+                We couldn&rsquo;t find anything matching &ldquo;{query.trim()}
+                &rdquo;. Try checking the spelling or searching for a broader
+                term like &ldquo;micropipette&rdquo;, &ldquo;LABXE&rdquo;, or
+                &ldquo;plasticware&rdquo;.
               </p>
-              <div className={styles.tagPills} style={{ justifyContent: "center" }}>
-                {POPULAR_SUGGESTIONS.slice(0, 4).map((sug) => (
+              <div
+                id={`${id}-results`}
+                className={styles.tagPills}
+                style={{ justifyContent: "center" }}
+                role="listbox"
+                aria-label="Suggested searches"
+              >
+                {suggestions.map((sug, index) => (
                   <Link
                     key={sug.label}
                     href={sug.href}
-                    className={styles.tagPill}
-                    onClick={() => {
-                      setIsOpen(false);
-                      onNavigate?.();
-                      onClose?.();
-                    }}
+                    id={`${id}-option-${index}`}
+                    role="option"
+                    aria-selected={activeIndex === index}
+                    tabIndex={-1}
+                    className={`${styles.tagPill} ${activeIndex === index ? styles.tagPillActive : ""}`}
+                    onClick={handleNavigate}
+                    onMouseEnter={() => setActiveIndex(index)}
                   >
                     {sug.label}
                   </Link>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -20,7 +20,13 @@ export default function Header({ onOpenQuote }: HeaderProps) {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const searchTriggerRef = useRef<HTMLButtonElement>(null);
   const mobileSearchTriggerRef = useRef<HTMLButtonElement>(null);
-  const navShellRef = useRef<HTMLDivElement>(null);
+  const closeSearch = useCallback(() => {
+    setSearchOpen(false);
+    const trigger = window.matchMedia("(min-width: 1101px)").matches
+      ? searchTriggerRef.current
+      : mobileSearchTriggerRef.current;
+    trigger?.focus();
+  }, []);
 
   // Close menus on route navigation
   const [prevPathname, setPrevPathname] = useState(pathname);
@@ -47,12 +53,8 @@ export default function Header({ onOpenQuote }: HeaderProps) {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         if (searchOpen) {
-          setSearchOpen(false);
-          if (typeof window !== "undefined" && window.innerWidth > 1100) {
-            searchTriggerRef.current?.focus();
-          } else {
-            mobileSearchTriggerRef.current?.focus();
-          }
+          event.preventDefault();
+          closeSearch();
         } else if (mobileMenuOpen) {
           setMobileMenuOpen(false);
           menuButtonRef.current?.focus();
@@ -61,7 +63,7 @@ export default function Header({ onOpenQuote }: HeaderProps) {
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [searchOpen, mobileMenuOpen]);
+  }, [searchOpen, mobileMenuOpen, closeSearch]);
 
   // Responsive listener for closing mobile menu on desktop resize
   useEffect(() => {
@@ -126,13 +128,9 @@ export default function Header({ onOpenQuote }: HeaderProps) {
     };
   }, [mobileMenuOpen, searchOpen]);
 
-  const quoteButton = onOpenQuote ? (
-    <button className="btn primary" type="button" onClick={onOpenQuote}>
-      Get Quote →
-    </button>
-  ) : (
-    <Link className="btn primary" href="/request-quote">
-      Get Quote →
+  const contactButton = (
+    <Link className="btn primary header-contact" href="/contact">
+      Contact
     </Link>
   );
 
@@ -174,10 +172,14 @@ export default function Header({ onOpenQuote }: HeaderProps) {
           </Link>
 
           {/* Desktop Navigation Shell (never shrinks; keeps all links visible) */}
-          <div className="nav-shell" ref={navShellRef}>
+          <div className="nav-shell">
             <div className="nav-links-wrap">
-              <nav className="nav">
-                <Link className={pathname === "/" ? "active" : ""} href="/">
+              <nav className="nav" aria-label="Main navigation">
+                <Link
+                  className={pathname === "/" ? "active" : ""}
+                  href="/"
+                  aria-current={pathname === "/" ? "page" : undefined}
+                >
                   Home
                 </Link>
                 <Link
@@ -219,10 +221,10 @@ export default function Header({ onOpenQuote }: HeaderProps) {
                   type="button"
                   className={`nav-search-trigger${searchOpen ? " active" : ""}`}
                   onClick={() => setSearchOpen((prev) => !prev)}
-                  aria-label={searchOpen ? "Close search bar" : "Open search bar"}
+                  aria-label="Search"
                   aria-expanded={searchOpen}
                   aria-controls="header-search-panel"
-                  title={searchOpen ? "Close search" : "Search products, series, brands..."}
+                  title="Search website"
                 >
                   <svg
                     className="nav-search-icon"
@@ -240,7 +242,7 @@ export default function Header({ onOpenQuote }: HeaderProps) {
                 </button>
               </nav>
 
-              {quoteButton}
+              {contactButton}
             </div>
           </div>
 
@@ -254,7 +256,7 @@ export default function Header({ onOpenQuote }: HeaderProps) {
                 setSearchOpen((prev) => !prev);
                 if (!searchOpen) setMobileMenuOpen(false);
               }}
-              aria-label={searchOpen ? "Close search bar" : "Toggle search bar"}
+              aria-label="Search"
               aria-expanded={searchOpen}
               aria-controls="header-search-panel"
               title="Search website"
@@ -298,36 +300,34 @@ export default function Header({ onOpenQuote }: HeaderProps) {
             id="header-search-panel"
             role="region"
             aria-label="Site Search"
+            onBlur={(event) => {
+              // Let the trigger's click toggle the current state. Closing here
+              // first would make that same click immediately reopen the panel.
+              if (
+                !event.currentTarget.contains(event.relatedTarget) &&
+                event.relatedTarget !== searchTriggerRef.current &&
+                event.relatedTarget !== mobileSearchTriggerRef.current
+              ) {
+                setSearchOpen(false);
+              }
+            }}
           >
             <div className="header-search-inner-wrap">
               <Suspense fallback={<div style={{ height: 38, flex: 1 }} />}>
                 <UniversalSearchBar
                   id="header-universal-search"
                   autoFocus
+                  panel
                   className="nav-search-inner"
-                  placeholder="Search products, series, brands, categories..."
+                  placeholder="Search the website…"
                   onNavigate={() => setSearchOpen(false)}
-                  onClose={() => {
-                    setSearchOpen(false);
-                    if (typeof window !== "undefined" && window.innerWidth > 1100) {
-                      searchTriggerRef.current?.focus();
-                    } else {
-                      mobileSearchTriggerRef.current?.focus();
-                    }
-                  }}
+                  onClose={closeSearch}
                 />
               </Suspense>
               <button
                 type="button"
                 className="nav-search-close"
-                onClick={() => {
-                  setSearchOpen(false);
-                  if (typeof window !== "undefined" && window.innerWidth > 1100) {
-                    searchTriggerRef.current?.focus();
-                  } else {
-                    mobileSearchTriggerRef.current?.focus();
-                  }
-                }}
+                onClick={closeSearch}
                 aria-label="Close search"
                 title="Close search (Esc)"
               >
@@ -340,16 +340,6 @@ export default function Header({ onOpenQuote }: HeaderProps) {
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
           <div className="mobile-menu-drawer" id="mobile-navigation">
-            <div style={{ paddingBottom: 6 }}>
-              <Suspense fallback={<div style={{ height: 36 }} />}>
-                <UniversalSearchBar
-                  id="header-mobile-drawer-search"
-                  className="nav-search-inner"
-                  placeholder="Search products, brands, series..."
-                  onNavigate={() => setMobileMenuOpen(false)}
-                />
-              </Suspense>
-            </div>
             <Link href="/" onClick={() => setMobileMenuOpen(false)}>
               Home
             </Link>
@@ -368,26 +358,13 @@ export default function Header({ onOpenQuote }: HeaderProps) {
             <Link href="/resources" onClick={() => setMobileMenuOpen(false)}>
               Resources
             </Link>
-            {onOpenQuote ? (
-              <button
-                className="btn primary"
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenQuote();
-                }}
-              >
-                Get Quote →
-              </button>
-            ) : (
-              <Link
-                className="btn primary"
-                href="/request-quote"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Get Quote →
-              </Link>
-            )}
+            <Link
+              className="btn primary"
+              href="/contact"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Contact
+            </Link>
           </div>
         )}
       </header>

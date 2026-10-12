@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent, type ChangeEvent } from "react";
 import Link from "next/link";
+import InnerPageHero from "@/components/layout/InnerPageHero";
 import styles from "./Contact.module.css";
 import CatalogueModal from "@/components/ui/CatalogueModal";
 
@@ -127,23 +128,11 @@ export default function ContactPageApp() {
   return (
     <div className={styles.contactPage}>
       {/* Hero */}
-      <section className={styles.contactHero}>
-        <div className={`wrap ${styles.contactHeroInner}`}>
-          <nav className={styles.contactBreadcrumb} aria-label="Breadcrumb">
-            <Link href="/">Home</Link>
-            <span className={styles.contactBreadcrumbSep}>›</span>
-            <span>Contact Us</span>
-          </nav>
-          <div className={styles.contactHeroCopy}>
-            <h1>Contact Us</h1>
-            <p>
-              Get in touch for product information, quotations,
-              OEM/private-label requirements, bulk enquiries, distributor
-              opportunities or technical assistance.
-            </p>
-          </div>
-        </div>
-      </section>
+      <InnerPageHero
+        breadcrumb={[{ label: "Home", href: "/" }, { label: "Contact Us" }]}
+        title="Contact Us"
+        description="Get in touch for product information, quotations, OEM/private-label requirements, bulk enquiries, distributor opportunities or technical assistance."
+      />
 
       {/* Main Contact Section */}
       <section className={styles.contactSection}>

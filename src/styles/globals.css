@@ -170,6 +170,11 @@ textarea {
   width: 100%;
 }
 
+.header-contact {
+  min-width: 124px;
+  flex-shrink: 0;
+}
+
 .nav-search-trigger {
   display: inline-flex;
   align-items: center;
@@ -288,24 +293,26 @@ textarea {
   color: #ffffff;
 }
 
-.header-search-panel,
-.mobile-search-panel {
+.header-search-panel {
   position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
+  top: calc(100% + 8px);
+  right: max(18px, calc((100% - var(--container-max)) / 2 + 18px));
+  width: min(600px, calc(100% - 36px));
+  max-height: calc(100dvh - 170px);
   background: var(--midnight-navy);
-  padding: 12px 18px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-button);
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.38);
   z-index: 54;
-  overflow: visible;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   animation: mobileSearchSlide 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .header-search-inner-wrap {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   width: 100%;
   max-width: var(--container-max);
@@ -314,21 +321,33 @@ textarea {
   overflow: visible;
 }
 
-.header-search-panel .nav-search-inner [class*="dropdown"] {
-  position: absolute !important;
-  top: calc(100% + 8px) !important;
-  left: 0 !important;
-  right: 0 !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  min-width: 0 !important;
-  z-index: 100 !important;
+.header-search-panel .nav-search-close {
+  width: 44px;
+  height: 44px;
+}
+
+.header .nav-search-trigger:focus-visible,
+.header .mobile-search-toggle:focus-visible,
+.header .nav-search-close:focus-visible {
+  outline: 2px solid var(--cool-white);
+  outline-offset: 3px;
 }
 
 @media (max-width: 640px) {
-  .header-search-panel .nav-search-inner [class*="dropdown"] {
-    width: calc(100% + 50px) !important;
-    max-width: calc(100% + 50px) !important;
+  .header-search-panel {
+    right: 10px;
+    width: calc(100% - 20px);
+    max-height: calc(100dvh - 120px);
+    padding: 10px;
+  }
+  .header-search-inner-wrap {
+    gap: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header-search-panel {
+    animation: none;
   }
 }
 
@@ -2082,8 +2101,8 @@ footer a:hover {
     border-radius: 10px;
     font-weight: 700;
   }
-  .mobile-menu-drawer a:hover,
-  .mobile-menu-drawer a:focus-visible {
+  .mobile-menu-drawer a:not(.btn):hover,
+  .mobile-menu-drawer a:not(.btn):focus-visible {
     background: rgba(240, 74, 42, 0.2);
   }
 }

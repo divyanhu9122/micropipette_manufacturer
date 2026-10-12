@@ -156,26 +156,42 @@
 
 /* Trust Badges */
 .trustBadges {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  padding-top: 24px;
-  border-top: 1px solid rgba(13, 65, 138, 0.12);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
 }
 
 .badgeItem {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  min-width: 0;
+  min-height: 64px;
+  padding: 14px 16px;
+  background: var(--pale-sky-blue, #dcecff);
+  border: 1px solid var(--mist-blue, #bcd3ee);
+  border-radius: 16px;
   font-size: 13px;
   font-weight: 700;
   color: var(--midnight-navy, #0b1f3b);
 }
 
 .badgeIcon {
+  flex-shrink: 0;
   color: #10b981;
   font-size: 16px;
+}
+
+@media (max-width: 1023px) {
+  .trustBadges {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .trustBadges {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* Section Header */

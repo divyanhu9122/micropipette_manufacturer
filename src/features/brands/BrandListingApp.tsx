@@ -1,4 +1,6 @@
 import Link from "next/link";
+import InnerPageHero from "@/components/layout/InnerPageHero";
+import InnerPageHeroVisual from "@/components/layout/InnerPageHeroVisual";
 import styles from "./Brands.module.css";
 import { BRAND_LISTING_ITEMS } from "./brands.data";
 
@@ -6,16 +8,13 @@ export default function BrandListingApp() {
   return (
     <div className={styles.brandPage}>
       {/* Compact Breadcrumb Hero */}
-      <section className={styles.heroCompact}>
-        <div className="wrap">
-          <nav className={styles.breadcrumb} aria-label="Breadcrumb">
-            <Link href="/">Home</Link>
-            <span className={styles.breadcrumbSep}>›</span>
-            <span>Brands</span>
-          </nav>
-          <h1>Our Brands</h1>
-        </div>
-      </section>
+      <InnerPageHero
+        breadcrumb={[{ label: "Home", href: "/" }, { label: "Brands" }]}
+        title="Our Brands"
+        eyebrow="Manufacturing brand portfolio"
+        description="Explore our scientific brands and their laboratory instrument portfolios, with dedicated product information and enquiry routes."
+        visual={<InnerPageHeroVisual kind="brands" />}
+      />
 
       {/* Main Brand Listing Section */}
       <section className={styles.brandSection}>

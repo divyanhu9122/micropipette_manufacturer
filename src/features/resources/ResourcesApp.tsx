@@ -2,6 +2,8 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import InnerPageHero from "@/components/layout/InnerPageHero";
+import InnerPageHeroVisual from "@/components/layout/InnerPageHeroVisual";
 import styles from "./Resources.module.css";
 import {
   RESOURCES_DATA,
@@ -41,16 +43,13 @@ export default function ResourcesApp() {
   return (
     <div className={styles.resourcesPage}>
       {/* Compact Breadcrumb Hero */}
-      <section className={styles.heroCompact}>
-        <div className="wrap">
-          <nav className={styles.breadcrumb} aria-label="Breadcrumb">
-            <Link href="/">Home</Link>
-            <span className={styles.breadcrumbSep}>›</span>
-            <span>Resources & Technical Documentation</span>
-          </nav>
-          <h1>Technical Documentation & Download Center</h1>
-        </div>
-      </section>
+      <InnerPageHero
+        breadcrumb={[{ label: "Home", href: "/" }, { label: "Resources & Technical Documentation" }]}
+        title="Technical Documentation & Download Center"
+        eyebrow="Resources"
+        description="Browse product catalogues, datasheets and operating manuals, with technical documents organized by product and brand."
+        visual={<InnerPageHeroVisual kind="resources" />}
+      />
 
       {/* Main Content Section */}
       <section className={styles.resourcesSection}>

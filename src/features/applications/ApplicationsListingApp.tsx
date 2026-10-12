@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import InnerPageHero from "@/components/layout/InnerPageHero";
+import InnerPageHeroVisual from "@/components/layout/InnerPageHeroVisual";
 import styles from "./Applications.module.css";
 import { APPLICATIONS_DATA } from "./applications.data";
 import QuoteModal from "@/components/ui/QuoteModal";
@@ -131,16 +133,13 @@ export default function ApplicationsListingApp() {
   return (
     <div className={styles.appPage}>
       {/* Compact Breadcrumb Hero */}
-      <section className={styles.heroCompact}>
-        <div className="wrap">
-          <nav className={styles.breadcrumb} aria-label="Breadcrumb">
-            <Link href="/">Home</Link>
-            <span className={styles.breadcrumbSep}>›</span>
-            <span>Applications</span>
-          </nav>
-          <h1>Applications</h1>
-        </div>
-      </section>
+      <InnerPageHero
+        breadcrumb={[{ label: "Home", href: "/" }, { label: "Applications" }]}
+        title="Applications"
+        eyebrow="Laboratory workflows"
+        description="Explore liquid handling applications across research, diagnostics and laboratory workflows, and find instruments for your area of work."
+        visual={<InnerPageHeroVisual kind="applications" />}
+      />
 
       {/* Main Applications Listing Section */}
       <section className={styles.appSection}>
