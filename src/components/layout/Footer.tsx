@@ -21,7 +21,8 @@ export default function Footer({ onOpenCatalogue }: FooterProps) {
               />
             </Link>
             <p>
-              Central B2B platform for LABXE, SSCIENCES and DANWER product discovery, OEM solutions and global laboratory inquiries.
+              Central B2B platform for LABXE, SSCIENCES and DANWER product
+              discovery, OEM solutions and global laboratory inquiries.
             </p>
           </div>
 
@@ -45,6 +46,7 @@ export default function Footer({ onOpenCatalogue }: FooterProps) {
 
           <div id="resources">
             <h4>RESOURCES</h4>
+            <Link href="/blog">Technical Blog</Link>
             <Link href="/resources">Documentation Hub</Link>
             {onOpenCatalogue ? (
               <>
@@ -94,10 +96,18 @@ export default function Footer({ onOpenCatalogue }: FooterProps) {
           <div>
             <h4>CONNECT WITH US</h4>
             <div className="socials">
-              <a href="#" className="social" aria-label="LinkedIn">in</a>
-              <a href="#" className="social" aria-label="Facebook">f</a>
-              <a href="#" className="social" aria-label="Twitter">𝕏</a>
-              <a href="#" className="social" aria-label="YouTube">▶</a>
+              <a href="#" className="social" aria-label="LinkedIn">
+                in
+              </a>
+              <a href="#" className="social" aria-label="Facebook">
+                f
+              </a>
+              <a href="#" className="social" aria-label="Twitter">
+                𝕏
+              </a>
+              <a href="#" className="social" aria-label="YouTube">
+                ▶
+              </a>
             </div>
             <p style={{ fontSize: 12, color: "#9bb8dc", marginTop: 14 }}>
               Direct export shipments dispatched to 80+ countries worldwide.
@@ -107,14 +117,38 @@ export default function Footer({ onOpenCatalogue }: FooterProps) {
       </div>
 
       <div className="copyright">
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, maxWidth: 1240, margin: "0 auto", padding: "0 18px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: 12,
+            maxWidth: 1240,
+            margin: "0 auto",
+            padding: "0 18px",
+          }}
+        >
           <div>
-            © {new Date().getFullYear()} MicropipetteManufacturer.com — Precision Liquid Handling Laboratory Solutions. All rights reserved.
+            © {new Date().getFullYear()} MicropipetteManufacturer.com —
+            Precision Liquid Handling Laboratory Solutions. All rights reserved.
           </div>
           <div className="footer-legal">
-            <Link href="/privacy-policy" style={{ color: "inherit", textDecoration: "none" }}>Privacy Policy</Link>
-            <span className="footer-legal-separator" aria-hidden="true">•</span>
-            <Link href="/terms" style={{ color: "inherit", textDecoration: "none" }}>Terms & Conditions</Link>
+            <Link
+              href="/privacy-policy"
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
+              Privacy Policy
+            </Link>
+            <span className="footer-legal-separator" aria-hidden="true">
+              •
+            </span>
+            <Link
+              href="/terms"
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
+              Terms & Conditions
+            </Link>
           </div>
         </div>
       </div>

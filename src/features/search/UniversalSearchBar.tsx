@@ -28,6 +28,7 @@ const RESULT_GROUPS: { type: SearchContentType; label: string }[] = [
   { type: "Micropipette Series", label: "Micropipette Series" },
   { type: "Category", label: "Categories" },
   { type: "Brand", label: "Brands" },
+  { type: "Article", label: "Articles & Blog" },
   { type: "Page", label: "Pages" },
 ];
 

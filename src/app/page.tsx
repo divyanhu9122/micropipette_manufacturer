@@ -1,60 +1,25 @@
-"use client";
+import type { Metadata } from "next";
+import HomePageApp from "@/features/home/HomePageApp";
 
-import { useState } from "react";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import HeroSlider from "@/components/home/HeroSlider";
-import CategoriesSection from "@/components/home/CategoriesSection";
-import BrandShowcase from "@/components/home/BrandShowcase";
-import OemSection from "@/components/home/OemSection";
-import ApplicationsSection from "@/components/home/ApplicationsSection";
-import FeaturedProductsCarousel from "@/components/home/FeaturedProductsCarousel";
-import QualityBar from "@/components/home/QualityBar";
-import PartnerMarquee from "@/components/home/PartnerMarquee";
-import TestimonialsCarousel from "@/components/home/TestimonialsCarousel";
-import PartnerCtaBlock from "@/components/home/PartnerCtaBlock";
-import QuoteModal from "@/components/ui/QuoteModal";
+export const metadata: Metadata = {
+  title:
+    "Micropipette Manufacturer — Precision Liquid Handling & OEM Solutions | LABXE · SSCIENCES · DANWER",
+  description:
+    "Central B2B platform for precision micropipettes, multichannel pipettes, laboratory plasticware, and custom OEM manufacturing across LABXE, SSCIENCES, and DANWER brands.",
+  alternates: {
+    canonical: "https://micropipettemanufacturer.in",
+  },
+  openGraph: {
+    title:
+      "Micropipette Manufacturer — Precision Liquid Handling & OEM Solutions",
+    description:
+      "Leading Indian manufacturer of precision micropipettes, variable and fixed volume liquid handling systems, and certified OEM solutions for global scientific laboratories.",
+    url: "https://micropipettemanufacturer.in",
+    siteName: "MicropipetteManufacturer.in",
+    type: "website",
+  },
+};
 
 export default function Home() {
-  const [quoteModalOpen, setQuoteModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState("");
-
-  const handleOpenQuote = (productName = "") => {
-    setSelectedProduct(productName);
-    setQuoteModalOpen(true);
-  };
-
-  return (
-    <main>
-      <Header onOpenQuote={() => handleOpenQuote()} />
-
-      <HeroSlider onOpenQuote={() => handleOpenQuote()} />
-
-      <CategoriesSection />
-
-      <BrandShowcase />
-
-      <OemSection />
-
-      <ApplicationsSection />
-
-      <FeaturedProductsCarousel />
-
-      <QualityBar />
-
-      <PartnerMarquee />
-
-      <TestimonialsCarousel />
-
-      <PartnerCtaBlock onOpenQuote={() => handleOpenQuote()} />
-
-      <Footer />
-
-      <QuoteModal
-        isOpen={quoteModalOpen}
-        onClose={() => setQuoteModalOpen(false)}
-        defaultProduct={selectedProduct}
-      />
-    </main>
-  );
+  return <HomePageApp />;
 }

@@ -1,9 +1,5 @@
 export type SearchContentType =
-  | "Product"
-  | "Micropipette Series"
-  | "Category"
-  | "Brand"
-  | "Page";
+  "Product" | "Micropipette Series" | "Category" | "Brand" | "Page" | "Article";
 
 export interface SearchItem {
   id: string;
@@ -25,7 +21,14 @@ export const searchableIndex: readonly SearchItem[] = [
     href: "/products/ssciences-science-plus-variable-05-10",
     description:
       "Precision single-channel variable volume pipette with click-stop volume adjustment and autoclavable lower assembly.",
-    keywords: ["science plus", "variable volume", "ssciences", "single channel", "0.5-10", "micropipette"],
+    keywords: [
+      "science plus",
+      "variable volume",
+      "ssciences",
+      "single channel",
+      "0.5-10",
+      "micropipette",
+    ],
     brand: "SSCIENCES",
   },
   {
@@ -35,7 +38,14 @@ export const searchableIndex: readonly SearchItem[] = [
     href: "/products/ssciences-science-plus-variable-10-100",
     description:
       "Reliable mid-volume mechanical pipette engineered for high reproducibility and broad chemical compatibility.",
-    keywords: ["science plus", "variable volume", "ssciences", "single channel", "10-100", "micropipette"],
+    keywords: [
+      "science plus",
+      "variable volume",
+      "ssciences",
+      "single channel",
+      "10-100",
+      "micropipette",
+    ],
     brand: "SSCIENCES",
   },
   {
@@ -45,7 +55,14 @@ export const searchableIndex: readonly SearchItem[] = [
     href: "/products/ssciences-fac-plus-fully-autoclavable-20-200",
     description:
       "Fully autoclavable mechanical pipette designed for critical contamination control. 121°C steam sterilizable without disassembly.",
-    keywords: ["fac plus", "autoclavable", "ssciences", "sterile", "20-200", "micropipette"],
+    keywords: [
+      "fac plus",
+      "autoclavable",
+      "ssciences",
+      "sterile",
+      "20-200",
+      "micropipette",
+    ],
     brand: "SSCIENCES",
   },
   {
@@ -55,7 +72,13 @@ export const searchableIndex: readonly SearchItem[] = [
     href: "/products/labxe-precision-variable-100-1000",
     description:
       "Heavy-duty milliliter-class variable pipette crafted from in-house precision injection molds with high chemical resistance.",
-    keywords: ["labxe", "precision", "variable volume", "100-1000", "micropipette"],
+    keywords: [
+      "labxe",
+      "precision",
+      "variable volume",
+      "100-1000",
+      "micropipette",
+    ],
     brand: "LABXE",
   },
   {
@@ -65,7 +88,14 @@ export const searchableIndex: readonly SearchItem[] = [
     href: "/products/ssciences-multichannel-8ch-variable-20-200",
     description:
       "Ergonomic 8-channel pipette equipped with a 360° rotating manifold, individual piston assemblies, and uniform tip sealing.",
-    keywords: ["8 channel", "multichannel", "ssciences", "microplate", "elisa", "micropipette"],
+    keywords: [
+      "8 channel",
+      "multichannel",
+      "ssciences",
+      "microplate",
+      "elisa",
+      "micropipette",
+    ],
     brand: "SSCIENCES",
   },
   {
@@ -75,7 +105,14 @@ export const searchableIndex: readonly SearchItem[] = [
     href: "/products/danwer-electronic-single-05-10",
     description:
       "Microprocessor-driven motorized electronic pipette providing automatic aspiration, multidispensing, and zero thumb strain.",
-    keywords: ["danwer", "electronic", "motorized", "single channel", "digital", "micropipette"],
+    keywords: [
+      "danwer",
+      "electronic",
+      "motorized",
+      "single channel",
+      "digital",
+      "micropipette",
+    ],
     brand: "DANWER",
   },
   {
@@ -85,7 +122,14 @@ export const searchableIndex: readonly SearchItem[] = [
     href: "/products/labxe-multichannel-12ch-variable-10-100",
     description:
       "12-channel high-density laboratory instrument designed for fast row-by-row pipetting in standard 96-well microplates.",
-    keywords: ["12 channel", "multichannel", "labxe", "microplate", "high throughput", "micropipette"],
+    keywords: [
+      "12 channel",
+      "multichannel",
+      "labxe",
+      "microplate",
+      "high throughput",
+      "micropipette",
+    ],
     brand: "LABXE",
   },
   {
@@ -95,7 +139,14 @@ export const searchableIndex: readonly SearchItem[] = [
     href: "/products/ssciences-science-plus-macro-1-10ml",
     description:
       "High-capacity macro pipette designed for transferring large volumes with micropipette accuracy, complete with aerosol filter.",
-    keywords: ["macro", "1-10 ml", "science plus", "ssciences", "large volume", "micropipette"],
+    keywords: [
+      "macro",
+      "1-10 ml",
+      "science plus",
+      "ssciences",
+      "large volume",
+      "micropipette",
+    ],
     brand: "SSCIENCES",
   },
   {
@@ -105,7 +156,14 @@ export const searchableIndex: readonly SearchItem[] = [
     href: "/products?category=Lab+Plasticware",
     description:
       "High-quality universal compatible tips built for dependable fit, contamination control and consistent transfer accuracy.",
-    keywords: ["pipette tips", "universal tips", "plasticware", "consumables", "labxe", "tips"],
+    keywords: [
+      "pipette tips",
+      "universal tips",
+      "plasticware",
+      "consumables",
+      "labxe",
+      "tips",
+    ],
     brand: "LABXE",
   },
   {
@@ -135,7 +193,13 @@ export const searchableIndex: readonly SearchItem[] = [
     href: "/products?category=Lab+Balances",
     description:
       "Analytical weighing solution with stable electromagnetic force restoration performance for laboratory formulation.",
-    keywords: ["analytical balance", "balance", "weighing", "danwer", "instruments"],
+    keywords: [
+      "analytical balance",
+      "balance",
+      "weighing",
+      "danwer",
+      "instruments",
+    ],
     brand: "DANWER",
   },
 
@@ -145,15 +209,22 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "Mini Plus minipipette",
     type: "Micropipette Series",
     href: "/products/micropipettes#mini-plus",
-    description: "Compact fixed and variable mini pipetting series for routine bench workflows and field diagnostic kits.",
-    keywords: ["mini plus", "minipipette", "compact pipette", "portable pipette"],
+    description:
+      "Compact fixed and variable mini pipetting series for routine bench workflows and field diagnostic kits.",
+    keywords: [
+      "mini plus",
+      "minipipette",
+      "compact pipette",
+      "portable pipette",
+    ],
   },
   {
     id: "series-science-plus",
     title: "Science Plus Micropipette",
     type: "Micropipette Series",
     href: "/products/micropipettes#science-plus",
-    description: "Precision mechanical variable-volume micropipette series with ergonomic click-stop volume dial.",
+    description:
+      "Precision mechanical variable-volume micropipette series with ergonomic click-stop volume dial.",
     keywords: ["science plus", "micropipette", "mechanical", "variable volume"],
   },
   {
@@ -161,7 +232,8 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "Lab Plus Micropipette",
     type: "Micropipette Series",
     href: "/products/micropipettes#lab-plus",
-    description: "High-accuracy laboratory micropipette series engineered for continuous diagnostic and research protocols.",
+    description:
+      "High-accuracy laboratory micropipette series engineered for continuous diagnostic and research protocols.",
     keywords: ["lab plus", "micropipette", "labxe", "laboratory pipette"],
   },
   {
@@ -169,15 +241,23 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "FAC Plus Micropipette",
     type: "Micropipette Series",
     href: "/products/micropipettes#fac-plus",
-    description: "Fully autoclavable liquid handling instruments with full-body 121°C steam decontamination without disassembly.",
-    keywords: ["fac plus", "fully autoclavable", "micropipette", "autoclave", "sterile"],
+    description:
+      "Fully autoclavable liquid handling instruments with full-body 121°C steam decontamination without disassembly.",
+    keywords: [
+      "fac plus",
+      "fully autoclavable",
+      "micropipette",
+      "autoclave",
+      "sterile",
+    ],
   },
   {
     id: "series-durax",
     title: "DuraX Micropipette",
     type: "Micropipette Series",
     href: "/products/micropipettes#durax",
-    description: "High-durability reinforced micropipette engineered for long operating life in harsh laboratory environments.",
+    description:
+      "High-durability reinforced micropipette engineered for long operating life in harsh laboratory environments.",
     keywords: ["durax", "micropipette", "heavy duty", "durable pipette"],
   },
   {
@@ -185,7 +265,8 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "Ergo Plus Micropipette",
     type: "Micropipette Series",
     href: "/products/micropipettes#ergo-plus",
-    description: "Ergonomic series engineered for low plunger actuation forces, minimal thumb strain, and extended comfort.",
+    description:
+      "Ergonomic series engineered for low plunger actuation forces, minimal thumb strain, and extended comfort.",
     keywords: ["ergo plus", "ergonomic", "micropipette", "low force"],
   },
   {
@@ -193,15 +274,23 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "Multi Plus Micropipette",
     type: "Micropipette Series",
     href: "/products/micropipettes#multi-plus",
-    description: "Multichannel liquid handling solution for 96-well microplate dispensing with 360° rotatable manifold.",
-    keywords: ["multi plus", "multichannel", "8 channel", "12 channel", "microplate"],
+    description:
+      "Multichannel liquid handling solution for 96-well microplate dispensing with 360° rotatable manifold.",
+    keywords: [
+      "multi plus",
+      "multichannel",
+      "8 channel",
+      "12 channel",
+      "microplate",
+    ],
   },
   {
     id: "series-multi-pro",
     title: "Multi Pro Micropipette",
     type: "Micropipette Series",
     href: "/products/micropipettes#multi-pro",
-    description: "Advanced multichannel professional pipetting instruments for high-throughput screening and genomics.",
+    description:
+      "Advanced multichannel professional pipetting instruments for high-throughput screening and genomics.",
     keywords: ["multi pro", "multichannel", "professional", "high throughput"],
   },
   {
@@ -209,7 +298,8 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "ProX Micropipette",
     type: "Micropipette Series",
     href: "/products/micropipettes#coming-soon",
-    description: "Next-generation precision instrument in final ISO 8655 gravimetric validation.",
+    description:
+      "Next-generation precision instrument in final ISO 8655 gravimetric validation.",
     keywords: ["prox", "micropipette", "coming soon", "next generation"],
     isComingSoon: true,
   },
@@ -218,7 +308,8 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "Primo Plus Micropipette",
     type: "Micropipette Series",
     href: "/products/micropipettes#coming-soon",
-    description: "Advanced ergonomic liquid handling series scheduled for upcoming portfolio release.",
+    description:
+      "Advanced ergonomic liquid handling series scheduled for upcoming portfolio release.",
     keywords: ["primo plus", "micropipette", "coming soon", "ergonomic"],
     isComingSoon: true,
   },
@@ -229,7 +320,8 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "Micropipette",
     type: "Category",
     href: "/products/micropipettes",
-    description: "Explore all micropipettes by classification — variable volume, fixed volume, multichannel, electronic, and mechanical.",
+    description:
+      "Explore all micropipettes by classification — variable volume, fixed volume, multichannel, electronic, and mechanical.",
     keywords: ["micropipette", "pipette", "liquid handling", "category"],
   },
   {
@@ -237,47 +329,80 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "Bottle Top Dispenser",
     type: "Category",
     href: "/products?category=Bottle+Top+Dispenser",
-    description: "High-accuracy reagent and solvent bottle-top liquid dispensing systems with chemical-resistant fluid paths.",
-    keywords: ["bottle top dispenser", "dispenser", "reagent", "liquid dispenser"],
+    description:
+      "High-accuracy reagent and solvent bottle-top liquid dispensing systems with chemical-resistant fluid paths.",
+    keywords: [
+      "bottle top dispenser",
+      "dispenser",
+      "reagent",
+      "liquid dispenser",
+    ],
   },
   {
     id: "cat-pipette-controller",
     title: "Pipette Controller",
     type: "Category",
     href: "/products?category=Pipette+Controller",
-    description: "Motorized and ergonomic pipetting aids and controllers for serological and volumetric pipettes.",
-    keywords: ["pipette controller", "serological", "motorized", "pipette filler"],
+    description:
+      "Motorized and ergonomic pipetting aids and controllers for serological and volumetric pipettes.",
+    keywords: [
+      "pipette controller",
+      "serological",
+      "motorized",
+      "pipette filler",
+    ],
   },
   {
     id: "cat-lab-plasticware",
     title: "Lab Plasticware",
     type: "Category",
     href: "/products?category=Lab+Plasticware",
-    description: "Universal pipette tips, filter tips, tip boxes, racks, and laboratory consumables.",
-    keywords: ["lab plasticware", "pipette tips", "plasticware", "tips", "racks", "consumables"],
+    description:
+      "Universal pipette tips, filter tips, tip boxes, racks, and laboratory consumables.",
+    keywords: [
+      "lab plasticware",
+      "pipette tips",
+      "plasticware",
+      "tips",
+      "racks",
+      "consumables",
+    ],
   },
   {
     id: "cat-lab-balances",
     title: "Lab Balances",
     type: "Category",
     href: "/products?category=Lab+Balances",
-    description: "Precision analytical balances and micro-weighing instrumentation for laboratory formulation.",
-    keywords: ["lab balances", "balances", "analytical balance", "weighing scale"],
+    description:
+      "Precision analytical balances and micro-weighing instrumentation for laboratory formulation.",
+    keywords: [
+      "lab balances",
+      "balances",
+      "analytical balance",
+      "weighing scale",
+    ],
   },
   {
     id: "cat-laboratory-instruments",
     title: "Laboratory Instruments",
     type: "Category",
     href: "/products?category=Laboratory+Instruments",
-    description: "Benchtop laboratory instrumentation, accessories, and calibration equipment.",
-    keywords: ["laboratory instruments", "instruments", "equipment", "benchtop"],
+    description:
+      "Benchtop laboratory instrumentation, accessories, and calibration equipment.",
+    keywords: [
+      "laboratory instruments",
+      "instruments",
+      "equipment",
+      "benchtop",
+    ],
   },
   {
     id: "subcat-variable-volume",
     title: "Variable Volume Micropipettes",
     type: "Category",
     href: "/products/micropipettes/variable-volume",
-    description: "Browse single and multichannel variable volume micropipettes with adjustable click-stop dials.",
+    description:
+      "Browse single and multichannel variable volume micropipettes with adjustable click-stop dials.",
     keywords: ["variable volume", "micropipettes", "adjustable pipette"],
   },
   {
@@ -285,7 +410,8 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "Fixed Volume Micropipettes",
     type: "Category",
     href: "/products/micropipettes/fixed-volume",
-    description: "Dedicated single-volume micropipettes for repetitive assays and standardized clinical protocols.",
+    description:
+      "Dedicated single-volume micropipettes for repetitive assays and standardized clinical protocols.",
     keywords: ["fixed volume", "micropipettes", "standard pipette"],
   },
   {
@@ -293,7 +419,8 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "Single Channel Micropipettes",
     type: "Category",
     href: "/products/micropipettes/single-channel",
-    description: "Precision single-channel micropipettes for routine sample transfer and microcentrifuge tube handling.",
+    description:
+      "Precision single-channel micropipettes for routine sample transfer and microcentrifuge tube handling.",
     keywords: ["single channel", "micropipettes"],
   },
   {
@@ -301,7 +428,8 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "Multichannel Micropipettes",
     type: "Category",
     href: "/products/micropipettes/multichannel",
-    description: "8-channel and 12-channel micropipettes designed for microplate liquid transfer and ELISA screening.",
+    description:
+      "8-channel and 12-channel micropipettes designed for microplate liquid transfer and ELISA screening.",
     keywords: ["multichannel", "8 channel", "12 channel", "microplate"],
   },
   {
@@ -309,7 +437,8 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "Electronic Micropipettes",
     type: "Category",
     href: "/products/micropipettes/electronic",
-    description: "Motorized electronic pipetting aids with digital display, multi-dispense, and automated mixing.",
+    description:
+      "Motorized electronic pipetting aids with digital display, multi-dispense, and automated mixing.",
     keywords: ["electronic", "digital pipette", "motorized pipette"],
   },
   {
@@ -317,7 +446,8 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "Mechanical Micropipettes",
     type: "Category",
     href: "/products/micropipettes/mechanical",
-    description: "Manual mechanical pipettes engineered for chemical durability, field calibration, and thermal insulation.",
+    description:
+      "Manual mechanical pipettes engineered for chemical durability, field calibration, and thermal insulation.",
     keywords: ["mechanical", "manual pipette"],
   },
 
@@ -327,7 +457,8 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "LABXE",
     type: "Brand",
     href: "/brands/labxe",
-    description: "Precision liquid handling and molecular diagnostic instruments engineered for clinical and analytical laboratories.",
+    description:
+      "Precision liquid handling and molecular diagnostic instruments engineered for clinical and analytical laboratories.",
     keywords: ["labxe", "brand", "molecular", "clinical"],
     brand: "LABXE",
   },
@@ -336,7 +467,8 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "SSCIENCES",
     type: "Brand",
     href: "/brands/ssciences",
-    description: "High-precision gravimetrically calibrated micropipettes and bottle-top liquid dispensers.",
+    description:
+      "High-precision gravimetrically calibrated micropipettes and bottle-top liquid dispensers.",
     keywords: ["ssciences", "brand", "life science", "genomics"],
     brand: "SSCIENCES",
   },
@@ -345,7 +477,8 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "DANWER",
     type: "Brand",
     href: "/brands/danwer",
-    description: "Heavy-duty analytical micro-weighing systems, motorized pipettes, and fluid transfer equipment.",
+    description:
+      "Heavy-duty analytical micro-weighing systems, motorized pipettes, and fluid transfer equipment.",
     keywords: ["danwer", "brand", "industrial", "balances"],
     brand: "DANWER",
   },
@@ -354,8 +487,15 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "dr.pipette",
     type: "Brand",
     href: "/brands/dr-pipette",
-    description: "Precision liquid handling and pipetting solutions manufactured for scientific and clinical laboratories.",
-    keywords: ["dr.pipette", "dr pipette", "drpipette", "brand", "liquid handling"],
+    description:
+      "Precision liquid handling and pipetting solutions manufactured for scientific and clinical laboratories.",
+    keywords: [
+      "dr.pipette",
+      "dr pipette",
+      "drpipette",
+      "brand",
+      "liquid handling",
+    ],
     brand: "dr.pipette",
   },
   {
@@ -363,8 +503,15 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "sscientific",
     type: "Brand",
     href: "/brands/sscientific",
-    description: "Scientific instrumentation and volumetric measurement solutions engineered for high laboratory accuracy.",
-    keywords: ["sscientific", "s scientific", "brand", "measurement", "instruments"],
+    description:
+      "Scientific instrumentation and volumetric measurement solutions engineered for high laboratory accuracy.",
+    keywords: [
+      "sscientific",
+      "s scientific",
+      "brand",
+      "measurement",
+      "instruments",
+    ],
     brand: "sscientific",
   },
 
@@ -374,7 +521,8 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "All Products Listing",
     type: "Page",
     href: "/products",
-    description: "Complete laboratory product catalog with category, brand, channel, and volume filtering.",
+    description:
+      "Complete laboratory product catalog with category, brand, channel, and volume filtering.",
     keywords: ["products", "catalog", "store", "all products", "filter"],
   },
   {
@@ -382,7 +530,8 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "Brand Portfolio",
     type: "Page",
     href: "/brands",
-    description: "Overview of specialized manufacturing brands united under our unified quality assurance umbrella.",
+    description:
+      "Overview of specialized manufacturing brands united under our unified quality assurance umbrella.",
     keywords: ["brands", "portfolio", "manufacturers"],
   },
   {
@@ -390,39 +539,71 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "About Us",
     type: "Page",
     href: "/about",
-    description: "Learn about our ISO 8655 certified liquid handling manufacturing facility, quality assurance, and global distribution.",
-    keywords: ["about", "company", "facility", "manufacturing", "iso 8655", "quality"],
+    description:
+      "Learn about our ISO 8655 certified liquid handling manufacturing facility, quality assurance, and global distribution.",
+    keywords: [
+      "about",
+      "company",
+      "facility",
+      "manufacturing",
+      "iso 8655",
+      "quality",
+    ],
   },
   {
     id: "page-oem",
     title: "OEM & Private Label",
     type: "Page",
     href: "/oem",
-    description: "Custom contract manufacturing, private-label branding, custom molds, and bulk volume supply for global distributors.",
-    keywords: ["oem", "private label", "contract manufacturing", "bulk", "white label"],
+    description:
+      "Custom contract manufacturing, private-label branding, custom molds, and bulk volume supply for global distributors.",
+    keywords: [
+      "oem",
+      "private label",
+      "contract manufacturing",
+      "bulk",
+      "white label",
+    ],
   },
   {
     id: "page-applications",
     title: "Applications",
     type: "Page",
     href: "/applications",
-    description: "Discover laboratory protocols and application workflows across Genomics, Cell Culture, Clinical Chemistry, and Microbiology.",
-    keywords: ["applications", "genomics", "cell culture", "pcr", "chemistry", "microbiology"],
+    description:
+      "Discover laboratory protocols and application workflows across Genomics, Cell Culture, Clinical Chemistry, and Microbiology.",
+    keywords: [
+      "applications",
+      "genomics",
+      "cell culture",
+      "pcr",
+      "chemistry",
+      "microbiology",
+    ],
   },
   {
     id: "page-resources",
     title: "Resources & Datasheets",
     type: "Page",
     href: "/resources",
-    description: "Central repository of product technical datasheets, user manuals, calibration guidelines, and catalogues.",
-    keywords: ["resources", "downloads", "datasheets", "manuals", "catalogues", "pdf"],
+    description:
+      "Central repository of product technical datasheets, user manuals, calibration guidelines, and catalogues.",
+    keywords: [
+      "resources",
+      "downloads",
+      "datasheets",
+      "manuals",
+      "catalogues",
+      "pdf",
+    ],
   },
   {
     id: "page-contact",
     title: "Contact & Support",
     type: "Page",
     href: "/contact",
-    description: "Get in touch with our technical sales, export distribution, and customer support teams.",
+    description:
+      "Get in touch with our technical sales, export distribution, and customer support teams.",
     keywords: ["contact", "support", "email", "phone", "sales", "inquiry"],
   },
   {
@@ -430,7 +611,8 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "Frequently Asked Questions",
     type: "Page",
     href: "/faq",
-    description: "Answers to common questions regarding ISO calibration, ordering, warranty, autoclaving, and delivery.",
+    description:
+      "Answers to common questions regarding ISO calibration, ordering, warranty, autoclaving, and delivery.",
     keywords: ["faq", "help", "questions", "calibration", "warranty"],
   },
   {
@@ -438,7 +620,8 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "Request a Quote",
     type: "Page",
     href: "/request-quote",
-    description: "Request a competitive B2B quotation for laboratory instruments, bulk orders, or distributor inquiries.",
+    description:
+      "Request a competitive B2B quotation for laboratory instruments, bulk orders, or distributor inquiries.",
     keywords: ["quote", "request quote", "pricing", "rfq", "b2b pricing"],
   },
   {
@@ -446,7 +629,8 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "Terms & Conditions",
     type: "Page",
     href: "/terms",
-    description: "B2B sales terms, shipping policies, warranty terms, and international commercial policies.",
+    description:
+      "B2B sales terms, shipping policies, warranty terms, and international commercial policies.",
     keywords: ["terms", "conditions", "warranty", "policy", "legal"],
   },
   {
@@ -454,8 +638,155 @@ export const searchableIndex: readonly SearchItem[] = [
     title: "Privacy Policy",
     type: "Page",
     href: "/privacy-policy",
-    description: "Our data protection practices, privacy commitments, and handling of B2B inquiry data.",
+    description:
+      "Our data protection practices, privacy commitments, and handling of B2B inquiry data.",
     keywords: ["privacy", "policy", "data protection"],
+  },
+  {
+    id: "page-blog",
+    title: "Blog & Technical Knowledge Center",
+    type: "Page",
+    href: "/blog",
+    description:
+      "Insights, technical articles, calibration standards, OEM manufacturing guides, and laboratory best practices.",
+    keywords: ["blog", "articles", "guides", "insights", "knowledge"],
+  },
+
+  // 6. Blog & Technical Articles
+  {
+    id: "article-iso-8655-gravimetric",
+    title: "ISO 8655 Gravimetric Testing: What Every Lab Manager Should Know",
+    type: "Article",
+    href: "/blog/iso-8655-gravimetric-testing-explained",
+    description:
+      "Practical breakdown of the ISO 8655 gravimetric calibration standard, compliance requirements, and traceable calibration.",
+    keywords: [
+      "iso 8655",
+      "gravimetric",
+      "calibration",
+      "accuracy",
+      "precision",
+      "metrology",
+      "audit",
+    ],
+  },
+  {
+    id: "article-choosing-right-pipette",
+    title: "How to Choose the Right Micropipette for Your Laboratory",
+    type: "Article",
+    href: "/blog/choosing-right-micropipette-for-your-lab",
+    description:
+      "Comprehensive buyer's guide covering volume range, channel count, ergonomics, chemical compatibility, and autoclaving.",
+    keywords: [
+      "buyers guide",
+      "selection",
+      "ergonomics",
+      "volume range",
+      "single channel",
+      "multi channel",
+    ],
+  },
+  {
+    id: "article-autoclaving-maintenance",
+    title: "Micropipette Autoclaving and Maintenance: Best Practices",
+    type: "Article",
+    href: "/blog/autoclave-micropipette-maintenance-best-practices",
+    description:
+      "Step-by-step sterilization and maintenance protocol to prevent calibration drift, piston corrosion, and seal wear.",
+    keywords: [
+      "autoclave",
+      "maintenance",
+      "sterilization",
+      "drift",
+      "seals",
+      "piston",
+      "cleaning",
+    ],
+  },
+  {
+    id: "article-oem-manufacturing-guide",
+    title:
+      "OEM Micropipette Manufacturing: From Mold Design to Private Label Export",
+    type: "Article",
+    href: "/blog/oem-micropipette-manufacturing-guide",
+    description:
+      "Comprehensive guide to OEM contract manufacturing, precision tooling, custom branding, and export logistics.",
+    keywords: [
+      "oem",
+      "contract manufacturing",
+      "private label",
+      "custom tooling",
+      "injection molding",
+      "white label",
+    ],
+  },
+  {
+    id: "article-single-vs-multi-channel",
+    title: "Single-Channel vs Multi-Channel Micropipettes: Workflow Matching",
+    type: "Article",
+    href: "/blog/single-vs-multi-channel-pipettes-selection",
+    description:
+      "Detailed workflow analysis comparing single-channel and multi-channel pipettes across microplates, PCR, and serial dilutions.",
+    keywords: [
+      "single channel",
+      "multi channel",
+      "8 channel",
+      "12 channel",
+      "96 well plate",
+      "pcr",
+      "elisa",
+    ],
+  },
+  {
+    id: "article-viscous-volatile-liquids",
+    title:
+      "Pipetting Viscous and Volatile Liquids: Overcoming Air-Displacement Limitations",
+    type: "Article",
+    href: "/blog/viscous-volatile-liquid-handling-solutions",
+    description:
+      "Technical techniques for handling glycerol, DMSO, ethanol, and acetone, including reverse pipetting and positive-displacement options.",
+    keywords: [
+      "viscous liquids",
+      "volatile liquids",
+      "glycerol",
+      "dmso",
+      "ethanol",
+      "reverse pipetting",
+    ],
+  },
+  {
+    id: "article-iso-17025-traceability",
+    title:
+      "ISO 17025 Traceability in Pipette Manufacturing: What It Means for Audits",
+    type: "Article",
+    href: "/blog/iso-17025-calibration-traceability-standards",
+    description:
+      "How manufacturer calibration traceability protects laboratories during ISO 15189, GLP, and FDA regulatory inspections.",
+    keywords: [
+      "iso 17025",
+      "traceability",
+      "glp",
+      "fda",
+      "audit readiness",
+      "calibration certificates",
+    ],
+  },
+  {
+    id: "article-sustainable-plasticware",
+    title:
+      "Sustainable Laboratory Plasticware: Material Innovations and Recycling",
+    type: "Article",
+    href: "/blog/sustainable-laboratory-plasticware-trends",
+    description:
+      "Environmental impact analysis of disposable tips and plasticware, bio-based polymers, reload systems, and lab sustainability.",
+    keywords: [
+      "sustainability",
+      "plasticware",
+      "tips",
+      "bio-based polymers",
+      "recycling",
+      "reload systems",
+    ],
   },
 ];
 
@@ -482,11 +813,13 @@ export function searchItems(rawQuery: string): SearchItem[] {
   return searchableIndex.filter((item) => {
     const titleNorm = item.title.toLowerCase();
     const compactTitle = titleNorm.replace(/[\s.\-_]/g, "");
-    if (titleNorm.includes(query) || compactTitle.includes(compactQuery)) return true;
+    if (titleNorm.includes(query) || compactTitle.includes(compactQuery))
+      return true;
 
     const descNorm = item.description.toLowerCase();
     const compactDesc = descNorm.replace(/[\s.\-_]/g, "");
-    if (descNorm.includes(query) || compactDesc.includes(compactQuery)) return true;
+    if (descNorm.includes(query) || compactDesc.includes(compactQuery))
+      return true;
 
     if (item.type.toLowerCase().includes(query)) return true;
     if (item.brand && item.brand.toLowerCase().includes(query)) return true;
@@ -495,7 +828,11 @@ export function searchItems(rawQuery: string): SearchItem[] {
     return item.keywords.some((kw) => {
       const kwNorm = kw.toLowerCase();
       const compactKw = kwNorm.replace(/[\s.\-_]/g, "");
-      return kwNorm.includes(query) || query.includes(kwNorm) || compactKw.includes(compactQuery);
+      return (
+        kwNorm.includes(query) ||
+        query.includes(kwNorm) ||
+        compactKw.includes(compactQuery)
+      );
     });
   });
 }

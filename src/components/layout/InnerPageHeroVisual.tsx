@@ -1,4 +1,4 @@
-type HeroVisualKind = "brands" | "oem" | "applications" | "resources";
+type HeroVisualKind = "brands" | "oem" | "applications" | "resources" | "blog";
 
 export default function InnerPageHeroVisual({
   kind,
@@ -105,6 +105,28 @@ export default function InnerPageHeroVisual({
             strokeWidth="2.5"
           />
           <path d="M122 44h26M122 53h18" strokeOpacity="0.5" />
+        </>
+      )}
+      {kind === "blog" && (
+        <>
+          <path
+            d="M82 28h96a10 10 0 0 1 10 10v104a10 10 0 0 1-10 10H82a10 10 0 0 1-10-10V38a10 10 0 0 1 10-10Z"
+            fill="#0D418A"
+          />
+          <path d="M96 60h72M96 76h72M96 92h48" strokeOpacity="0.7" />
+          <path d="M96 108h30" strokeOpacity="0.45" />
+          <path
+            d="M198 36l-26 26v12h12l26-26a8.5 8.5 0 0 0-12-12Z"
+            fill="#DCECFF"
+            fillOpacity="0.12"
+          />
+          <path
+            d="M198 36l-26 26v12h12l26-26a8.5 8.5 0 0 0-12-12Z"
+            strokeOpacity="0.8"
+          />
+          <path d="M192 42l12 12" strokeOpacity="0.5" />
+          <path d="M172 74l12-12" stroke="#F04A2A" strokeWidth="2.5" />
+          <path d="M56 64h8M60 60v8M216 118h8M220 114v8" strokeOpacity="0.35" />
         </>
       )}
     </svg>

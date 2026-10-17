@@ -4,7 +4,11 @@ import { Suspense, useMemo, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./SearchPage.module.css";
-import { searchItems, type SearchItem, type SearchContentType } from "./search.data";
+import {
+  searchItems,
+  type SearchItem,
+  type SearchContentType,
+} from "./search.data";
 
 const TABS: Array<{ label: string; value: "All" | SearchContentType }> = [
   { label: "All", value: "All" },
@@ -12,6 +16,7 @@ const TABS: Array<{ label: string; value: "All" | SearchContentType }> = [
   { label: "Micropipette Series", value: "Micropipette Series" },
   { label: "Categories", value: "Category" },
   { label: "Brands", value: "Brand" },
+  { label: "Articles", value: "Article" },
   { label: "Information Pages", value: "Page" },
 ];
 
@@ -86,7 +91,11 @@ function SearchPageContent() {
         <div className={styles.wrap}>
           {/* Query Bar */}
           <div className={styles.searchToolbar}>
-            <form onSubmit={handleSearchSubmit} className={styles.searchBarLarge} role="search">
+            <form
+              onSubmit={handleSearchSubmit}
+              className={styles.searchBarLarge}
+              role="search"
+            >
               <input
                 type="search"
                 className={styles.largeInput}
@@ -115,12 +124,17 @@ function SearchPageContent() {
 
           {/* Results Filter Tabs */}
           {allMatching.length > 0 && (
-            <div className={styles.tabs} role="tablist" aria-label="Filter results by content type">
+            <div
+              className={styles.tabs}
+              role="tablist"
+              aria-label="Filter results by content type"
+            >
               {TABS.map((tab) => {
                 const count =
                   tab.value === "All"
                     ? allMatching.length
-                    : allMatching.filter((item) => item.type === tab.value).length;
+                    : allMatching.filter((item) => item.type === tab.value)
+                        .length;
                 if (count === 0 && tab.value !== "All") return null;
 
                 const isActive = activeTab === tab.value;
@@ -146,11 +160,17 @@ function SearchPageContent() {
             <div className={styles.emptyBox}>
               <h2 className={styles.emptyTitle}>Enter a Search Query</h2>
               <p className={styles.emptyText}>
-                Type a product model, series name (e.g. Science Plus, FAC Plus), brand (LABXE, SSCIENCES, dr.pipette, sscientific), or category (Lab Plasticware, Balances) to find instant matches.
+                Type a product model, series name (e.g. Science Plus, FAC Plus),
+                brand (LABXE, SSCIENCES, dr.pipette, sscientific), or category
+                (Lab Plasticware, Balances) to find instant matches.
               </p>
               <div className={styles.suggestionPills}>
                 {SUGGESTIONS.map((sug) => (
-                  <Link key={sug.label} href={sug.href} className={styles.suggestionPill}>
+                  <Link
+                    key={sug.label}
+                    href={sug.href}
+                    className={styles.suggestionPill}
+                  >
                     {sug.label}
                   </Link>
                 ))}
@@ -161,12 +181,19 @@ function SearchPageContent() {
             <div className={styles.emptyBox}>
               <h2 className={styles.emptyTitle}>No Results Found</h2>
               <p className={styles.emptyText}>
-                We couldn&rsquo;t find any matches for &ldquo;{initialQuery.trim()}&rdquo;
-                {activeTab !== "All" ? ` under the ${activeTab} filter` : ""}. Try adjusting your keywords, clearing filters, or exploring popular categories below.
+                We couldn&rsquo;t find any matches for &ldquo;
+                {initialQuery.trim()}&rdquo;
+                {activeTab !== "All" ? ` under the ${activeTab} filter` : ""}.
+                Try adjusting your keywords, clearing filters, or exploring
+                popular categories below.
               </p>
               <div className={styles.suggestionPills}>
                 {SUGGESTIONS.map((sug) => (
-                  <Link key={sug.label} href={sug.href} className={styles.suggestionPill}>
+                  <Link
+                    key={sug.label}
+                    href={sug.href}
+                    className={styles.suggestionPill}
+                  >
                     {sug.label}
                   </Link>
                 ))}
@@ -180,7 +207,9 @@ function SearchPageContent() {
                   <div className={styles.cardTop}>
                     <span className={styles.cardTypeBadge}>{item.type}</span>
                     {item.isComingSoon && (
-                      <span className={styles.comingSoonBadge}>Coming Soon</span>
+                      <span className={styles.comingSoonBadge}>
+                        Coming Soon
+                      </span>
                     )}
                   </div>
                   <h3 className={styles.cardTitle}>{item.title}</h3>
@@ -206,7 +235,13 @@ function SearchPageWrapper() {
 
 export default function SearchPageApp() {
   return (
-    <Suspense fallback={<div style={{ padding: "60px 20px", textAlign: "center" }}>Loading search...</div>}>
+    <Suspense
+      fallback={
+        <div style={{ padding: "60px 20px", textAlign: "center" }}>
+          Loading search...
+        </div>
+      }
+    >
       <SearchPageWrapper />
     </Suspense>
   );

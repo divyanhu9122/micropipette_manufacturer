@@ -143,12 +143,17 @@ export default function Header({ onOpenQuote }: HeaderProps) {
           </span>
           <div className="topbar-actions">
             <a href="mailto:sales@micropipettemanufacturer.com">
-              <span aria-hidden="true">✉</span> sales@micropipettemanufacturer.com
+              <span aria-hidden="true">✉</span>{" "}
+              sales@micropipettemanufacturer.com
             </a>
             <a href="tel:+18005550199">
               <span aria-hidden="true">☎</span> +1 (800) 555-0199
             </a>
-            <button className="topbar-quote" type="button" onClick={onOpenQuote}>
+            <button
+              className="topbar-quote"
+              type="button"
+              onClick={onOpenQuote}
+            >
               Request a Quote
             </button>
           </div>
@@ -213,6 +218,12 @@ export default function Header({ onOpenQuote }: HeaderProps) {
                   href="/resources"
                 >
                   Resources
+                </Link>
+                <Link
+                  className={pathname?.startsWith("/blog") ? "active" : ""}
+                  href="/blog"
+                >
+                  Blog
                 </Link>
 
                 {/* Small Search Icon Button in the Nav Bar */}
@@ -357,6 +368,9 @@ export default function Header({ onOpenQuote }: HeaderProps) {
             </Link>
             <Link href="/resources" onClick={() => setMobileMenuOpen(false)}>
               Resources
+            </Link>
+            <Link href="/blog" onClick={() => setMobileMenuOpen(false)}>
+              Blog
             </Link>
             <Link
               className="btn primary"

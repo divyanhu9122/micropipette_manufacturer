@@ -17,8 +17,29 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "MicropipetteManufacturer.com",
-  description: "B2B scientific laboratory product platform.",
+  metadataBase: new URL("https://micropipettemanufacturer.in"),
+  title: {
+    default:
+      "Micropipette Manufacturer — Precision Liquid Handling & OEM Solutions",
+    template: "%s | MicropipetteManufacturer.in",
+  },
+  description:
+    "Central B2B platform for precision micropipettes, multichannel pipettes, laboratory plasticware, and custom OEM manufacturing across LABXE, SSCIENCES, and DANWER brands.",
+  keywords: [
+    "micropipette",
+    "pipette manufacturer",
+    "liquid handling",
+    "laboratory equipment",
+    "LABXE",
+    "SSCIENCES",
+    "DANWER",
+    "autoclavable micropipette",
+    "multichannel pipette",
+    "OEM pipette manufacturing",
+  ],
+  authors: [{ name: "MicropipetteManufacturer.in" }],
+  creator: "MicropipetteManufacturer.in",
+  publisher: "MicropipetteManufacturer.in",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
