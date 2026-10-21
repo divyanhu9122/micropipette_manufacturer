@@ -248,5 +248,6 @@ export async function submitCmsEnquiry(
     "[Enquiry Handler] Mocking local enquiry submission receipt:",
     payload
   );
-  return { success: true, id: `local-enq-${Date.now()}` };
+  const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+  return { success: true, id: `ENQ-${Date.now().toString().slice(-6)}-${randomSuffix}` };
 }

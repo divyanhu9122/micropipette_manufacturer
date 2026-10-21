@@ -26,4 +26,5 @@ next-env.d.ts
 .vercel/
 micropipette manufacturer/
 micropipette_codex_context_pack/
+scratch/
 
