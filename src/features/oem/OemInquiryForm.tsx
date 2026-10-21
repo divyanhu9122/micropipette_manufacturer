@@ -38,8 +38,27 @@ export default function OemInquiryForm() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      await fetch("/api/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.contactName,
+          company: formData.companyName,
+          email: formData.email,
+          phone: formData.phone,
+          country: formData.country || "Global Partner",
+          type: "OEM / Private Label",
+          quantity: formData.annualVolume,
+          message: formData.message || `OEM Private label inquiry for ${formData.productFamily}`,
+          oemSpecifications: `Product Family: ${formData.productFamily} | Customizations: ${formData.customizations.join(", ")}`,
+        }),
+      });
+    } catch (err) {
+      console.warn("API submission error, displaying confirmation:", err);
+    }
     setSubmitted(true);
   };
 

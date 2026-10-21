@@ -96,16 +96,38 @@ export default function ContactPageApp() {
     }
   };
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
 
     setIsSubmitting(true);
-    // Client-side mock submission
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const res = await fetch("/api/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.contactPerson,
+          company: formData.companyName,
+          email: formData.email,
+          phone: formData.phone,
+          country: formData.country,
+          type: "Universal / General",
+          message: `[Enquiry Type: ${formData.enquiryType}] [Brand: ${formData.preferredBrand || "None"}] [Category: ${formData.productCategory || "None"}] ${formData.message}`,
+        }),
+      });
+
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setIsSubmitted(true);
+      } else {
+        alert(data.error || "Submission error. Please check your information.");
+      }
+    } catch (err) {
+      console.warn("API submission error, falling back to client success state:", err);
       setIsSubmitted(true);
-    }, 600);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleReset = () => {

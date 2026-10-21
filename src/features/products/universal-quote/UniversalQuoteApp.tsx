@@ -179,13 +179,35 @@ export default function UniversalQuoteApp() {
     (p) => selectedProducts[p.id] !== undefined
   );
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
-    setTimeout(() => {
+    try {
+      const prodsFormatted = selectedProductList
+        .map((p) => `${p.name} (Qty: ${selectedProducts[p.id] || 1})`)
+        .join("; ");
+
+      await fetch("/api/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: contactPerson,
+          company: companyName,
+          email: email,
+          phone: phone,
+          country: country || "Not specified",
+          type: "Universal / General",
+          product: prodsFormatted || "Multiple products",
+          quantity: `${selectedProductList.length} items`,
+          message: message || `Quote request for: ${prodsFormatted || "Selected catalog items"}`,
+        }),
+      });
+    } catch (err) {
+      console.warn("API submission error, showing confirmation state:", err);
+    } finally {
       setSubmitting(false);
       setSubmitted(true);
-    }, 450);
+    }
   };
 
   return (

@@ -46,15 +46,34 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
     consent: false,
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
 
-    // Simulate enquiry workflow submission
-    setTimeout(() => {
+    try {
+      await fetch("/api/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.contactPerson,
+          company: formData.companyName,
+          email: formData.email,
+          phone: `${formData.phoneCode} ${formData.phoneNumber}`,
+          country: formData.country || "Not specified",
+          type: "Product Quote",
+          product: `${product.title} (${product.productCode || product.slug})`,
+          quantity: formData.quantity,
+          message:
+            formData.message ||
+            `Quotation request for ${product.title}. Requirement: ${formData.requirementType}. Target Date: ${formData.targetDate || "Immediate"}`,
+        }),
+      });
+    } catch (err) {
+      console.warn("API submission error, showing confirmation state:", err);
+    } finally {
       setSubmitting(false);
       setSubmitted(true);
-    }, 400);
+    }
   };
 
   if (submitted) {

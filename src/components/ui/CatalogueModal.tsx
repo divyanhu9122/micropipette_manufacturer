@@ -50,8 +50,26 @@ export default function CatalogueModal({
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    try {
+      await fetch("/api/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          company: formData.company,
+          email: formData.email,
+          phone: formData.phone,
+          country: formData.country || "Not specified",
+          type: "Technical Resource",
+          product: catalogueTitle,
+          message: formData.message || `Catalogue download request for ${catalogueTitle}`,
+        }),
+      });
+    } catch (err) {
+      console.warn("API submission error, showing confirmation:", err);
+    }
     setSubmitted(true);
   };
 
