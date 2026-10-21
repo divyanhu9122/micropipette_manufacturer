@@ -432,3 +432,442 @@ export const INITIAL_ADMIN_PRODUCTS: AdminProductItem[] = [
     displayOrder: 60,
   },
 ];
+
+// ==========================================
+// CATEGORIES & TAXONOMY (Phase 4.4)
+// ==========================================
+
+export interface AdminCategoryItem {
+  id: string;
+  name: string;
+  slug: string;
+  parent?: string; // e.g. "Micropipettes" or undefined if top-level
+  status: "Published" | "Draft";
+  order: number;
+  description: string;
+  seoTitle?: string;
+  metaDesc?: string;
+}
+
+export const INITIAL_ADMIN_CATEGORIES: AdminCategoryItem[] = [
+  {
+    id: "cat-001",
+    name: "Micropipettes",
+    slug: "micropipettes",
+    status: "Published",
+    order: 1,
+    description: "Precision single channel and multichannel mechanical and electronic micropipettes.",
+    seoTitle: "Precision Micropipettes | Manufacturer Liquid Handling",
+    metaDesc: "Explore factory-calibrated single-channel and multichannel laboratory micropipettes with ISO 8655 compliance.",
+  },
+  {
+    id: "cat-002",
+    name: "Variable Volume",
+    slug: "variable-volume",
+    parent: "Micropipettes",
+    status: "Published",
+    order: 1,
+    description: "Adjustable volume pipettes featuring click-stop micro-increments and ergonomic plunger kinematics.",
+    seoTitle: "Variable Volume Micropipettes | Click-Stop Precision",
+    metaDesc: "Single and multichannel variable volume micropipettes covering 0.1 µL to 10 mL with autoclavable lower manifolds.",
+  },
+  {
+    id: "cat-003",
+    name: "Multichannel",
+    slug: "multichannel",
+    parent: "Micropipettes",
+    status: "Published",
+    order: 2,
+    description: "8-channel and 12-channel high-throughput pipettes optimized for 96-well microplate applications.",
+    seoTitle: "Multichannel Micropipettes (8 & 12 Channel)",
+    metaDesc: "Ergonomic 8-channel and 12-channel micropipettes with 360-degree rotating manifolds for microplate processing.",
+  },
+  {
+    id: "cat-004",
+    name: "Pipette Tips",
+    slug: "pipette-tips",
+    status: "Published",
+    order: 2,
+    description: "Universal-fit, low-retention, and aerosol filter barrier pipette tips manufactured in cleanrooms.",
+    seoTitle: "Certified Laboratory Pipette Tips | Low Retention & Filter",
+    metaDesc: "DNase, RNase and endotoxin free universal pipette tips in bulk bags, racked, and reload packaging.",
+  },
+  {
+    id: "cat-005",
+    name: "Bottle Top Dispensers",
+    slug: "bottle-top-dispensers",
+    status: "Draft",
+    order: 3,
+    description: "Direct displacement bottle-mounted reagent dispensers with recirculation priming valves.",
+    seoTitle: "Bottle Top Dispensers | Chemical Resistant Reagent Dosing",
+    metaDesc: "Precision bottle-top dispensers for corrosive acids, bases and organic solvents with GL45 standard threading.",
+  },
+  {
+    id: "cat-006",
+    name: "Pipette Controllers",
+    slug: "pipette-controllers",
+    status: "Published",
+    order: 4,
+    description: "Lightweight motorized pipette aids and rubber bulb fillers for serological and volumetric pipettes.",
+    seoTitle: "Motorized Pipette Controllers & Fillers",
+    metaDesc: "Ergonomic electronic pipette fillers compatible with 0.1–100 mL plastic and glass serological pipettes.",
+  },
+  {
+    id: "cat-007",
+    name: "Lab Instruments",
+    slug: "lab-instruments",
+    status: "Published",
+    order: 5,
+    description: "Complementary laboratory analytical balances, vortex mixers, and benchtop microcentrifuges.",
+    seoTitle: "Laboratory Instruments & Benchtop Equipment",
+    metaDesc: "Precision analytical balances, micro-centrifuges, and laboratory instruments built for reliable scientific workflows.",
+  },
+];
+
+// ==========================================
+// BRAND MANAGEMENT (Phase 4.5)
+// ==========================================
+
+export interface AdminBrandItem {
+  id: string;
+  name: "LABXE" | "SSCIENCES" | "DANWER";
+  tagline: string;
+  slug: string;
+  status: "Published" | "Draft";
+  displayOrder: number;
+  summary: string;
+  logo: string;
+  productsLinkedCount: number;
+  seoTitle?: string;
+  metaDesc?: string;
+}
+
+export const INITIAL_ADMIN_BRANDS: AdminBrandItem[] = [
+  {
+    id: "brand-01",
+    name: "LABXE",
+    tagline: "Precision Micropipettes",
+    slug: "labxe",
+    status: "Published",
+    displayOrder: 1,
+    summary:
+      "Engineered for research laboratories requiring high repetitive accuracy, ergonomic fatigue reduction, and fully certified ISO 8655 calibration conformity.",
+    logo: "/images/brand/micropipette-manufacturer-logo.png",
+    productsLinkedCount: 3,
+    seoTitle: "LABXE Precision Micropipettes | Official Brand Portfolio",
+    metaDesc: "Discover the complete LABXE micropipette line featuring variable single-channel and 8-channel precision instruments.",
+  },
+  {
+    id: "brand-02",
+    name: "SSCIENCES",
+    tagline: "Singh Science Systems · Technology For Better Science",
+    slug: "ssciences",
+    status: "Published",
+    displayOrder: 2,
+    summary:
+      "A heritage of liquid handling engineering delivering durable bottle-top dispensers, universal low-retention pipette tips, and laboratory consumables.",
+    logo: "/images/brand/micropipette-manufacturer-logo.png",
+    productsLinkedCount: 2,
+    seoTitle: "SSCIENCES (Singh Science Systems) | Laboratory Liquid Handling",
+    metaDesc: "Explore the SSCIENCES catalog including direct displacement bottle-top dispensers and aerosol barrier filter tips.",
+  },
+  {
+    id: "brand-03",
+    name: "DANWER",
+    tagline: "Analytical Instruments",
+    slug: "danwer",
+    status: "Published",
+    displayOrder: 3,
+    summary:
+      "Analytical balances and precision laboratory equipment built to provide verified accuracy in quality assurance, pharmaceutical analysis, and academic research.",
+    logo: "/images/brand/micropipette-manufacturer-logo.png",
+    productsLinkedCount: 1,
+    seoTitle: "DANWER Analytical Instruments | Precision Laboratory Balances",
+    metaDesc: "Certified DANWER analytical and precision balances offering internal calibration and GLP/ISO compliant data logging.",
+  },
+];
+
+// ==========================================
+// RESOURCES & DOCUMENTS (Phase 4.6)
+// ==========================================
+
+export type ResourceType =
+  | "Catalogue"
+  | "Brochure"
+  | "Datasheet"
+  | "Manual"
+  | "Certificate"
+  | "Calibration-related"
+  | "Other Technical File";
+
+export interface AdminResourceItem {
+  id: string;
+  title: string;
+  type: ResourceType;
+  associations: string;
+  fileFormat: string;
+  fileSize: string;
+  status: "Published" | "Draft";
+  brandAssoc?: string;
+  categoryAssoc?: string;
+  productAssoc?: string;
+  downloadLabel: string;
+  seoTitle?: string;
+  metaDesc?: string;
+}
+
+export const INITIAL_ADMIN_RESOURCES: AdminResourceItem[] = [
+  {
+    id: "res-001",
+    title: "Liquid Handling Catalogue",
+    type: "Catalogue",
+    associations: "LABXE · Micropipettes",
+    fileFormat: "PDF",
+    fileSize: "4.2 MB",
+    status: "Published",
+    brandAssoc: "LABXE",
+    categoryAssoc: "Micropipettes",
+    productAssoc: "LABXE Micropipette Single Channel",
+    downloadLabel: "Download Catalogue",
+    seoTitle: "Liquid Handling Master Catalogue | Download PDF",
+    metaDesc: "Official comprehensive product catalogue detailing liquid handling equipment, pipettes, and technical specifications.",
+  },
+  {
+    id: "res-002",
+    title: "Variable Volume Product Datasheet",
+    type: "Datasheet",
+    associations: "Product · LABXE",
+    fileFormat: "PDF",
+    fileSize: "1.8 MB",
+    status: "Published",
+    brandAssoc: "LABXE",
+    categoryAssoc: "Micropipettes",
+    productAssoc: "LABXE Micropipette Single Channel",
+    downloadLabel: "Download Datasheet",
+    seoTitle: "Variable Volume Micropipette Datasheet PDF",
+    metaDesc: "Technical specifications, volumetric tolerance limits, and chemical resistance matrix for variable volume pipettes.",
+  },
+  {
+    id: "res-003",
+    title: "User Manual — LABXE Precision Series",
+    type: "Manual",
+    associations: "Micropipettes",
+    fileFormat: "PDF",
+    fileSize: "2.4 MB",
+    status: "Draft",
+    brandAssoc: "LABXE",
+    categoryAssoc: "Micropipettes",
+    productAssoc: "LABXE Micropipette Single Channel",
+    downloadLabel: "Download User Manual",
+    seoTitle: "LABXE Micropipette User Manual & Operating Guide",
+    metaDesc: "Operating instructions, in-lab gravimetric calibration procedure, autoclave sterilization guidelines and maintenance.",
+  },
+  {
+    id: "res-004",
+    title: "ISO 9001:2015 & CE Quality Declarations",
+    type: "Certificate",
+    associations: "All Brands",
+    fileFormat: "PDF",
+    fileSize: "850 KB",
+    status: "Published",
+    brandAssoc: "None",
+    categoryAssoc: "None",
+    productAssoc: "None",
+    downloadLabel: "Download Certificate",
+    seoTitle: "ISO 9001 & CE Quality Compliance Declarations",
+    metaDesc: "Official manufacturer quality management certificates and European conformity documentation.",
+  },
+  {
+    id: "res-005",
+    title: "Micro-Volume Gravimetric Calibration Chart",
+    type: "Calibration-related",
+    associations: "Micropipettes · LABXE",
+    fileFormat: "PDF",
+    fileSize: "1.1 MB",
+    status: "Published",
+    brandAssoc: "LABXE",
+    categoryAssoc: "Micropipettes",
+    productAssoc: "LABXE Micropipette Multi Channel",
+    downloadLabel: "Download Calibration Chart",
+    seoTitle: "ISO 8655 Gravimetric Calibration Guidelines",
+    metaDesc: "Factory calibration reference guide, Z-factor correction tables, and volumetric tolerance allowances.",
+  },
+];
+
+// ==========================================
+// BLOG ARTICLES (Phase 4.7)
+// ==========================================
+
+export interface AdminBlogItem {
+  id: string;
+  title: string;
+  slug: string;
+  category: string;
+  author: string;
+  date: string;
+  status: "Published" | "Draft";
+  excerpt: string;
+  content: string;
+  tags: string[];
+  relatedArticles?: string[];
+  faq?: string;
+  seoTitle?: string;
+  metaDesc?: string;
+}
+
+export const INITIAL_ADMIN_BLOG_ARTICLES: AdminBlogItem[] = [
+  {
+    id: "blog-001",
+    title: "Choosing a Micropipette Range for Daily Diagnostics",
+    slug: "choosing-a-micropipette-range",
+    category: "Liquid Handling",
+    author: "Admin User",
+    date: "01 Sep 2026",
+    status: "Published",
+    excerpt:
+      "A comprehensive guide on selecting the correct variable volume ranges and ergonomic parameters for high-throughput clinical laboratory workflows.",
+    content:
+      "Selecting the appropriate micropipette range is critical for maintaining pipette accuracy and pipetting ergonomics in molecular biology and diagnostic labs...",
+    tags: ["micropipette", "liquid handling", "diagnostics", "ISO 8655"],
+    relatedArticles: ["Understanding Pipette Tip Compatibility", "Laboratory Liquid Handling Checklist"],
+    faq: "Q: Which volume range yields optimal accuracy?\nA: For highest precision, pipette in the 35% to 100% region of the nominal volume range.",
+    seoTitle: "Choosing a Micropipette Range | Technical Guide",
+    metaDesc: "Learn how to select volume ranges and ergonomic channel configurations to achieve maximum pipetting accuracy.",
+  },
+  {
+    id: "blog-002",
+    title: "Understanding Pipette Tip Compatibility & Retention Loss",
+    slug: "understanding-pipette-tip-compatibility",
+    category: "Product Guidance",
+    author: "Content Editor A",
+    date: "31 Aug 2026",
+    status: "Draft",
+    excerpt:
+      "How tip geometry, cleanroom manufacturing standards, and hydrophobic polymer surface treatments influence pipetting accuracy.",
+    content:
+      "A micropipette and its disposable tip function as an interconnected measuring system. Mismatched tip cones cause sealing leaks and volume errors...",
+    tags: ["pipette tips", "low retention", "cleanroom", "sample recovery"],
+    relatedArticles: ["Choosing a Micropipette Range"],
+    seoTitle: "Pipette Tip Compatibility & Retention Loss Guide",
+    metaDesc: "Deep dive into aerosol barrier filter tips, tip nozzle geometry, and low-retention surface chemistry.",
+  },
+  {
+    id: "blog-003",
+    title: "Laboratory Liquid Handling Checklist: Maintenance & Calibration",
+    slug: "laboratory-liquid-handling-checklist",
+    category: "Resources",
+    author: "Content Editor B",
+    date: "29 Aug 2026",
+    status: "Published",
+    excerpt:
+      "Standard operating checklist for daily seal inspection, monthly gravimetric validation, and autoclave decontamination protocols.",
+    content:
+      "Regular pipette servicing and gravimetric calibration testing under ISO 8655 guidelines ensure long-term reproducibility and regulatory audit readiness...",
+    tags: ["calibration", "maintenance", "autoclave", "quality assurance"],
+    relatedArticles: ["Choosing a Micropipette Range"],
+    seoTitle: "Laboratory Liquid Handling Checklist | ISO 8655",
+    metaDesc: "Essential daily and monthly maintenance checklist for laboratory pipettes, seal rings, and calibration checks.",
+  },
+];
+
+// ==========================================
+// SEO & WEBSITE SETTINGS (Phase 4.12)
+// ==========================================
+
+export interface PageSeoRecord {
+  id: string;
+  pageName: string;
+  path: string;
+  seoTitle: string;
+  metaDesc: string;
+  canonical: string;
+  robots: string;
+}
+
+export interface AdminSettingsData {
+  siteName: string;
+  tagline: string;
+  defaultDescription: string;
+  primaryLogo: string;
+  favicon: string;
+  defaultTitlePattern: string;
+  defaultMetaDescription: string;
+  defaultCanonical: string;
+  defaultRobots: string;
+  openGraphImage: string;
+  twitterCard: string;
+  pageRecords: PageSeoRecord[];
+  contactEmail: string;
+  contactPhone: string;
+  address: string;
+  linkedin: string;
+  twitter: string;
+}
+
+export const INITIAL_ADMIN_SETTINGS: AdminSettingsData = {
+  siteName: "MicropipetteManufacturer.com",
+  tagline: "Precision. Performance. Partnership.",
+  defaultDescription:
+    "Central B2B platform for LABXE, SSCIENCES and DANWER product discovery, OEM solutions and global enquiries.",
+  primaryLogo: "/images/brand/micropipette-manufacturer-logo.png",
+  favicon: "/favicon.ico",
+  defaultTitlePattern: "{page_title} | MicropipetteManufacturer.com",
+  defaultMetaDescription:
+    "Certified manufacturer of precision micropipettes, pipette tips, bottle-top dispensers and laboratory liquid handling equipment.",
+  defaultCanonical: "Use page URL unless overridden",
+  defaultRobots: "Index, follow",
+  openGraphImage: "/images/brand/micropipette-manufacturer-logo.png",
+  twitterCard: "Summary large image",
+  contactEmail: "sales@micropipettemanufacturer.com",
+  contactPhone: "+91 98200 00000",
+  address: "Precision Manufacturing Park, Sector 4, Gujarat, India",
+  linkedin: "https://linkedin.com/company/micropipette-manufacturer",
+  twitter: "https://x.com/micropipette_mfg",
+  pageRecords: [
+    {
+      id: "p-home",
+      pageName: "Homepage",
+      path: "/",
+      seoTitle: "Micropipette Manufacturer & Laboratory Liquid Handling Solutions",
+      metaDesc: "Certified manufacturer of variable volume micropipettes, pipette tips, and bottle-top dispensers for global laboratories.",
+      canonical: "https://micropipettemanufacturer.com/",
+      robots: "Index, follow",
+    },
+    {
+      id: "p-prod",
+      pageName: "Products Listing",
+      path: "/products/",
+      seoTitle: "Laboratory Liquid Handling Products & Consumables",
+      metaDesc: "Browse calibrated micropipettes, filter tips, electronic controllers, and laboratory instrumentation.",
+      canonical: "https://micropipettemanufacturer.com/products/",
+      robots: "Index, follow",
+    },
+    {
+      id: "p-brand",
+      pageName: "Brand Portfolio",
+      path: "/brands/",
+      seoTitle: "Brand Portfolio | LABXE, SSCIENCES & DANWER",
+      metaDesc: "Official brand catalog covering precision liquid handling, analytical balances, and medical cleanroom consumables.",
+      canonical: "https://micropipettemanufacturer.com/brands/",
+      robots: "Index, follow",
+    },
+    {
+      id: "p-res",
+      pageName: "Resources & Download Center",
+      path: "/resources/",
+      seoTitle: "Technical Download Center | Manuals, Catalogues & ISO Certificates",
+      metaDesc: "Download official product brochures, user operating manuals, gravimetric calibration charts, and CE declarations.",
+      canonical: "https://micropipettemanufacturer.com/resources/",
+      robots: "Index, follow",
+    },
+    {
+      id: "p-oem",
+      pageName: "OEM & Private Label",
+      path: "/oem/",
+      seoTitle: "OEM & Private Label Micropipette Manufacturing Solutions",
+      metaDesc: "Custom molding, private labeling, color customization, and contract manufacturing for laboratory distributor brands.",
+      canonical: "https://micropipettemanufacturer.com/oem/",
+      robots: "Index, follow",
+    },
+  ],
+};
