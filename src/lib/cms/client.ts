@@ -3,8 +3,6 @@
 // Server-only client for querying Strapi REST API with fallback
 // ============================================================
 
-import { StrapiResponse, StrapiCollectionResponse } from "@/types/cms";
-
 const CMS_URL = process.env.CMS_API_URL?.replace(/\/$/, "");
 const CMS_TOKEN = process.env.CMS_API_TOKEN;
 

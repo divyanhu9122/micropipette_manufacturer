@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validateEnquiryPayload } from "@/lib/validation/enquiry";
 import { submitCmsEnquiry } from "@/lib/cms/fetchers";
-import { CmsEnquiryPayload } from "@/types/cms";
 
 // In-memory rate limiting map (IP -> timestamp array) for basic DOS / spam mitigation
 const rateLimitMap = new Map<string, number[]>();
