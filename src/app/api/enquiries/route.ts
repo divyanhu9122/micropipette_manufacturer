@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validateEnquiryPayload } from "@/lib/validation/enquiry";
-import { submitCmsEnquiry } from "@/lib/cms/fetchers";
+import { supabaseAdmin } from "@/lib/cms/client";
 
 // In-memory rate limiting map (IP -> timestamp array) for basic DOS / spam mitigation
 const rateLimitMap = new Map<string, number[]>();
@@ -65,15 +65,44 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 5. Submit to Strapi CMS / Data Pipeline
-    const submissionResult = await submitCmsEnquiry(validation.sanitizedData);
+    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+    const enquiryId = `ENQ-${Date.now().toString().slice(-6)}-${randomSuffix}`;
+
+    const validated = {
+      ...validation.sanitizedData,
+      productSlug: (body.productSlug || body.product_slug) as string | undefined,
+      productTitle: (body.productTitle || body.product_title || validation.sanitizedData.product) as string | undefined,
+      enquiryType: (body.enquiryType || body.enquiry_type || (validation.sanitizedData.type === 'Product Quote' ? 'product' : validation.sanitizedData.type === 'OEM / Private Label' ? 'oem' : validation.sanitizedData.type === 'Technical Resource' ? 'contact' : 'universal')) as 'product' | 'universal' | 'oem' | 'contact',
+    };
+
+    // Persist enquiry to Supabase
+    const { error: dbError } = await supabaseAdmin
+      .from('enquiries')
+      .insert({
+        enquiry_id: enquiryId,
+        name: validated.name,
+        email: validated.email,
+        phone: validated.phone ?? null,
+        company: validated.company ?? null,
+        country: validated.country ?? null,
+        message: validated.message,
+        product_slug: validated.productSlug ?? null,
+        product_title: validated.productTitle ?? null,
+        enquiry_type: validated.enquiryType,
+        ip_address: ip,
+      });
+
+    if (dbError) {
+      // Log server-side only — never expose DB errors to client
+      console.error('[Enquiry DB Insert]', dbError.message);
+    }
 
     return NextResponse.json(
       {
         success: true,
         message:
           "Thank you for your enquiry. Our technical sales team will review your specifications and respond shortly.",
-        enquiryId: submissionResult.id,
+        enquiryId: enquiryId,
       },
       { status: 200 }
     );

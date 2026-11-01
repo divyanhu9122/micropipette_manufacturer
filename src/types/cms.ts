@@ -1,243 +1,145 @@
-// ============================================================
-// STRAPI CMS TYPE DEFINITIONS (STAGE 8 & 10)
-// Matching CMS_DATA_ARCHITECTURE.md
-// ============================================================
+// ─── Brand ───────────────────────────────────────────────────────────────────
 
-export interface StrapiMediaFormat {
-  name: string;
-  hash: string;
-  ext: string;
-  mime: string;
-  width: number;
-  height: number;
-  size: number;
-  url: string;
+export interface Brand {
+  id: string
+  slug: string
+  name: string
+  tagline: string | null
+  description: string | null
+  logo_url: string | null
+  website: string | null
+  is_active: boolean
+  sort_order: number
+  created_at: string
+  updated_at: string
 }
 
-export interface StrapiMedia {
-  id: number;
-  documentId?: string;
-  name: string;
-  alternativeText?: string;
-  caption?: string;
-  width?: number;
-  height?: number;
-  formats?: {
-    thumbnail?: StrapiMediaFormat;
-    small?: StrapiMediaFormat;
-    medium?: StrapiMediaFormat;
-    large?: StrapiMediaFormat;
-  };
-  url: string;
+// ─── Category ────────────────────────────────────────────────────────────────
+
+export interface Category {
+  id: string
+  slug: string
+  name: string
+  parent_id: string | null
+  description: string | null
+  icon: string | null
+  sort_order: number
+  is_active: boolean
+  created_at: string
 }
 
-export interface StrapiPagination {
-  page: number;
-  pageSize: number;
-  pageCount: number;
-  total: number;
+// ─── Product ─────────────────────────────────────────────────────────────────
+
+export interface Product {
+  id: string
+  slug: string
+  title: string
+  model_number: string | null
+  brand_id: string
+  category_id: string
+  description: string | null
+  short_description: string | null
+  volume_min: number | null
+  volume_max: number | null
+  volume_unit: string
+  channels: number
+  is_autoclavable: boolean
+  autoclave_type: string | null
+  mechanism: string | null
+  specifications: Record<string, unknown>
+  accuracy_tolerances: Record<string, unknown>
+  images: string[]
+  datasheet_url: string | null
+  is_featured: boolean
+  is_active: boolean
+  meta_title: string | null
+  meta_description: string | null
+  sort_order: number
+  created_at: string
+  updated_at: string
+  // Joined relations — present when fetched with .select('*, brands(*), categories(*)')
+  brands?: Brand
+  categories?: Category
 }
 
-export interface StrapiMeta {
-  pagination?: StrapiPagination;
+// ─── Blog Article ─────────────────────────────────────────────────────────────
+
+export interface BlogArticle {
+  id: string
+  slug: string
+  title: string
+  content: string | null
+  excerpt: string | null
+  author: string
+  cover_image: string | null
+  tags: string[]
+  category: string | null
+  read_time_minutes: number | null
+  is_published: boolean
+  published_at: string | null
+  meta_title: string | null
+  meta_description: string | null
+  created_at: string
+  updated_at: string
 }
 
-export interface StrapiResponse<T> {
-  data: T;
-  meta?: StrapiMeta;
+// ─── Resource ─────────────────────────────────────────────────────────────────
+
+export interface Resource {
+  id: string
+  title: string
+  type: 'brochure' | 'manual' | 'datasheet' | 'certificate' | 'other'
+  file_url: string | null
+  file_size_kb: number | null
+  brand_id: string | null
+  description: string | null
+  is_public: boolean
+  download_count: number
+  created_at: string
+  brands?: Pick<Brand, 'name' | 'slug'>
 }
 
-export interface StrapiCollectionResponse<T> {
-  data: T[];
-  meta: StrapiMeta;
+// ─── Enquiry ──────────────────────────────────────────────────────────────────
+
+export interface Enquiry {
+  id: string
+  enquiry_id: string
+  name: string
+  email: string
+  phone: string | null
+  company: string | null
+  country: string | null
+  message: string
+  product_slug: string | null
+  product_title: string | null
+  enquiry_type: 'product' | 'universal' | 'oem' | 'contact'
+  status: 'new' | 'read' | 'replied' | 'closed'
+  ip_address: string | null
+  created_at: string
 }
 
-// ==========================================
-// SHARED COMPONENTS
-// ==========================================
+// ─── Settings ─────────────────────────────────────────────────────────────────
 
-export interface SharedSeo {
-  id?: number;
-  metaTitle?: string;
-  metaDescription?: string;
-  canonicalUrl?: string;
-  robotsDirective?: string;
-  shareImage?: StrapiMedia;
-  schemaJson?: Record<string, unknown>;
+export interface SiteSettings {
+  title: string
+  description: string
 }
 
-export interface ProductSpecItem {
-  id?: number;
-  label: string;
-  value: string;
-}
-
-// ==========================================
-// CORE ENTITY DATA MODELS
-// ==========================================
-
-export interface CmsBrand {
-  id: number;
-  documentId?: string;
-  name: "LABXE" | "SSCIENCES" | "DANWER";
-  tagline: string;
-  slug: string;
-  summary: string;
-  logo?: StrapiMedia;
-  bannerImage?: StrapiMedia;
-  displayOrder: number;
-  seo?: SharedSeo;
-  createdAt?: string;
-  updatedAt?: string;
-  publishedAt?: string;
-}
-
-export interface CmsCategory {
-  id: number;
-  documentId?: string;
-  name: string;
-  slug: string;
-  parent?: CmsCategory;
-  children?: CmsCategory[];
-  description?: string;
-  bannerImage?: StrapiMedia;
-  displayOrder: number;
-  seo?: SharedSeo;
-  createdAt?: string;
-  updatedAt?: string;
-  publishedAt?: string;
-}
-
-export interface CmsResource {
-  id: number;
-  documentId?: string;
-  title: string;
-  type:
-    | "Catalogue"
-    | "Brochure"
-    | "Datasheet"
-    | "Manual"
-    | "Certificate"
-    | "Calibration-related"
-    | "Other"
-    | "Other Technical File";
-  file?: StrapiMedia;
-  downloadLabel: string;
-  brands?: CmsBrand[];
-  categories?: CmsCategory[];
-  products?: CmsProduct[];
-  isGated: boolean;
-  createdAt?: string;
-  updatedAt?: string;
-  publishedAt?: string;
-}
-
-export interface CmsProduct {
-  id: number;
-  documentId?: string;
-  title: string;
-  slug: string;
-  sku: string;
-  brand?: CmsBrand;
-  category?: CmsCategory;
-  subcategory?: CmsCategory;
-  channelType?: "Single Channel" | "8-Channel" | "12-Channel" | "None";
-  mechanism: "Mechanical (Manual)" | "Electronic (Motorized)";
-  volumeRangeMin?: number;
-  volumeRangeMax?: number;
-  volumeUnit?: "µL" | "mL";
-  autoclavability:
-    | "Fully Autoclavable"
-    | "Autoclavable Lower Assembly"
-    | "Non-autoclavable";
-  overview: string;
-  features?: string[];
-  specifications: ProductSpecItem[];
-  images?: StrapiMedia[];
-  resources?: CmsResource[];
-  relatedProducts?: CmsProduct[];
-  displayOrder: number;
-  seo?: SharedSeo;
-  createdAt?: string;
-  updatedAt?: string;
-  publishedAt?: string;
-}
-
-export interface CmsBlogArticle {
-  id: number;
-  documentId?: string;
-  title: string;
-  slug: string;
-  category: string;
-  author: string;
-  publishDate: string;
-  readingTime?: string;
-  excerpt: string;
-  content: string;
-  featuredImage?: StrapiMedia;
-  tags?: string[];
-  faq?: Array<{ question: string; answer: string }>;
-  relatedProducts?: CmsProduct[];
-  seo?: SharedSeo;
-  createdAt?: string;
-  updatedAt?: string;
-  publishedAt?: string;
-}
-
-export interface CmsApplication {
-  id: number;
-  documentId?: string;
-  name: string;
-  slug: string;
-  summary: string;
-  icon?: string;
-  displayOrder: number;
-  products?: CmsProduct[];
-}
-
-export interface CmsFaq {
-  id: number;
-  documentId?: string;
-  question: string;
-  answer: string;
-  category: "General" | "Products" | "OEM" | "Calibration" | "Shipping";
-  displayOrder: number;
-}
+// ─── Legacy Enquiry Payload Compatibility ────────────────────────────────────
 
 export interface CmsEnquiryPayload {
-  name: string;
-  email: string;
-  phone?: string;
-  company: string;
-  country: string;
+  name: string
+  email: string
+  phone?: string
+  company: string
+  country: string
   type:
     | "Product Quote"
     | "Universal / General"
     | "OEM / Private Label"
-    | "Technical Resource";
-  product?: string;
-  quantity?: string;
-  message: string;
-  oemSpecifications?: string;
-}
-
-export interface CmsEnquiry extends CmsEnquiryPayload {
-  id: number;
-  documentId?: string;
-  status: "New" | "Open" | "Responded" | "Closed";
-  internalNotes?: string;
-  createdAt: string;
-}
-
-export interface CmsSettings {
-  siteName: string;
-  siteTagline: string;
-  defaultDescription: string;
-  defaultTitlePattern: string;
-  defaultRobots: string;
-  contactEmail: string;
-  contactPhone: string;
-  address: string;
-  linkedin?: string;
-  twitter?: string;
+    | "Technical Resource"
+  product?: string
+  quantity?: string
+  message: string
+  oemSpecifications?: string
 }
