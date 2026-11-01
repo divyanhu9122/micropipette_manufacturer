@@ -24,7 +24,7 @@ The platform strictly represents three confirmed corporate manufacturing brands:
 - **Typography**: Google Fonts via `next/font/google` — **Manrope** (headings) and **Inter** (body text and tabular technical data), self-hosted automatically.
 - **Server APIs**: Next.js App Router Route Handlers (`/api/enquiries`, `/api/revalidate`).
 - **Data Access Layer**: Server-only dual-mode CMS client (`src/lib/cms/`) with graceful mock fallback and on-demand ISR revalidation.
-- **Target CMS & DB (Stage 9)**: Strapi v5 Headless CMS + PostgreSQL 16+ (specified in [`CMS_DATA_ARCHITECTURE.md`](CMS_DATA_ARCHITECTURE.md)).
+- **Target CMS & DB (Stage 9)**: Supabase (PostgreSQL 16+, Supabase Storage, Row Level Security; specified in [`CMS_DATA_ARCHITECTURE.md`](CMS_DATA_ARCHITECTURE.md)).
 
 ---
 
@@ -80,8 +80,9 @@ cp .env.example .env.local
 | Variable | Description | Default / Local Development |
 |---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | Public site domain URL | `http://localhost:3000` |
-| `CMS_API_URL` | Strapi REST API endpoint | Leave blank for prototype mock fallback |
-| `CMS_API_TOKEN` | Strapi server-to-server token | Leave blank for prototype mock fallback |
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL | Leave blank for prototype mock fallback |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous public API key | Leave blank for prototype mock fallback |
+| `SUPABASE_SERVICE_KEY` | Supabase service role / admin token | Private server-only; leave blank for mock fallback |
 | `REVALIDATE_SECRET` | Token for `/api/revalidate` webhook | Optional in local development |
 
 ### Running the Application
@@ -123,16 +124,16 @@ node scratch/test_suite.mjs
 
 The frontend uses a dual-mode data architecture (`src/lib/cms/`):
 
-1. **Online Mode (CMS Configured)**: When `CMS_API_URL` and `CMS_API_TOKEN` are defined in the environment, the server-side client queries Strapi REST endpoints directly with on-demand ISR revalidation.
-2. **Offline / Fallback Mode (Default)**: When Strapi is not running or credentials are blank, typed fetchers (`src/lib/cms/fetchers.ts`) seamlessly fall back to verified internal datasets (`admin.data.ts`) with zero runtime errors and zero downtime.
+1. **Online Mode (CMS Configured)**: When `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` (or `SUPABASE_SERVICE_KEY`) are defined in the environment, the server-side client queries Supabase REST / PostgREST endpoints directly with on-demand ISR revalidation.
+2. **Offline / Fallback Mode (Default)**: When Supabase is not running or credentials are blank, typed fetchers (`src/lib/cms/fetchers.ts`) seamlessly fall back to verified internal datasets (`admin.data.ts`) with zero runtime errors and zero downtime.
 
 ---
 
 ## 6. Next Development Milestone & Known Limitations
 
-- **Current Milestone**: Transitioning to **Stage 9 — Strapi v5 Headless CMS & PostgreSQL Initialization**.
-- **Architecture Blueprint**: Refer to [`CMS_DATA_ARCHITECTURE.md`](CMS_DATA_ARCHITECTURE.md) for full schema definitions, field constraints, entity relationship diagrams, database indexes, and API permissions.
+- **Current Milestone**: Transitioning to **Stage 9 — Supabase Backend Initialization**.
+- **Architecture Blueprint**: Refer to [`CMS_DATA_ARCHITECTURE.md`](CMS_DATA_ARCHITECTURE.md) for full schema definitions, field constraints, entity relationship diagrams, database indexes, and Row Level Security (RLS) policies.
 - **Known Limitations**:
-  - Live external Strapi instance and PostgreSQL database are not yet initialized (all data currently served via fallback mock datasets).
+  - Live external Supabase project and PostgreSQL database tables are not yet initialized (all data currently served via fallback mock datasets).
   - Transactional email dispatch (SMTP / AWS SES / Resend) for submitted inquiries is deferred to production deployment; submissions currently log receipts on the server.
-  - S3-compatible object storage and CDN for PDF spec sheet distribution are scheduled for Stage 11.
+  - Supabase Storage and CDN for PDF spec sheet distribution are scheduled for Stage 11.

@@ -25,8 +25,8 @@
 - **Styling**: Vanilla CSS + scoped CSS Modules + custom design tokens (`src/styles/tokens.css`). Zero TailwindCSS.
 - **Typography**: Google Fonts via `next/font/google` (Manrope headings, Inter body/tables).
 - **API Pipeline**: Next.js Route Handlers (`/api/enquiries`, `/api/revalidate`) with in-memory IP rate limiting (5 req/min), honeypot spam protection, and RFC 5322 regex validation.
-- **Data Access Layer**: Dual-mode server CMS client (`src/lib/cms/`) with automatic fallback to verified internal datasets (`admin.data.ts`) when Strapi is offline.
-- **Target Backend (Stage 9)**: Strapi v5 Headless CMS + PostgreSQL 16+ (specified in [`CMS_DATA_ARCHITECTURE.md`](CMS_DATA_ARCHITECTURE.md)).
+- **Data Access Layer**: Dual-mode server CMS client (`src/lib/cms/`) with automatic fallback to verified internal datasets (`admin.data.ts`) when Supabase is offline.
+- **Target Backend (Stage 9)**: Supabase (PostgreSQL 16+, Supabase Storage, Row Level Security; specified in [`CMS_DATA_ARCHITECTURE.md`](CMS_DATA_ARCHITECTURE.md)).
 
 ---
 
@@ -64,7 +64,7 @@
 ## 5. Current Blockers & Pending Infrastructure
 
 1. **Pending Remote Push**: The 4 completed feature commits plus this hygiene commit need to be pushed to GitHub (`git push origin main`) upon TL review.
-2. **Strapi Headless CMS & PostgreSQL (Stage 9)**: The architectural blueprint and data contracts are locked (`CMS_DATA_ARCHITECTURE.md`), but the backend services have not yet been instantiated.
+2. **Supabase Backend & PostgreSQL (Stage 9)**: The architectural blueprint and data contracts are locked (`CMS_DATA_ARCHITECTURE.md`), and the client layer is being integrated with Supabase.
 3. **Transactional Email Service**: Inquiries currently log receipts to the server console; production SMTP / SES dispatch is pending Stage 12 production configuration.
 4. **Media CDN & Object Storage (Stage 11)**: AWS S3 or Cloudinary integration for PDF datasheets and high-res media is pending backend deployment.
 
@@ -91,14 +91,13 @@ npx tsx scratch/test_suite.mjs
 
 ---
 
-## 7. Exact Next Task: Stage 9 — Strapi v5 & PostgreSQL Initialization
+## 7. Exact Next Task: Stage 9 — Supabase Backend Initialization
 
-- **Objective**: Stand up the external Strapi v5 headless CMS and connect it to a PostgreSQL database instance.
-- **Reference Document**: [`CMS_DATA_ARCHITECTURE.md`](CMS_DATA_ARCHITECTURE.md) (contains full schemas for Products, Categories, Brands, Resources, Blog Articles, Applications, FAQs, Enquiries, and Settings).
+- **Objective**: Stand up the managed Supabase backend (PostgreSQL 16+, Supabase Storage, Row Level Security) and connect the Next.js frontend client layer.
+- **Reference Document**: [`CMS_DATA_ARCHITECTURE.md`](CMS_DATA_ARCHITECTURE.md) (contains full table schemas for Products, Categories, Brands, Resources, Blog Articles, Applications, FAQs, Enquiries, and Settings).
 - **Step-by-Step Sequence**:
-  1. Obtain user approval to commit hygiene fixes and push local `main` to GitHub.
-  2. Initialize Strapi v5 application (e.g. in `backend/` or dedicated infrastructure repo).
-  3. Configure PostgreSQL connection string and environment variables.
-  4. Create Content-Type schemas matching `CMS_DATA_ARCHITECTURE.md`.
-  5. Configure Public API role permissions (`find`, `findOne`, `create enquiry`).
-  6. Generate server-to-server `CMS_API_TOKEN` and update `.env.local` to connect frontend.
+  1. Initialize Supabase managed project and database instance.
+  2. Configure PostgreSQL tables and schema matching `CMS_DATA_ARCHITECTURE.md`.
+  3. Configure Supabase Storage buckets for product media and PDF technical documents.
+  4. Configure Row Level Security (RLS) policies and role permissions (`anon` read, server-side enquiry write).
+  5. Set environment variables (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_KEY`) to connect frontend.
