@@ -19,7 +19,7 @@ The automated test suite currently contains 57 tests. It covers negative access,
 ## Remaining launch dependencies
 
 - Access to the existing Vercel project, production environment configuration and verified deployment at the existing URL.
-- The first admin membership for rajyu2003@gmail.com is prepared. The private one-time link is in ignored .tmp/staff-onboarding.txt; the owner still needs to choose a password and enroll an authenticator.
+- The requested first administrator membership is prepared. The private one-time link is in ignored .tmp/staff-onboarding.txt; the owner still needs to choose a password and enroll an authenticator.
 - Final verified product/brand information, images, PDFs, business contacts and legal/marketing copy. Imported drafts: 3 brands, 4 categories, 12 products, 8 articles and 19 document descriptions; zero were published.
 - Email provider/verified sender and optional Supabase SMTP. Until configured, enquiries are stored in the admin inbox and alerts are queued.
 - Business decisions for retention, backups, monitoring, storage quotas and any future CAPTCHA/antivirus requirements.

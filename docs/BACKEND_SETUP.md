@@ -40,16 +40,16 @@ The remote check sends HEAD requests only. It verifies connectivity/columns, not
 
 ## First administrator and recovery
 
-The requested first administrator is rajyu2003@gmail.com. Bootstrap is trusted local setup, permitted only before an active admin exists:
+Use the owner-approved administrator email; admin@example.com below is a placeholder. Bootstrap is trusted local setup, permitted only before an active admin exists:
 
 ```powershell
-node scripts/bootstrap-staff.mjs rajyu2003@gmail.com
+node scripts/bootstrap-staff.mjs admin@example.com
 ```
 
 The script writes a one-time private link to .tmp/staff-onboarding.txt without sending email or printing tokens. The link uses NEXT_PUBLIC_SITE_URL, so the corresponding application must be running. Open it, confirm access, choose a password and enroll a TOTP authenticator. The link expires according to the project's Auth settings; regenerate it if needed:
 
 ```powershell
-node scripts/bootstrap-staff.mjs --reissue rajyu2003@gmail.com
+node scripts/bootstrap-staff.mjs --reissue admin@example.com
 ```
 
 Other approved staff can be invited, enabled/disabled or assigned admin/editor/sales from /admin/staff. Their link is sensitive and should be delivered privately by the administrator. No shared default password exists. Password recovery preserves the MFA requirement; lost authenticators require trusted Supabase administrator intervention. Public signup does not grant staff membership; disable unused public signup in Supabase Auth settings as operational hardening.
@@ -62,7 +62,7 @@ Review each brand/category/product/article. Upload final PDFs and images using t
 
 ## Email and jobs
 
-The enquiry recipient is raj884701@gmail.com in the private environment. No provider has been supplied, so notifications remain queued and the admin dashboard identifies delivery as pending. Configure a Resend account, verify the sender's domain, then set RESEND_API_KEY and RESEND_FROM_EMAIL privately. Supabase Auth SMTP is a separate configuration if automatic invitation/password recovery mail is desired; private onboarding links work without it.
+The enquiry recipient is configured privately with NOTIFICATION_EMAIL. No provider has been supplied, so notifications remain queued and the admin dashboard identifies delivery as pending. Configure a Resend account, verify the sender's domain, then set RESEND_API_KEY and RESEND_FROM_EMAIL privately. Supabase Auth SMTP is a separate configuration if automatic invitation/password recovery mail is desired; private onboarding links work without it.
 
 vercel.json schedules /api/jobs/notifications daily at 08:00 UTC, authenticated with CRON_SECRET. New leads also attempt immediate delivery when configured. Up to ten queued jobs are claimed per cron request, with leases and up to five attempts per job. Configure monitoring and a higher retry frequency/appropriate hosting plan if enquiry volume or delivery expectations exceed that. No guarantee of exactly-once email delivery is made.
 
