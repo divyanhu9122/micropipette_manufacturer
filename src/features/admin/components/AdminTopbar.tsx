@@ -1,18 +1,38 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import type { StaffIdentity } from "@/lib/auth/authorize";
+import { createBrowserSupabaseClient } from "@/lib/cms/browser";
 import styles from "../Admin.module.css";
 
 interface AdminTopbarProps {
+  staff: StaffIdentity;
   title: string;
   contextText?: string;
   onToggleSidebar: () => void;
 }
 
 export default function AdminTopbar({
+  staff,
   title,
   contextText = "Micropipette Central Management",
   onToggleSidebar,
 }: AdminTopbarProps) {
+  const router = useRouter();
+  const [signOutError, setSignOutError] = useState("");
+  async function signOut() {
+    try {
+      const { error } = await createBrowserSupabaseClient().auth.signOut({
+        scope: "local",
+      });
+      if (error) throw error;
+      router.replace("/staff/login");
+      router.refresh();
+    } catch {
+      setSignOutError("Sign-out failed. Please try again.");
+    }
+  }
   return (
     <header className={styles.topbar}>
       <div className={styles.topbarLeft}>
@@ -36,15 +56,21 @@ export default function AdminTopbar({
       </div>
 
       <div className={styles.topbarRight}>
-        <span className={styles.chip}>B2B Admin Prototype</span>
+        <span className={styles.chip}>{staff.role}</span>
 
         <div className={styles.profile}>
-          <div className={styles.avatar}>AU</div>
+          <div className={styles.avatar}>
+            {staff.email.slice(0, 2).toUpperCase()}
+          </div>
           <div className={styles.profileInfo}>
-            <strong>Admin User</strong>
-            <span>Lead Metrology</span>
+            <strong>{staff.email}</strong>
+            <span>{staff.role}</span>
           </div>
         </div>
+        <button type="button" onClick={signOut}>
+          Sign out
+        </button>
+        {signOutError && <span role="alert">{signOutError}</span>}
       </div>
     </header>
   );

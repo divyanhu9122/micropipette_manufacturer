@@ -8,22 +8,34 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",
+    "check:backend": "node scripts/check-backend.mjs",
+    "staff:bootstrap": "node scripts/bootstrap-staff.mjs",
+    "staff:link": "node scripts/bootstrap-staff.mjs --reissue",
+    "content:import-drafts": "node --import tsx scripts/import-prototype.ts",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "test": "node --conditions=react-server --import tsx --test tests/backend.test.ts tests/config.test.mjs tests/database.test.mjs tests/workflows.test.ts",
+    "test:integration": "node scripts/test-integration.mjs",
+    "test:smoke": "node tests/smoke.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.118.0",
-    "next": "16.3.4",
+    "@supabase/ssr": "0.12.7",
+    "@supabase/supabase-js": "2.118.0",
+    "next": "16.4.6",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "server-only": "0.0.1"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.6.0",
+    "@next/env": "16.4.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.3.4",
+    "eslint-config-next": "16.4.6",
     "prettier": "^3.6.2",
+    "tsx": "4.23.15",
     "typescript": "^5"
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import styles from "./ProductListing.module.css";
 import { useReveal } from "./useReveal";
 import type { ProductListItem } from "./product-listing.data";
@@ -21,9 +22,20 @@ export default function ProductCard({
       style={{ transitionDelay: `${revealDelayMs}ms` }}
     >
       <div className={styles.media} aria-hidden="true">
-        <span style={{ fontSize: 13, color: "#62758d" }}>
-          {product.brandLabel} • {product.family}
-        </span>
+        {product.imageUrl ? (
+          <Image
+            unoptimized
+            src={product.imageUrl}
+            alt={product.title}
+            width={360}
+            height={260}
+            style={{ width: "100%", height: "100%", objectFit: "contain" }}
+          />
+        ) : (
+          <span style={{ fontSize: 13, color: "#62758d" }}>
+            {product.brandLabel} • {product.family}
+          </span>
+        )}
       </div>
       <div className={styles.tagRow} style={{ flexWrap: "wrap", gap: "6px" }}>
         <span className={styles.brandTag}>{product.brandLabel}</span>

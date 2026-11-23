@@ -1,10 +1,10 @@
 import Link from "next/link";
 import styles from "./Blog.module.css";
 import type { BlogPost } from "./blog.data";
-import { getRelatedPosts } from "./blog.data";
 
 interface BlogDetailAppProps {
   post: BlogPost;
+  relatedPosts?: BlogPost[];
 }
 
 function formatDate(dateStr: string): string {
@@ -16,9 +16,10 @@ function formatDate(dateStr: string): string {
   });
 }
 
-export default function BlogDetailApp({ post }: BlogDetailAppProps) {
-  const relatedPosts = getRelatedPosts(post.slug, 3);
-
+export default function BlogDetailApp({
+  post,
+  relatedPosts = [],
+}: BlogDetailAppProps) {
   const authorInitials = post.author.name
     .split(/\s+/)
     .map((w) => w[0])

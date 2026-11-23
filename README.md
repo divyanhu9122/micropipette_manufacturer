@@ -1,139 +1,81 @@
-# Micropipette Manufacturer B2B Web Platform
+# Micropipette Manufacturer
 
-B2B scientific laboratory liquid-handling and precision instrument platform (`MicropipetteManufacturer.in` / `MicropipetteManufacturer.com`). The application provides product catalog discovery, technical specification tables conforming to ISO 8655 gravimetric tolerances, multi-facet filtering, quotation inquiry pipelines (product-specific, universal, and OEM private-label), central technical resource downloads, SEO-indexed technical articles, and an internal Admin CMS management console.
+A Next.js catalogue and quote enquiry website backed by Supabase PostgreSQL, Auth and private Storage. Customers do not need accounts. Approved staff use password sign-in and a TOTP authenticator at /staff/login.
 
----
+The maintained application is src/app at the repository root. Preserved design archives, former prototype components and scratch material are reference material, not additional deployed applications. Keep the existing LABXE, SSCIENCES and DANWER brand scope; LABAIDS remains excluded. Technical specifications and compliance claims must be verified by the business before publication.
 
-## 1. Permitted Brand Scope
+## Current implementation
 
-The platform strictly represents three confirmed corporate manufacturing brands:
+- Published products, brands, categories, articles, documents and managed pages come from Supabase. Drafts do not appear in public search, navigation or sitemap. Unknown product/article/brand slugs return 404.
+- Persistent admin editors support content, uploads, publication, site settings, enquiries and staff access. Enquiries include status, internal notes and private reference files. The dashboard reads real counts and audit events.
+- Admin can publish and manage staff/settings. Editor can create and edit drafts. Sales can read enquiries and update status/notes. All protected operations require current active membership, an active Auth session and verified MFA. RLS enforces permissions independently of Next.js.
+- All six public enquiry form variants confirm database persistence before showing success. Shared database limits, idempotent retries and a durable email outbox protect the submission workflow. Optional reference files are private, bounded to 3 MB and available only to admin/sales.
+- Email integration is prepared for Resend but delivery is disabled until a provider and verified sender are configured. Staff onboarding can use private one-time links without sending email.
 
-1. **`LABXE`**: Scientific liquid-handling equipment, in-house molding, assembly, single/multichannel pipettes, bottle-top dispensers, and electronic pipette controllers.
-2. **`SSCIENCES`** (*Singh Science Systems*): Precision laboratory lines including Mini, Excellent, Science Plus (semi-autoclavable), FAC Plus (fully autoclavable), and multichannel series under the registered tagline *"Technology For Better Science."*
-3. **`DANWER`**: High-precision analytical balances, laboratory scales, and precision liquid-handling instruments.
+The connected database migrations are in supabase/migrations. Existing prototype data can be imported as unpublished drafts. Final product data, PDFs, business contact details and legal/marketing copy still require the owner's review. Do not publish unverified content.
 
-> **Important**: Per project operating rules, `LABAIDS` is strictly excluded from this repository and must never be added.
+## Setup
 
----
+Use Node.js 22 or newer and npm. Dependencies are locked in package-lock.json.
 
-## 2. Technology Stack
-
-- **Core Framework**: Next.js 16.3.4 (App Router)
-- **Runtime & UI**: React 19.2.8, strict TypeScript 5
-- **Styling**: Vanilla CSS + scoped CSS Modules with custom design tokens (`src/styles/tokens.css`). **Zero TailwindCSS dependency**.
-- **Typography**: Google Fonts via `next/font/google` — **Manrope** (headings) and **Inter** (body text and tabular technical data), self-hosted automatically.
-- **Server APIs**: Next.js App Router Route Handlers (`/api/enquiries`, `/api/revalidate`).
-- **Data Access Layer**: Server-only dual-mode CMS client (`src/lib/cms/`) with graceful mock fallback and on-demand ISR revalidation.
-- **Target CMS & DB (Stage 9)**: Supabase (PostgreSQL 16+, Supabase Storage, Row Level Security; specified in [`CMS_DATA_ARCHITECTURE.md`](CMS_DATA_ARCHITECTURE.md)).
-
----
-
-## 3. Current Application Capabilities (85 Compiled Routes)
-
-### Public Platform
-- **Homepage ([`/`](src/app/page.tsx))**: Hero slider, product categories, brand portfolio showcase, OEM capabilities, applications, featured series, ISO quality standards, customer testimonials, partner marquee, and global quotation modal.
-- **Product Catalog ([`/products`](src/app/products/page.tsx))**: Multi-facet interactive filtering (Brand, Volume Range, Autoclavability, Channel Count, Mechanism), keyword search, sorting, and responsive product cards.
-- **Product Hierarchy & Details ([`/products/[slug]`](src/app/products/[slug]/page.tsx))**: Dynamic product pages with technical specifications, ISO 8655 accuracy (A%) and precision (CV%) tables, autoclavability badges, downloadable datasheets, and direct quotation modal.
-- **Category & Subcategory Routes**: [`/products/micropipettes`](src/app/products/micropipettes/page.tsx) and [`/products/micropipettes/variable-volume`](src/app/products/micropipettes/variable-volume/page.tsx).
-- **Brand Portfolios ([`/brands`](src/app/brands/page.tsx))**: Dedicated showcase pages for [`/brands/labxe`](src/app/brands/[slug]/page.tsx), [`/brands/ssciences`](src/app/brands/[slug]/page.tsx), and [`/brands/danwer`](src/app/brands/[slug]/page.tsx).
-- **OEM & Private Label Solutions ([`/oem`](src/app/oem/page.tsx))**: Custom injection molding, custom volume ranges, laser branding, calibration tolerances, and embedded consultation form.
-- **Applications Listing ([`/applications`](src/app/applications/page.tsx))**: Scientific workflow cards covering Genomics, Cell Culture, PCR/Sequencing, Microbiology, and Clinical Diagnostics.
-- **Download Center ([`/resources`](src/app/resources/page.tsx))**: Central document repository for Catalogues, Brochures, Datasheets, Manuals, and ISO Certificates.
-- **Blog & Knowledge Hub ([`/blog`](src/app/blog/page.tsx), [`/blog/[slug]`](src/app/blog/[slug]/page.tsx))**: Technical articles with sticky auto-generated Table of Contents, ISO 8655 testing guides, and product cross-references.
-- **Company & Inquiry Pages**: About Us ([`/about`](src/app/about/page.tsx)), Contact Us ([`/contact`](src/app/contact/page.tsx)), Universal Quote ([`/request-quote`](src/app/request-quote/page.tsx)), FAQ Hub ([`/faq`](src/app/faq/page.tsx)), Privacy Policy ([`/privacy-policy`](src/app/privacy-policy/page.tsx)), and Terms ([`/terms`](src/app/terms/page.tsx)).
-- **Universal Search ([`/search`](src/app/search/page.tsx))**: Instant header search suggestions and dedicated search results view.
-- **Resilience & SEO**: Global loading skeleton ([`src/app/loading.tsx`](src/app/loading.tsx)), error boundary ([`src/app/error.tsx`](src/app/error.tsx)), dark 404 page ([`src/app/not-found.tsx`](src/app/not-found.tsx)), dynamic [`robots.ts`](src/app/robots.ts), and dynamic [`sitemap.ts`](src/app/sitemap.ts).
-
-### Admin CMS Prototypes ([`/admin`](src/app/admin/page.tsx))
-- **Dashboard ([`/admin`](src/app/admin/page.tsx))**: Metrics overview (Total Products, Pending Inquiries, Approvals), quick actions, and recent activity logs.
-- **Product Management ([`/admin/products`](src/app/admin/products/page.tsx))**: Searchable product table with status badges and full **Add/Edit Product Editor** modal.
-- **Taxonomy Manager ([`/admin/categories`](src/app/admin/categories/page.tsx))**: Category hierarchy tree view with child counts and SEO editing controls.
-- **Brand Manager ([`/admin/brands`](src/app/admin/brands/page.tsx))**: Brand portfolio cards for LABXE, SSCIENCES, and DANWER with linked product counters.
-- **Resource Registry ([`/admin/resources`](src/app/admin/resources/page.tsx))**: Central document registry with multi-entity association (Brand / Category / Product).
-- **Blog Publishing ([`/admin/blog`](src/app/admin/blog/page.tsx))**: Article manager with reading-time metrics, status filters, and modal editor.
-- **Enquiry Inbox ([`/admin/enquiries`](src/app/admin/enquiries/page.tsx))**: Incoming B2B quote requests table with status pills (New, Open, Responded, Closed) and detail viewer.
-- **Site Settings & SERP Preview ([`/admin/settings`](src/app/admin/settings/page.tsx))**: Global identity settings, contact channels, and live Google SERP preview.
-
-### Server API Pipeline
-- **`POST /api/enquiries`**: In-memory IP rate limiter (max 5 submissions per minute per IP), invisible honeypot spam guard (`website_hp`, `hp_check`), server-side RFC 5322 regex validation, and standardized quotation ID generation (`ENQ-XXXXXX-XXXX`).
-- **`POST /api/revalidate`**: Token-secured cache revalidation webhook supporting path and tag invalidation.
-
----
-
-## 4. Local Development & Verification
-
-### Prerequisites
-- Node.js 20+ (recommended: Node 22 or Node 24 LTS)
-- npm
-
-### Installation
-```sh
-npm install
+```powershell
+npm ci
+# Fresh checkout only; do not overwrite an existing .env.local:
+Copy-Item .env.example .env.local
 ```
 
-### Environment Configuration
-Copy `.env.example` to `.env.local`:
-```sh
-cp .env.example .env.local
-```
+Fill .env.local privately. Required: NEXT_PUBLIC_SITE_URL, NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, SUPABASE_SECRET_KEY, REVALIDATION_TOKEN and CRON_SECRET. The two token values should be independently generated random secrets of at least 32 characters. Legacy anon/service keys remain supported. Never put a server key in NEXT_PUBLIC_ variables or Git.
 
-| Variable | Description | Default / Local Development |
-|---|---|---|
-| `NEXT_PUBLIC_SITE_URL` | Public site domain URL | `http://localhost:3000` |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL | Leave blank for prototype mock fallback |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anonymous public API key | Leave blank for prototype mock fallback |
-| `SUPABASE_SERVICE_KEY` | Supabase service role / admin token | Private server-only; leave blank for mock fallback |
-| `REVALIDATE_SECRET` | Token for `/api/revalidate` webhook | Optional in local development |
-
-### Running the Application
-```sh
-# Start local development server
+```powershell
+node scripts/check-backend.mjs --remote
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) for the public website, or [http://localhost:3000/admin](http://localhost:3000/admin) for the admin console.
 
-### Code Quality & Verification Commands
-```sh
-# 1. Run ESLint code quality checks
+Read [backend setup](docs/BACKEND_SETUP.md) before connecting a different database. Do not replay migrations blindly on an existing project.
+
+## Staff and content
+
+```powershell
+# Trusted local setup, only when no active admin exists:
+node scripts/bootstrap-staff.mjs admin@example.com
+# Regenerate an access link for an existing active staff member:
+node scripts/bootstrap-staff.mjs --reissue admin@example.com
+# Optional, idempotent import of original source content as drafts:
+npm run content:import-drafts
+```
+
+Onboarding links are written to ignored .tmp/staff-onboarding.txt and never printed. Open the link while the application is running, choose a password and enroll an authenticator. Other staff are managed from /admin/staff. No shared/default password is created. Recovery links do not bypass MFA; factor recovery requires the trusted Supabase administrator.
+
+Publish verified brands/categories before their products, then upload real images/PDFs and publish the products/resources. Website settings expose public presentation fields only; provider credentials belong in environment settings. Managed pages can replace home, about, oem, applications and faq bodies, or appear at /pages/your-slug. Theme/layout changes remain code changes.
+
+## Verification
+
+```powershell
+npm test
 npm run lint
-
-# 2. Run strict TypeScript type-checking
 npm run typecheck
-
-# 3. Format code / check formatting
-npm run format
-npm run format:check
-
-# 4. Create production build
 npm run build
-
-# 5. Start production server
-npm run start
+npm audit --omit=dev
+npm run start -- --hostname 127.0.0.1 --port 3010
+# In another terminal:
+node tests/smoke.mjs http://127.0.0.1:3010
 ```
 
-### Automated Test Suite
-The repository includes a 59-assertion automated verification runner testing the validation engine, live API endpoints, and CMS fallback fetchers:
-```sh
-# Note: Ensure the development server is running on port 3000 before running the suite
-node scratch/test_suite.mjs
+Unit/route tests use controlled network fixtures. Database tests replay the actual migrations in embedded PostgreSQL and test grants/RLS for anonymous, unapproved, password-only, admin, editor, sales, disabled and revoked sessions. CI does not require production credentials.
+
+The opt-in live integration test creates clearly labelled disposable Auth accounts, catalogue records, an enquiry and private files in the configured Supabase project, then cleans up only its own fixtures. Run only against an owned local server with email delivery disabled. Production intake requires Vercel's trusted IP headers; to simulate them on a loopback production test server:
+
+```powershell
+$env:VERCEL='1'
+node node_modules/next/dist/bin/next start --hostname 127.0.0.1 --port 3010
+# In a second terminal:
+node scripts/test-integration.mjs --allow-live-fixtures
 ```
 
----
+Do not expose that simulated server to the network. Do not set VERCEL=1 on an arbitrary public server: implement its trusted-proxy identity handling first.
 
-## 5. Current CMS State: Dual-Mode Architecture
+## Deployment
 
-The frontend uses a dual-mode data architecture (`src/lib/cms/`):
+The intended address remains https://micropipette-manufacturer.vercel.app/. Production deployment requires access to that existing Vercel project. No replacement hosting project is required. Configure production environment values privately, link the existing project, deploy the tested revision and smoke-test the public forms and staff workflows. Do not provide production secrets to untrusted preview builds.
 
-1. **Online Mode (CMS Configured)**: When `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` (or `SUPABASE_SERVICE_KEY`) are defined in the environment, the server-side client queries Supabase REST / PostgREST endpoints directly with on-demand ISR revalidation.
-2. **Offline / Fallback Mode (Default)**: When Supabase is not running or credentials are blank, typed fetchers (`src/lib/cms/fetchers.ts`) seamlessly fall back to verified internal datasets (`admin.data.ts`) with zero runtime errors and zero downtime.
-
----
-
-## 6. Next Development Milestone & Known Limitations
-
-- **Current Milestone**: Transitioning to **Stage 9 — Supabase Backend Initialization**.
-- **Architecture Blueprint**: Refer to [`CMS_DATA_ARCHITECTURE.md`](CMS_DATA_ARCHITECTURE.md) for full schema definitions, field constraints, entity relationship diagrams, database indexes, and Row Level Security (RLS) policies.
-- **Known Limitations**:
-  - Live external Supabase project and PostgreSQL database tables are not yet initialized (all data currently served via fallback mock datasets).
-  - Transactional email dispatch (SMTP / AWS SES / Resend) for submitted inquiries is deferred to production deployment; submissions currently log receipts on the server.
-  - Supabase Storage and CDN for PDF spec sheet distribution are scheduled for Stage 11.
+See [architecture](docs/ARCHITECTURE.md), [operations and connection](docs/BACKEND_SETUP.md), and [current change report](docs/CHANGE_REPORT.md).

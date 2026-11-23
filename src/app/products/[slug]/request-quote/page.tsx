@@ -1,43 +1,34 @@
-import type { Metadata } from "next";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import PublicFrame from "@/components/layout/PublicFrame";
+import { getPublicContent } from "@/lib/cms/public";
+import { notFound } from "next/navigation";
 import ProductEnquiry from "@/components/products/ProductEnquiry";
-import {
-  getAllProductSlugs,
-  getProductBySlug,
-} from "@/features/products/product-detail/product-detail.data";
-
-type Props = {
-  params: Promise<{ slug: string }>;
-};
-
+import { productDetail } from "@/lib/cms/presentation";
+export const revalidate = 60;
+type Props = { params: Promise<{ slug: string }> };
 export async function generateStaticParams() {
-  const slugs = getAllProductSlugs();
-  return slugs.map((slug) => ({ slug }));
+  return (await getPublicContent()).products.map(({ slug }) => ({ slug }));
 }
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
-
+  const product = (await getPublicContent()).products.find(
+    (p) => p.slug === slug,
+  );
+  if (!product) notFound();
   return {
-    title: `Request Quote — ${product.title} | MicropipetteManufacturer.in`,
-    description: `Request quotation, pricing, and bulk technical specifications for ${product.title}.`,
-    alternates: {
-      canonical: `https://micropipettemanufacturer.in/products/${slug}/request-quote`,
-    },
+    title: `Request quote — ${product.title}`,
+    description: `Request a quotation for ${product.title}.`,
+    alternates: { canonical: `/products/${slug}/request-quote` },
   };
 }
-
-export default async function ProductEnquiryRoute({ params }: Props) {
+export default async function QuotePage({ params }: Props) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
-
+  const product = (await getPublicContent()).products.find(
+    (p) => p.slug === slug,
+  );
+  if (!product) notFound();
   return (
-    <main>
-      <Header />
-      <ProductEnquiry product={product} />
-      <Footer />
-    </main>
+    <PublicFrame>
+      <ProductEnquiry product={productDetail(product)} />
+    </PublicFrame>
   );
 }

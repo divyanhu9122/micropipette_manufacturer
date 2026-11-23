@@ -1,24 +1,35 @@
-import { supabaseAdmin } from '@/lib/cms/client'
-import { NextRequest, NextResponse } from 'next/server'
+import type { NextRequest } from "next/server";
+import { staffEndpoint } from "@/lib/auth/request";
+import { readJsonObject } from "@/lib/http/request";
+import { databaseError } from "@/lib/http/responses";
+import { parseBrandInput } from "@/lib/validation/admin";
 
-export async function GET() {
-  const { data, error } = await supabaseAdmin
-    .from('brands')
-    .select('*')
-    .order('sort_order', { ascending: true })
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json(data)
+export async function GET(request: NextRequest) {
+  return staffEndpoint(request, "content:read", async ({ client }) => {
+    const { data, error } = await client
+      .from("brands")
+      .select("*")
+      .order("sort_order", { ascending: true })
+      .limit(200);
+    if (error) databaseError(error, "list brands");
+    return data;
+  });
 }
 
-export async function POST(req: NextRequest) {
-  const body = await req.json()
-  const { data, error } = await supabaseAdmin
-    .from('brands')
-    .insert(body)
-    .select()
-    .single()
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 400 })
-  return NextResponse.json(data, { status: 201 })
+export async function POST(request: NextRequest) {
+  return staffEndpoint(
+    request,
+    "content:publish",
+    async ({ client }) => {
+      const input = parseBrandInput(await readJsonObject(request));
+      const { data, error } = await client
+        .from("brands")
+        .insert(input)
+        .select()
+        .single();
+      if (error) databaseError(error, "create brand");
+      return data;
+    },
+    201,
+  );
 }

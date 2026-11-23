@@ -16,13 +16,14 @@ export interface ProductDetailDownload {
   title: string;
   format: string;
   size: string;
+  url?: string;
 }
 
 export interface ProductDetailItem {
   id: string;
   slug: string;
   title: string;
-  brand: "SSCIENCES" | "LABXE" | "DANWER";
+  brand: string;
   typeLabel: string;
   shortOverview: string;
   productCode: string;
@@ -39,6 +40,7 @@ export interface ProductDetailItem {
   applications: string[];
   downloads: ProductDetailDownload[];
   relatedSlugs: string[];
+  images?: string[];
 }
 
 export const productCatalog: Record<string, ProductDetailItem> = {
@@ -688,109 +690,10 @@ export const productCatalog: Record<string, ProductDetailItem> = {
 };
 
 // Fallback generator for placeholders from general product listing (e.g. placeholder-1..6, featured-micropipette-1..4)
-export function getProductBySlug(slug: string): ProductDetailItem {
-  if (productCatalog[slug]) {
-    return productCatalog[slug];
-  }
-
-  // Generate clean default structured product for any placeholder slug
-  const titleFormatted = slug
-    .split("-")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
-
-  return {
-    id: slug,
-    slug,
-    title: `${titleFormatted} Precision Micropipette`,
-    brand: "SSCIENCES",
-    typeLabel: "VARIABLE VOLUME",
-    shortOverview:
-      "Precision laboratory instrument engineered for high accuracy, minimal pipetting force, and full compliance with international laboratory standards.",
-    productCode: `MP-${slug.slice(0, 6).toUpperCase()}`,
-    category: "Micropipette",
-    keySpecs: {
-      volumeRange: "0.5 – 1000 µL",
-      increment: "0.1 µL",
-      channel: "Single Channel",
-      autoclavable: "Autoclavable",
-    },
-    longOverview: [
-      "This precision micropipette combines lightweight ergonomics with robust mechanical durability, providing exceptional repeatability across standard and advanced laboratory protocols.",
-      "Every instrument is calibrated according to ISO 8655 gravimetric standards and supplied with a factory calibration certificate.",
-    ],
-    specifications: [
-      { label: "Volume Range", value: "Verified Laboratory Range" },
-      { label: "Increment", value: "Standard Metric Interval" },
-      { label: "Accuracy", value: "Within ISO 8655 Standards" },
-      { label: "Precision", value: "High Reproducibility (CV < 0.5%)" },
-      {
-        label: "Channel Configuration",
-        value: "Single Channel / Multichannel",
-      },
-      {
-        label: "Tip Compatibility",
-        value: "Universal standard laboratory tips",
-      },
-      { label: "Autoclavability", value: "121°C Autoclavable" },
-      { label: "Construction Material", value: "Chemical-resistant polymers" },
-    ],
-    features: [
-      {
-        num: "01",
-        title: "Ergonomic Handling",
-        desc: "Engineered body profile minimizes thumb strain during extended analytical runs.",
-      },
-      {
-        num: "02",
-        title: "Click-Stop Calibration",
-        desc: "Accurate volume indexing dial prevents accidental setting drift.",
-      },
-      {
-        num: "03",
-        title: "Streamlined Tip Ejection",
-        desc: "Low-force tip release mechanism reduces repetitive hand strain.",
-      },
-      {
-        num: "04",
-        title: "Chemical Shielding",
-        desc: "High-grade polymer housing resists solvent contact and buffer exposure.",
-      },
-    ],
-    applications: [
-      "Molecular Biology",
-      "Clinical Chemistry",
-      "Analytical Quality Control",
-      "Microbiology",
-    ],
-    downloads: [
-      { title: "Product Technical Datasheet", format: "PDF", size: "1.9 MB" },
-      {
-        title: "User Operation & Maintenance Manual",
-        format: "PDF",
-        size: "3.1 MB",
-      },
-      { title: "Product Family Catalogue", format: "PDF", size: "5.2 MB" },
-    ],
-    relatedSlugs: [
-      "ssciences-science-plus-variable-05-10",
-      "ssciences-science-plus-variable-10-100",
-      "labxe-precision-variable-100-1000",
-    ],
-  };
+export function getProductBySlug(slug: string): ProductDetailItem | null {
+  return productCatalog[slug] ?? null;
 }
 
 export function getAllProductSlugs(): string[] {
-  const catalogSlugs = Object.keys(productCatalog);
-  const placeholderSlugs = Array.from(
-    { length: 6 },
-    (_, i) => `placeholder-${i + 1}`,
-  );
-  const featuredSlugs = Array.from(
-    { length: 4 },
-    (_, i) => `featured-micropipette-${i + 1}`,
-  );
-  return Array.from(
-    new Set([...catalogSlugs, ...placeholderSlugs, ...featuredSlugs]),
-  );
+  return Object.keys(productCatalog);
 }

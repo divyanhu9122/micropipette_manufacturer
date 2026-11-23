@@ -1,23 +1,21 @@
-import type { Metadata } from "next";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import MicropipetteCategory from "@/components/products/MicropipetteCategory";
-
-export const metadata: Metadata = {
-  title: "Micropipettes | MicropipetteManufacturer.in",
-  description:
-    "Micropipettes by classification — variable volume, fixed volume, single channel, multichannel, electronic and mechanical — from LABXE, SSCIENCES and DANWER.",
-  alternates: {
-    canonical: "https://micropipettemanufacturer.in/products/micropipettes",
-  },
-};
-
-export default function MicropipetteCategoryPage() {
+import PublicFrame from "@/components/layout/PublicFrame";
+import { getPublicContent } from "@/lib/cms/public";
+import ProductListing from "@/components/products/ProductListing";
+import { productListItem } from "@/lib/cms/presentation";
+export const revalidate = 60;
+export const metadata = { title: "Micropipettes" };
+export default async function CataloguePage() {
+  const { products, categories } = await getPublicContent();
+  const categoryIds = new Set(
+    categories.filter((c) => c.slug.includes("micropipette")).map((c) => c.id),
+  );
+  const records = products.filter((p) => categoryIds.has(p.category_id));
   return (
-    <main>
-      <Header />
-      <MicropipetteCategory />
-      <Footer />
-    </main>
+    <PublicFrame>
+      <ProductListing
+        title="Micropipettes"
+        products={records.map(productListItem)}
+      />
+    </PublicFrame>
   );
 }

@@ -1,0 +1,9 @@
+.env*
+!.env.example
+.tmp/
+.git/
+.next/
+node_modules/
+scratch/
+micropipette manufacturer/
+micropipette_codex_context_pack/

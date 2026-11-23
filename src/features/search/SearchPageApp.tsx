@@ -1,14 +1,11 @@
 "use client";
 
-import { Suspense, useMemo, useState, type FormEvent } from "react";
+import { Suspense, useEffect, useMemo, useState, type FormEvent } from "react";
 import Link from "next/link";
+import { useSiteNavigation } from "@/features/site/SiteSettings";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./SearchPage.module.css";
-import {
-  searchItems,
-  type SearchItem,
-  type SearchContentType,
-} from "./search.data";
+import { type SearchItem, type SearchContentType } from "./search.data";
 
 const TABS: Array<{ label: string; value: "All" | SearchContentType }> = [
   { label: "All", value: "All" },
@@ -20,18 +17,15 @@ const TABS: Array<{ label: string; value: "All" | SearchContentType }> = [
   { label: "Information Pages", value: "Page" },
 ];
 
-const SUGGESTIONS = [
-  { label: "Micropipettes", href: "/products/micropipettes" },
-  { label: "Lab Plasticware", href: "/products?category=Lab+Plasticware" },
-  { label: "Science Plus", href: "/products/micropipettes#science-plus" },
-  { label: "FAC Plus", href: "/products/micropipettes#fac-plus" },
-  { label: "LABXE", href: "/brands/labxe" },
-  { label: "SSCIENCES", href: "/brands/ssciences" },
-  { label: "dr.pipette", href: "/brands/dr-pipette" },
-  { label: "sscientific", href: "/brands/sscientific" },
-];
-
 function SearchPageContent() {
+  const navigation = useSiteNavigation();
+  const SUGGESTIONS = [
+    { label: "All products", href: "/products" },
+    { label: "Technical resources", href: "/resources" },
+    ...navigation.brands
+      .slice(0, 6)
+      .map((brand) => ({ label: brand.name, href: `/brands/${brand.slug}` })),
+  ];
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
@@ -39,8 +33,26 @@ function SearchPageContent() {
   const [inputVal, setInputVal] = useState(initialQuery);
   const [activeTab, setActiveTab] = useState<"All" | SearchContentType>("All");
 
-  const allMatching = useMemo(() => {
-    return initialQuery.trim() ? searchItems(initialQuery) : [];
+  const [allMatching, setAllMatching] = useState<SearchItem[]>([]);
+  const [searchError, setSearchError] = useState("");
+  useEffect(() => {
+    const controller = new AbortController();
+    if (initialQuery.trim())
+      fetch(`/api/search?q=${encodeURIComponent(initialQuery)}`, {
+        signal: controller.signal,
+      })
+        .then(async (response) => {
+          if (!response.ok) throw new Error();
+          return response.json();
+        })
+        .then((result) => setAllMatching(result.items))
+        .catch(() => {
+          if (!controller.signal.aborted)
+            setSearchError(
+              "Search is temporarily unavailable. Try again shortly.",
+            );
+        });
+    return () => controller.abort();
   }, [initialQuery]);
 
   const filteredResults = useMemo(() => {
@@ -65,6 +77,11 @@ function SearchPageContent() {
 
   return (
     <div className={styles.page}>
+      {searchError && (
+        <p role="alert" className="wrap">
+          {searchError}
+        </p>
+      )}
       {/* Hero Header */}
       <section className={styles.hero}>
         <div className={styles.wrap}>

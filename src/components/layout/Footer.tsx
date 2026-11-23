@@ -1,11 +1,16 @@
+"use client";
 import Link from "next/link";
 import Image from "next/image";
+import { useSiteSettings } from "@/features/site/SiteSettings";
 
 interface FooterProps {
   onOpenCatalogue?: () => void;
 }
 
 export default function Footer({ onOpenCatalogue }: FooterProps) {
+  const settings = useSiteSettings();
+  const site = settings.site || {};
+  const contact = settings.contact || {};
   return (
     <footer>
       <div className="wrap footer-top">
@@ -14,15 +19,19 @@ export default function Footer({ onOpenCatalogue }: FooterProps) {
             <Link href="/" className="logo footer-brand-logo">
               <Image
                 className="footer-brand-logo-image"
-                src="/images/brand/micropipette-manufacturer-logo.png"
-                alt="MicropipetteManufacturer"
+                unoptimized
+                src={
+                  site.logo ||
+                  "/images/brand/micropipette-manufacturer-logo.png"
+                }
+                alt={site.name || "Micropipette Manufacturer"}
                 width={866}
                 height={288}
               />
             </Link>
             <p>
-              Central B2B platform for LABXE, SSCIENCES and DANWER product
-              discovery, OEM solutions and global laboratory inquiries.
+              {site.description ||
+                "Product information, OEM solutions and laboratory enquiries."}
             </p>
           </div>
 
@@ -96,21 +105,46 @@ export default function Footer({ onOpenCatalogue }: FooterProps) {
           <div>
             <h4>CONNECT WITH US</h4>
             <div className="socials">
-              <a href="#" className="social" aria-label="LinkedIn">
-                in
-              </a>
-              <a href="#" className="social" aria-label="Facebook">
-                f
-              </a>
-              <a href="#" className="social" aria-label="Twitter">
-                𝕏
-              </a>
-              <a href="#" className="social" aria-label="YouTube">
-                ▶
-              </a>
+              {contact.linkedin && (
+                <a
+                  href={contact.linkedin}
+                  className="social"
+                  aria-label="LinkedIn"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  in
+                </a>
+              )}
+              {contact.twitter && (
+                <a
+                  href={contact.twitter}
+                  className="social"
+                  aria-label="Twitter"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  𝕏
+                </a>
+              )}
             </div>
             <p style={{ fontSize: 12, color: "#9bb8dc", marginTop: 14 }}>
-              Direct export shipments dispatched to 80+ countries worldwide.
+              {contact.email && (
+                <>
+                  <a href={`mailto:${contact.email}`}>{contact.email}</a>
+                  <br />
+                </>
+              )}
+              {contact.phone && (
+                <>
+                  <a href={`tel:${contact.phone.replace(/[^+0-9]/g, "")}`}>
+                    {contact.phone}
+                  </a>
+                  <br />
+                </>
+              )}
+              {contact.address ||
+                "Contact our team for product and quotation information."}
             </p>
           </div>
         </div>
@@ -130,8 +164,9 @@ export default function Footer({ onOpenCatalogue }: FooterProps) {
           }}
         >
           <div>
-            © {new Date().getFullYear()} MicropipetteManufacturer.com —
-            Precision Liquid Handling Laboratory Solutions. All rights reserved.
+            © {new Date().getFullYear()}{" "}
+            {site.name || "Micropipette Manufacturer"} — Precision Liquid
+            Handling Laboratory Solutions. All rights reserved.
           </div>
           <div className="footer-legal">
             <Link

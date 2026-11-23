@@ -13,8 +13,9 @@ export default function PartnerCtaBlock({ onOpenQuote }: PartnerCtaBlockProps) {
             <div>
               <h2>Ready to Partner With Us?</h2>
               <p>
-                Connect with our direct sales and OEM engineering team for bulk distributor pricing, private label manufacturing,
-                tender participation, and technical liquid handling guidance.
+                Connect with our direct sales and OEM engineering team for bulk
+                distributor pricing, private label manufacturing, tender
+                participation, and technical liquid handling guidance.
               </p>
 
               <div className="partner-actions">
@@ -32,12 +33,12 @@ export default function PartnerCtaBlock({ onOpenQuote }: PartnerCtaBlockProps) {
 
               <div className="partner-highlights">
                 <div className="highlight">
-                  <strong>80+</strong>
-                  <span>Countries Served Globally</span>
+                  <strong>B2B</strong>
+                  <span>Distributor & Laboratory Enquiries</span>
                 </div>
                 <div className="highlight">
-                  <strong>24h</strong>
-                  <span>Average Technical Response</span>
+                  <strong>Support</strong>
+                  <span>Product & Technical Guidance</span>
                 </div>
                 <div className="highlight">
                   <strong>OEM</strong>
@@ -49,16 +50,28 @@ export default function PartnerCtaBlock({ onOpenQuote }: PartnerCtaBlockProps) {
             <div className="partner-side">
               <h3>Why Global Buyers Contact Us Directly</h3>
               <ul>
-                <li>Direct factory bulk pricing with no intermediary distributor markup</li>
-                <li>Comprehensive OEM & private-label branding with custom colorways</li>
-                <li>Individual ISO 8655 gravimetric calibration certificates included</li>
-                <li>Dedicated international freight support, customs, and documentation</li>
+                <li>
+                  Direct factory bulk pricing with no intermediary distributor
+                  markup
+                </li>
+                <li>
+                  Comprehensive OEM & private-label branding with custom
+                  colorways
+                </li>
+                <li>
+                  Discuss calibration requirements and available product
+                  documentation
+                </li>
+                <li>
+                  Dedicated international freight support, customs, and
+                  documentation
+                </li>
               </ul>
 
               <div className="contact-badges">
                 <div className="badge">Direct Factory Supply</div>
                 <div className="badge">OEM Consultation</div>
-                <div className="badge">24h Sales Response</div>
+                <div className="badge">Sales Enquiries</div>
                 <div className="badge">Worldwide Shipping</div>
               </div>
             </div>

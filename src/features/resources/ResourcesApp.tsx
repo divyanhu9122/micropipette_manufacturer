@@ -5,19 +5,27 @@ import Link from "next/link";
 import InnerPageHero from "@/components/layout/InnerPageHero";
 import InnerPageHeroVisual from "@/components/layout/InnerPageHeroVisual";
 import styles from "./Resources.module.css";
-import {
-  RESOURCES_DATA,
-  RESOURCE_CATEGORIES,
-  RESOURCE_BRANDS,
-  ResourceItem,
-} from "./resources.data";
+import { RESOURCE_CATEGORIES, ResourceItem } from "./resources.data";
 import CatalogueModal from "@/components/ui/CatalogueModal";
 
-export default function ResourcesApp() {
+export default function ResourcesApp({
+  resources = [],
+}: {
+  resources?: ResourceItem[];
+}) {
+  const RESOURCE_BRANDS = [
+    { id: "all", label: "All Brands" },
+    ...Array.from(
+      new Set(
+        resources.map((item) => item.brand).filter((brand) => brand !== "all"),
+      ),
+    ).map((brand) => ({ id: brand, label: brand.toUpperCase() })),
+  ];
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedBrand, setSelectedBrand] = useState<string>("all");
-  const [activeModalResource, setActiveModalResource] = useState<ResourceItem | null>(null);
+  const [activeModalResource, setActiveModalResource] =
+    useState<ResourceItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenCatalogueModal = (resource?: ResourceItem) => {
@@ -26,11 +34,13 @@ export default function ResourcesApp() {
   };
 
   const filteredResources = useMemo(() => {
-    return RESOURCES_DATA.filter((item) => {
+    return resources.filter((item) => {
       const matchesCategory =
         selectedCategory === "all" || item.category === selectedCategory;
       const matchesBrand =
-        selectedBrand === "all" || item.brand === selectedBrand || item.brand === "all";
+        selectedBrand === "all" ||
+        item.brand === selectedBrand ||
+        item.brand === "all";
       const matchesSearch =
         searchQuery === "" ||
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -38,13 +48,16 @@ export default function ResourcesApp() {
 
       return matchesCategory && matchesBrand && matchesSearch;
     });
-  }, [searchQuery, selectedCategory, selectedBrand]);
+  }, [resources, searchQuery, selectedCategory, selectedBrand]);
 
   return (
     <div className={styles.resourcesPage}>
       {/* Compact Breadcrumb Hero */}
       <InnerPageHero
-        breadcrumb={[{ label: "Home", href: "/" }, { label: "Resources & Technical Documentation" }]}
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Resources & Technical Documentation" },
+        ]}
         title="Technical Documentation & Download Center"
         eyebrow="Resources"
         description="Browse product catalogues, datasheets and operating manuals, with technical documents organized by product and brand."
@@ -56,23 +69,26 @@ export default function ResourcesApp() {
         <div className="wrap">
           <div className={styles.resourcesIntro}>
             <span className={styles.typeTag}>Central download repository</span>
-            <h2>Product Catalogues, Datasheets, Protocols & Quality Certificates</h2>
+            <h2>
+              Product Catalogues, Datasheets, Protocols & Quality Certificates
+            </h2>
             <p>
-              Access certified technical documentation across our manufacturing portfolio.
-              Download official product catalogues, ISO 8655 gravimetric protocols, chemical
-              resistance charts, and operation manuals for LABXE, SSCIENCES, and DANWER liquid
-              handling systems.
+              Access certified technical documentation across our manufacturing
+              portfolio. Download official product catalogues, ISO 8655
+              gravimetric protocols, chemical resistance charts, and operation
+              manuals for LABXE, SSCIENCES, and DANWER liquid handling systems.
             </p>
           </div>
 
           {/* Featured Pack Banner */}
           <div className={styles.featuredBanner}>
             <div className={styles.featuredContent}>
-              <h3>Download Complete 2026 Master Catalogue Suite</h3>
+              <h3>Request the product catalogue</h3>
               <p>
-                Get the unified multi-brand liquid handling instrument guide covering variable
-                pipettes, multichannel units, dispensers, and private-label manufacturing options in
-                one high-resolution PDF package.
+                Get the unified multi-brand liquid handling instrument guide
+                covering variable pipettes, multichannel units, dispensers, and
+                private-label manufacturing options in one high-resolution PDF
+                package.
               </p>
             </div>
             <button
@@ -151,7 +167,7 @@ export default function ResourcesApp() {
           {/* Grid Count */}
           <div className={styles.gridHeader}>
             <span className={styles.gridCount}>
-              Showing {filteredResources.length} of {RESOURCES_DATA.length} documents
+              Showing {filteredResources.length} of {resources.length} documents
             </span>
           </div>
 
@@ -177,7 +193,9 @@ export default function ResourcesApp() {
                         {item.format}
                       </span>
                       <span className={styles.brandBadge}>
-                        {item.brand === "all" ? "All Brands" : item.brand.toUpperCase()}
+                        {item.brand === "all"
+                          ? "All Brands"
+                          : item.brand.toUpperCase()}
                       </span>
                     </div>
                     <h3 className={styles.cardTitle}>{item.title}</h3>
@@ -216,7 +234,9 @@ export default function ResourcesApp() {
           ) : (
             <div className={styles.emptyState}>
               <h3>No matching documents found</h3>
-              <p>Try refining your search keyword or clearing the active filters.</p>
+              <p>
+                Try refining your search keyword or clearing the active filters.
+              </p>
               <button
                 type="button"
                 className="btn secondary"
@@ -237,8 +257,9 @@ export default function ResourcesApp() {
             <div className={styles.customCtaContent}>
               <h3>Need Custom Calibration Reports or Regulatory Dossiers?</h3>
               <p>
-                Our laboratory quality team provides tailored batch inspection records, ISO 8655
-                conformity certificates, and OEM compliance documentation on demand.
+                Our laboratory quality team provides tailored batch inspection
+                records, ISO 8655 conformity certificates, and OEM compliance
+                documentation on demand.
               </p>
             </div>
             <Link href="/contact" className="btn secondary">
@@ -250,19 +271,18 @@ export default function ResourcesApp() {
 
       {/* Catalogue Download Modal */}
       <CatalogueModal
+        downloadUrl={activeModalResource?.url}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         catalogueTitle={
-          activeModalResource
-            ? activeModalResource.title
-            : "Complete Micropipette & Lab Instruments Catalogue 2026"
+          activeModalResource ? activeModalResource.title : "Product catalogue"
         }
         categoryOrBrand={
           activeModalResource
             ? activeModalResource.brand.toUpperCase()
             : "LABXE • SSCIENCES • DANWER"
         }
-        fileSize={activeModalResource ? activeModalResource.fileSize : "PDF (6.2 MB)"}
+        fileSize={activeModalResource ? activeModalResource.fileSize : "PDF"}
       />
     </div>
   );

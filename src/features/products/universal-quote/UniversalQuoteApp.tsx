@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { submitEnquiry } from "@/features/enquiries/submit-enquiry";
 import Link from "next/link";
 import styles from "./UniversalQuote.module.css";
 import {
@@ -103,6 +104,7 @@ export default function UniversalQuoteApp() {
   const [summaryOpen, setSummaryOpen] = useState(true);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState("");
 
   // Form states
   const [contactPerson, setContactPerson] = useState("");
@@ -117,7 +119,9 @@ export default function UniversalQuoteApp() {
   ]);
   const [preferredBrand, setPreferredBrand] = useState("");
   const [productSearch, setProductSearch] = useState("");
-  const [selectedProducts, setSelectedProducts] = useState<Record<string, number>>({
+  const [selectedProducts, setSelectedProducts] = useState<
+    Record<string, number>
+  >({
     "sp-v010": 10,
   });
 
@@ -130,7 +134,7 @@ export default function UniversalQuoteApp() {
   // Category toggle
   const toggleCategory = (cat: string) => {
     setSelectedCategories((prev) =>
-      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
+      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat],
     );
   };
 
@@ -167,7 +171,8 @@ export default function UniversalQuoteApp() {
   // Filtered product options based on search and selected categories
   const filteredProducts = AVAILABLE_PRODUCTS.filter((p) => {
     const matchesCategory =
-      selectedCategories.length === 0 || selectedCategories.includes(p.category);
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(p.category);
     const matchesSearch =
       !productSearch ||
       p.name.toLowerCase().includes(productSearch.toLowerCase()) ||
@@ -176,37 +181,55 @@ export default function UniversalQuoteApp() {
   });
 
   const selectedProductList = AVAILABLE_PRODUCTS.filter(
-    (p) => selectedProducts[p.id] !== undefined
+    (p) => selectedProducts[p.id] !== undefined,
   );
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    const selectedReference = new FormData(
+      event.currentTarget as HTMLFormElement,
+    ).get("referenceFile");
+    const referenceFile =
+      selectedReference instanceof File && selectedReference.size
+        ? selectedReference
+        : undefined;
+    if (submitting) return;
     setSubmitting(true);
+    setSubmissionError("");
     try {
-      const prodsFormatted = selectedProductList
-        .map((p) => `${p.name} (Qty: ${selectedProducts[p.id] || 1})`)
+      const products = selectedProductList
+        .map(
+          (product) =>
+            `${product.name} (Qty: ${selectedProducts[product.id] || 1})`,
+        )
         .join("; ");
-
-      await fetch("/api/enquiries", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      await submitEnquiry(
+        {
           name: contactPerson,
           company: companyName,
-          email: email,
-          phone: phone,
+          email,
+          phone,
           country: country || "Not specified",
           type: "Universal / General",
-          product: prodsFormatted || "Multiple products",
-          quantity: `${selectedProductList.length} items`,
-          message: message || `Quote request for: ${prodsFormatted || "Selected catalog items"}`,
-        }),
-      });
-    } catch (err) {
-      console.warn("API submission error, showing confirmation state:", err);
+          product: products || "Multiple products",
+          quantity: `${selectedProductList.length} models`,
+          message: [
+            message || `Quote request for ${products || "catalogue items"}.`,
+            `Buyer: ${buyerType || "Not specified"}. Brand: ${preferredBrand || "Any"}. Categories: ${selectedCategories.join(", ")}.`,
+            `Required date: ${requiredDate || "Not specified"}. Destination: ${destinationCountry || country || "Not specified"}. Quote type: ${quoteType}.`,
+          ].join("\n"),
+        },
+        referenceFile,
+      );
+      setSubmitted(true);
+    } catch (cause) {
+      setSubmissionError(
+        cause instanceof Error
+          ? cause.message
+          : "Your enquiry could not be saved. Please try again.",
+      );
     } finally {
       setSubmitting(false);
-      setSubmitted(true);
     }
   };
 
@@ -293,7 +316,10 @@ export default function UniversalQuoteApp() {
                       <div className={styles.uqSummaryProducts}>
                         {selectedProductList.length > 0 ? (
                           selectedProductList.map((p) => (
-                            <div key={p.id} className={styles.uqSummaryProductRow}>
+                            <div
+                              key={p.id}
+                              className={styles.uqSummaryProductRow}
+                            >
                               <span>{p.name}</span>
                               <strong>Qty: {selectedProducts[p.id]}</strong>
                             </div>
@@ -319,19 +345,26 @@ export default function UniversalQuoteApp() {
 
                     <div className={styles.uqSummaryRow}>
                       <span>Destination</span>
-                      <strong>{destinationCountry || country || "Not specified"}</strong>
+                      <strong>
+                        {destinationCountry || country || "Not specified"}
+                      </strong>
                     </div>
                   </div>
 
                   <div className={styles.uqSummaryActions}>
-                    <a className={styles.uqSummaryEdit} href="#product-requirement">
+                    <a
+                      className={styles.uqSummaryEdit}
+                      href="#product-requirement"
+                    >
                       Edit Selection
                     </a>
                   </div>
 
                   <div className={styles.uqSummaryNote}>
                     <p>
-                      <strong>Need help choosing a model?</strong> Our scientific sales team can recommend the exact configuration.
+                      <strong>Need help choosing a model?</strong> Our
+                      scientific sales team can recommend the exact
+                      configuration.
                     </p>
                   </div>
                 </div>
@@ -347,10 +380,20 @@ export default function UniversalQuoteApp() {
                   </div>
                   <h3>Quote Request Received</h3>
                   <p>
-                    Thank you, <strong>{contactPerson}</strong>. Your universal quotation request for{" "}
-                    <strong>{selectedProductList.length} product(s)</strong> has been logged. Our commercial sales engineers will prepare a formal proposal.
+                    Thank you, <strong>{contactPerson}</strong>. Your universal
+                    quotation request for{" "}
+                    <strong>{selectedProductList.length} product(s)</strong> has
+                    been logged. Our commercial sales engineers will prepare a
+                    formal proposal.
                   </p>
-                  <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "12px",
+                      justifyContent: "center",
+                      flexWrap: "wrap",
+                    }}
+                  >
                     <button
                       type="button"
                       className={styles.btnPrimary}
@@ -361,7 +404,10 @@ export default function UniversalQuoteApp() {
                     <Link
                       href="/products"
                       className={styles.btnPrimary}
-                      style={{ background: "var(--deep-navy-blue)", borderColor: "var(--deep-navy-blue)" }}
+                      style={{
+                        background: "var(--deep-navy-blue)",
+                        borderColor: "var(--deep-navy-blue)",
+                      }}
                     >
                       Browse Products
                     </Link>
@@ -369,6 +415,14 @@ export default function UniversalQuoteApp() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className={styles.uqForm}>
+                  {submissionError && (
+                    <p
+                      role="alert"
+                      style={{ color: "#b42318", padding: "12px 0" }}
+                    >
+                      {submissionError}
+                    </p>
+                  )}
                   {/* Block 01: Contact Information */}
                   <div className={styles.uqBlock}>
                     <div className={styles.uqBlockHead}>
@@ -459,7 +513,8 @@ export default function UniversalQuoteApp() {
                       <div>
                         <h3>Product & Brand Requirement</h3>
                         <p>
-                          Select one or multiple categories and products. Multi-selection is fully supported.
+                          Select one or multiple categories and products.
+                          Multi-selection is fully supported.
                         </p>
                       </div>
                     </div>
@@ -467,7 +522,9 @@ export default function UniversalQuoteApp() {
                     <div className={styles.uqGrid}>
                       {/* Category Chips */}
                       <div className={styles.uqField}>
-                        <span className={styles.uqLabel}>Product Categories *</span>
+                        <span className={styles.uqLabel}>
+                          Product Categories *
+                        </span>
                         <div className={styles.categoryChipGrid}>
                           {CATEGORIES.map((cat) => {
                             const active = selectedCategories.includes(cat);
@@ -504,7 +561,9 @@ export default function UniversalQuoteApp() {
 
                       {/* Products Multi-Selection with Search */}
                       <div className={`${styles.uqField} ${styles.uqSpan2}`}>
-                        <span className={styles.uqLabel}>Products / Models</span>
+                        <span className={styles.uqLabel}>
+                          Products / Models
+                        </span>
                         <div className={styles.productSearchWrap}>
                           <input
                             type="search"
@@ -515,9 +574,13 @@ export default function UniversalQuoteApp() {
                           />
                           <div className={styles.productCheckList}>
                             {filteredProducts.map((p) => {
-                              const isSelected = selectedProducts[p.id] !== undefined;
+                              const isSelected =
+                                selectedProducts[p.id] !== undefined;
                               return (
-                                <label key={p.id} className={styles.productCheckItem}>
+                                <label
+                                  key={p.id}
+                                  className={styles.productCheckItem}
+                                >
                                   <input
                                     type="checkbox"
                                     checked={isSelected}
@@ -529,12 +592,17 @@ export default function UniversalQuoteApp() {
                             })}
                           </div>
                         </div>
-                        <small>Check items to include them in the quotation table below.</small>
+                        <small>
+                          Check items to include them in the quotation table
+                          below.
+                        </small>
                       </div>
 
                       {/* Quantities Table */}
                       <div className={`${styles.uqField} ${styles.uqSpan2}`}>
-                        <span className={styles.uqLabel}>Selected Products & Quantities</span>
+                        <span className={styles.uqLabel}>
+                          Selected Products & Quantities
+                        </span>
                         <div className={styles.uqQtyTable}>
                           <div className={styles.uqQtyHead}>
                             <span>Product / Model</span>
@@ -551,7 +619,10 @@ export default function UniversalQuoteApp() {
                                     min="1"
                                     value={selectedProducts[p.id]}
                                     onChange={(e) =>
-                                      updateQuantity(p.id, parseInt(e.target.value) || 1)
+                                      updateQuantity(
+                                        p.id,
+                                        parseInt(e.target.value) || 1,
+                                      )
                                     }
                                   />
                                   <button
@@ -566,7 +637,8 @@ export default function UniversalQuoteApp() {
                               ))
                             ) : (
                               <div className={styles.uqQtyEmpty}>
-                                Select a product or model above to add a quantity.
+                                Select a product or model above to add a
+                                quantity.
                               </div>
                             )}
                           </div>
@@ -588,7 +660,9 @@ export default function UniversalQuoteApp() {
                           type="text"
                           placeholder="Enter destination country"
                           value={destinationCountry}
-                          onChange={(e) => setDestinationCountry(e.target.value)}
+                          onChange={(e) =>
+                            setDestinationCountry(e.target.value)
+                          }
                         />
                       </label>
                     </div>
@@ -600,7 +674,10 @@ export default function UniversalQuoteApp() {
                       <span>03</span>
                       <div>
                         <h3>Quote Type</h3>
-                        <p>Select the commercial requirement that best matches your enquiry.</p>
+                        <p>
+                          Select the commercial requirement that best matches
+                          your enquiry.
+                        </p>
                       </div>
                     </div>
                     <div className={styles.uqChoiceGrid}>
@@ -634,7 +711,10 @@ export default function UniversalQuoteApp() {
                       <span>04</span>
                       <div>
                         <h3>Additional Requirement</h3>
-                        <p>Add specifications, branding information or purchasing notes.</p>
+                        <p>
+                          Add specifications, branding information or purchasing
+                          notes.
+                        </p>
                       </div>
                     </div>
                     <div className={styles.uqGrid}>
@@ -649,8 +729,15 @@ export default function UniversalQuoteApp() {
                       </label>
                       <label className={styles.uqSpan2}>
                         <span>Upload Requirement File</span>
-                        <input type="file" />
-                        <small>Optional — purchase list, specification sheet, logo artwork or supporting document.</small>
+                        <input
+                          type="file"
+                          name="referenceFile"
+                          accept="application/pdf,image/png,image/jpeg,image/webp"
+                        />
+                        <small>
+                          Optional — purchase list, specification sheet, logo
+                          artwork or supporting document.
+                        </small>
                       </label>
                     </div>
                   </div>
@@ -665,10 +752,15 @@ export default function UniversalQuoteApp() {
                         onChange={(e) => setConsent(e.target.checked)}
                       />
                       <span>
-                        I agree that the submitted information may be used to respond to this quotation request.
+                        I agree that the submitted information may be used to
+                        respond to this quotation request.
                       </span>
                     </label>
-                    <button className={styles.btnPrimary} type="submit" disabled={submitting}>
+                    <button
+                      className={styles.btnPrimary}
+                      type="submit"
+                      disabled={submitting}
+                    >
                       {submitting ? "Submitting..." : "Submit Quote Request →"}
                     </button>
                   </div>

@@ -15,6 +15,7 @@ export default function BrandDetailApp({ brand }: BrandDetailAppProps) {
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
   const [quoteProduct, setQuoteProduct] = useState("");
   const [catalogueModalOpen, setCatalogueModalOpen] = useState(false);
+  const [downloadUrl, setDownloadUrl] = useState<string | undefined>();
 
   const handleOpenQuote = (productName = "") => {
     setQuoteProduct(productName || `${brand.name} Product Range`);
@@ -64,7 +65,9 @@ export default function BrandDetailApp({ brand }: BrandDetailAppProps) {
                     brand.name
                   )}
                 </div>
-                <span className={styles.brandLogoSubtitle}>{brand.tagline}</span>
+                <span className={styles.brandLogoSubtitle}>
+                  {brand.tagline}
+                </span>
               </div>
             </div>
 
@@ -117,7 +120,9 @@ export default function BrandDetailApp({ brand }: BrandDetailAppProps) {
 
           {/* Featured Products Panel */}
           <section className={styles.bdPanel} id="products">
-            <div className={`${styles.bdSectionHead} ${styles.bdSectionHeadRow}`}>
+            <div
+              className={`${styles.bdSectionHead} ${styles.bdSectionHeadRow}`}
+            >
               <h2 className={styles.bdSectionTitle}>FEATURED PRODUCTS</h2>
               <Link href="/products" className={styles.bdSectionLink}>
                 View All {brand.name} Products →
@@ -140,7 +145,9 @@ export default function BrandDetailApp({ brand }: BrandDetailAppProps) {
                       <span>{product.typeLabel}</span>
                     </div>
                     <div className={styles.bdProductBody}>
-                      <span className={styles.brandTag}>{product.brandTag}</span>
+                      <span className={styles.brandTag}>
+                        {product.brandTag}
+                      </span>
                       <h3>{product.title}</h3>
                       <p>{product.description}</p>
                       <Link
@@ -155,7 +162,9 @@ export default function BrandDetailApp({ brand }: BrandDetailAppProps) {
               </div>
             ) : (
               <p style={{ color: "#62758d", margin: "16px 0" }}>
-                Verified product listings for {brand.name} are currently being updated. Contact our sales team for available models and custom inquiries.
+                Verified product listings for {brand.name} are currently being
+                updated. Contact our sales team for available models and custom
+                inquiries.
               </p>
             )}
           </section>
@@ -190,13 +199,17 @@ export default function BrandDetailApp({ brand }: BrandDetailAppProps) {
                     <div className={styles.bdResourceInfo}>
                       <strong>{res.title}</strong>
                       <span>
-                        {res.format} • {res.size} • Official Manufacturer Edition
+                        {res.format} • {res.size} • Official Manufacturer
+                        Edition
                       </span>
                     </div>
                     <button
                       type="button"
                       className="btn secondary"
-                      onClick={handleOpenCatalogue}
+                      onClick={() => {
+                        setDownloadUrl(res.url);
+                        handleOpenCatalogue();
+                      }}
                     >
                       Download
                     </button>
@@ -205,7 +218,8 @@ export default function BrandDetailApp({ brand }: BrandDetailAppProps) {
               </div>
             ) : (
               <p style={{ color: "#62758d", margin: "16px 0" }}>
-                Technical datasheets and documentation for {brand.name} are available upon request through our engineering support desk.
+                Technical datasheets and documentation for {brand.name} are
+                available upon request through our engineering support desk.
               </p>
             )}
           </section>
@@ -253,6 +267,7 @@ export default function BrandDetailApp({ brand }: BrandDetailAppProps) {
         defaultProduct={quoteProduct}
       />
       <CatalogueModal
+        downloadUrl={downloadUrl}
         isOpen={catalogueModalOpen}
         onClose={() => setCatalogueModalOpen(false)}
       />

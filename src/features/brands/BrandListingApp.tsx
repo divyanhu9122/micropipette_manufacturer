@@ -1,10 +1,15 @@
 import Link from "next/link";
+import Image from "next/image";
 import InnerPageHero from "@/components/layout/InnerPageHero";
 import InnerPageHeroVisual from "@/components/layout/InnerPageHeroVisual";
 import styles from "./Brands.module.css";
-import { BRAND_LISTING_ITEMS } from "./brands.data";
+import type { BrandListingCard } from "./brands.data";
 
-export default function BrandListingApp() {
+export default function BrandListingApp({
+  brands = [],
+}: {
+  brands?: BrandListingCard[];
+}) {
   return (
     <div className={styles.brandPage}>
       {/* Compact Breadcrumb Hero */}
@@ -31,11 +36,20 @@ export default function BrandListingApp() {
           </div>
 
           <div className={styles.brandGrid}>
-            {BRAND_LISTING_ITEMS.map((item) => (
+            {brands.map((item) => (
               <article key={item.id} className={styles.brandMasterCard}>
                 <div className={styles.brandLogoArea}>
                   <span className={styles.brandBadge}>{item.badge}</span>
-                  {item.logoClass ? (
+                  {item.logoUrl ? (
+                    <Image
+                      unoptimized
+                      src={item.logoUrl}
+                      alt={item.name}
+                      width={260}
+                      height={120}
+                      style={{ objectFit: "contain", maxWidth: "100%" }}
+                    />
+                  ) : item.logoClass ? (
                     <div
                       className={`${styles.brandLogoTitle} ${styles[item.logoClass]}`}
                     >

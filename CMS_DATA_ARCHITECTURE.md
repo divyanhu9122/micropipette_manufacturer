@@ -1,3 +1,5 @@
+> Current implementation — 24 November 2026: Supabase is connected, three migrations are applied, and the active CMS/public catalogue use persistent data. This file retains historical planning/status. See [current change report](docs/CHANGE_REPORT.md), [implemented architecture](docs/ARCHITECTURE.md) and [operations](docs/BACKEND_SETUP.md) for current behavior. Earlier percentages, schema proposals and test results below are historical.
+
 # CMS Data Architecture Specification (Stage 8)
 
 > ⚠️ **ARCHITECTURE DECISION UPDATE (November 2026)**  

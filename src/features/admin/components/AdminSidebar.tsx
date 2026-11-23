@@ -4,13 +4,23 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import styles from "../Admin.module.css";
+import {
+  hasPermission,
+  permissionForAdminPath,
+  type StaffRole,
+} from "@/lib/auth/permissions";
 
 interface AdminSidebarProps {
+  role: StaffRole;
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
+export default function AdminSidebar({
+  isOpen,
+  onClose,
+  role,
+}: AdminSidebarProps) {
   const pathname = usePathname();
 
   const isNavActive = (href: string) => {
@@ -54,6 +64,11 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
           <nav className={styles.nav}>
             <Link
               href="/admin"
+              style={
+                hasPermission(role, permissionForAdminPath("/admin"))
+                  ? undefined
+                  : { display: "none" }
+              }
               className={`${styles.navBtn} ${
                 isNavActive("/admin") ? styles.navBtnActive : ""
               }`}
@@ -73,6 +88,11 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
 
             <Link
               href="/admin/enquiries"
+              style={
+                hasPermission(role, permissionForAdminPath("/admin/enquiries"))
+                  ? undefined
+                  : { display: "none" }
+              }
               className={`${styles.navBtn} ${
                 isNavActive("/admin/enquiries") ? styles.navBtnActive : ""
               }`}
@@ -93,6 +113,11 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
           <nav className={styles.nav}>
             <Link
               href="/admin/products"
+              style={
+                hasPermission(role, permissionForAdminPath("/admin/products"))
+                  ? undefined
+                  : { display: "none" }
+              }
               className={`${styles.navBtn} ${
                 isNavActive("/admin/products") ? styles.navBtnActive : ""
               }`}
@@ -111,6 +136,11 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
 
             <Link
               href="/admin/categories"
+              style={
+                hasPermission(role, permissionForAdminPath("/admin/categories"))
+                  ? undefined
+                  : { display: "none" }
+              }
               className={`${styles.navBtn} ${
                 isNavActive("/admin/categories") ? styles.navBtnActive : ""
               }`}
@@ -132,6 +162,11 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
 
             <Link
               href="/admin/brands"
+              style={
+                hasPermission(role, permissionForAdminPath("/admin/brands"))
+                  ? undefined
+                  : { display: "none" }
+              }
               className={`${styles.navBtn} ${
                 isNavActive("/admin/brands") ? styles.navBtnActive : ""
               }`}
@@ -148,6 +183,11 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
 
             <Link
               href="/admin/blog"
+              style={
+                hasPermission(role, permissionForAdminPath("/admin/blog"))
+                  ? undefined
+                  : { display: "none" }
+              }
               className={`${styles.navBtn} ${
                 isNavActive("/admin/blog") ? styles.navBtnActive : ""
               }`}
@@ -168,6 +208,11 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
 
             <Link
               href="/admin/resources"
+              style={
+                hasPermission(role, permissionForAdminPath("/admin/resources"))
+                  ? undefined
+                  : { display: "none" }
+              }
               className={`${styles.navBtn} ${
                 isNavActive("/admin/resources") ? styles.navBtnActive : ""
               }`}
@@ -185,10 +230,33 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
             </Link>
           </nav>
 
+          {hasPermission(role, "content:read") && (
+            <Link
+              href="/admin/pages"
+              className={`${styles.navBtn} ${isNavActive("/admin/pages") ? styles.navBtnActive : ""}`}
+              onClick={onClose}
+            >
+              <span className={styles.navText}>Website pages</span>
+            </Link>
+          )}
+          {hasPermission(role, "staff:manage") && (
+            <Link
+              href="/admin/staff"
+              className={`${styles.navBtn} ${isNavActive("/admin/staff") ? styles.navBtnActive : ""}`}
+              onClick={onClose}
+            >
+              <span className={styles.navText}>Staff access</span>
+            </Link>
+          )}
           <div className={styles.navLabel}>System & Settings</div>
           <nav className={styles.nav}>
             <Link
               href="/admin/settings"
+              style={
+                hasPermission(role, permissionForAdminPath("/admin/settings"))
+                  ? undefined
+                  : { display: "none" }
+              }
               className={`${styles.navBtn} ${
                 isNavActive("/admin/settings") ? styles.navBtnActive : ""
               }`}
@@ -224,8 +292,8 @@ export default function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
         </div>
 
         <div className={styles.sideFoot}>
-          <strong>Phase 4 Prototype</strong>
-          <span>Ready for Strapi CMS API</span>
+          <strong>Staff workspace</strong>
+          <span>Catalogue and enquiries</span>
         </div>
       </aside>
     </>

@@ -1,27 +1,42 @@
-import { supabaseAdmin } from '@/lib/cms/client'
-import { NextRequest, NextResponse } from 'next/server'
+import type { NextRequest } from "next/server";
+import { staffEndpoint } from "@/lib/auth/request";
+import { assertCanPublish } from "@/lib/auth/publishing";
+import { hasPermission } from "@/lib/auth/permissions";
+import { HttpError } from "@/lib/http/errors";
+import { readJsonObject } from "@/lib/http/request";
+import { databaseError } from "@/lib/http/responses";
+import { parseBlogInput, parseRecordId } from "@/lib/validation/admin";
 
-export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-  const body = await req.json()
-  const { data, error } = await supabaseAdmin
-    .from('blog_articles')
-    .update({ ...body, updated_at: new Date().toISOString() })
-    .eq('id', id)
-    .select()
-    .single()
+type Context = { params: Promise<{ id: string }> };
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 400 })
-  return NextResponse.json(data)
+export async function PATCH(request: NextRequest, { params }: Context) {
+  return staffEndpoint(request, "content:write", async ({ client, staff }) => {
+    const id = parseRecordId((await params).id);
+    const input = parseBlogInput(await readJsonObject(request, 131_072));
+    assertCanPublish(staff.role, input.is_published);
+    let query = client.from("blog_articles").update(input).eq("id", id);
+    if (!hasPermission(staff.role, "content:publish"))
+      query = query.eq("is_published", false);
+    const { data, error } = await query.select().maybeSingle();
+    if (error) databaseError(error, "update article");
+    if (!data)
+      throw new HttpError(404, "NOT_FOUND", "No editable article was found.");
+    return data;
+  });
 }
 
-export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-  const { error } = await supabaseAdmin
-    .from('blog_articles')
-    .update({ is_published: false })
-    .eq('id', id)
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 400 })
-  return NextResponse.json({ success: true })
+export async function DELETE(request: NextRequest, { params }: Context) {
+  return staffEndpoint(request, "content:publish", async ({ client }) => {
+    const id = parseRecordId((await params).id);
+    const { data, error } = await client
+      .from("blog_articles")
+      .update({ is_published: false })
+      .eq("id", id)
+      .select("id")
+      .maybeSingle();
+    if (error) databaseError(error, "unpublish article");
+    if (!data)
+      throw new HttpError(404, "NOT_FOUND", "The article was not found.");
+    return { success: true };
+  });
 }

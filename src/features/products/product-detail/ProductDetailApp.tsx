@@ -16,9 +16,13 @@ import type { ProductDetailItem } from "./product-detail.data";
 
 interface ProductDetailAppProps {
   product: ProductDetailItem;
+  relatedProducts?: ProductDetailItem[];
 }
 
-export default function ProductDetailApp({ product }: ProductDetailAppProps) {
+export default function ProductDetailApp({
+  product,
+  relatedProducts = [],
+}: ProductDetailAppProps) {
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
 
   const handleOpenQuote = () => {
@@ -39,16 +43,18 @@ export default function ProductDetailApp({ product }: ProductDetailAppProps) {
             <span className={styles.chevron} aria-hidden="true">
               ›
             </span>
-            <Link href="/products/micropipettes">Micropipettes</Link>
-            <span className={styles.chevron} aria-hidden="true">
-              ›
-            </span>
-            <Link href="/products/micropipettes/variable-volume">
-              Variable Volume
-            </Link>
-            <span className={styles.chevron} aria-hidden="true">
-              ›
-            </span>
+            {product.category && (
+              <>
+                <Link
+                  href={`/products?category=${encodeURIComponent(product.category)}`}
+                >
+                  {product.category}
+                </Link>
+                <span className={styles.chevron} aria-hidden="true">
+                  ›
+                </span>
+              </>
+            )}
             <span className={styles.breadcrumbCurrent}>{product.title}</span>
           </nav>
         </div>
@@ -59,7 +65,7 @@ export default function ProductDetailApp({ product }: ProductDetailAppProps) {
         <div className={styles.wrap}>
           {/* Top Hero Card: Gallery + Summary */}
           <div className={styles.pdHeroCard}>
-            <ProductGallery title={product.title} />
+            <ProductGallery title={product.title} images={product.images} />
             <ProductHeroSummary
               product={product}
               onOpenQuote={handleOpenQuote}
@@ -100,7 +106,10 @@ export default function ProductDetailApp({ product }: ProductDetailAppProps) {
           </div>
 
           {/* Related Products Recommendation */}
-          <ProductRelatedGrid relatedSlugs={product.relatedSlugs} />
+          <ProductRelatedGrid
+            relatedSlugs={product.relatedSlugs}
+            products={relatedProducts}
+          />
         </div>
       </section>
 

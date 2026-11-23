@@ -9,9 +9,10 @@ import {
   type KeyboardEvent,
 } from "react";
 import Link from "next/link";
+import { useSiteNavigation } from "@/features/site/SiteSettings";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./UniversalSearchBar.module.css";
-import { searchItems, type SearchContentType } from "./search.data";
+import type { SearchItem, SearchContentType } from "./search.data";
 
 interface UniversalSearchBarProps {
   id?: string;
@@ -32,20 +33,6 @@ const RESULT_GROUPS: { type: SearchContentType; label: string }[] = [
   { type: "Page", label: "Pages" },
 ];
 
-const POPULAR_SUGGESTIONS = [
-  { label: "Micropipette", href: "/products/micropipettes" },
-  { label: "Lab Plasticware", href: "/products?category=Lab+Plasticware" },
-  { label: "Science Plus", href: "/products/micropipettes#science-plus" },
-  {
-    label: "FAC Plus (Autoclavable)",
-    href: "/products/micropipettes#fac-plus",
-  },
-  { label: "LABXE", href: "/brands/labxe" },
-  { label: "SSCIENCES", href: "/brands/ssciences" },
-  { label: "dr.pipette", href: "/brands/dr-pipette" },
-  { label: "sscientific", href: "/brands/sscientific" },
-];
-
 export default function UniversalSearchBar({
   id = "universal-search",
   placeholder = "Search products, series, brands...",
@@ -55,6 +42,14 @@ export default function UniversalSearchBar({
   className,
   panel = false,
 }: UniversalSearchBarProps) {
+  const navigation = useSiteNavigation();
+  const POPULAR_SUGGESTIONS = [
+    { label: "All products", href: "/products" },
+    { label: "Technical resources", href: "/resources" },
+    ...navigation.brands
+      .slice(0, 6)
+      .map((brand) => ({ label: brand.name, href: `/brands/${brand.slug}` })),
+  ];
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialUrlQuery = searchParams?.get("q") || "";
@@ -98,7 +93,32 @@ export default function UniversalSearchBar({
       document.removeEventListener("pointerdown", handleOutsideClick);
   }, []);
 
-  const matches = query.trim() ? searchItems(query).slice(0, 7) : [];
+  const [searchMatches, setSearchMatches] = useState<SearchItem[]>([]);
+  useEffect(() => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => {
+      if (!query.trim()) {
+        setSearchMatches([]);
+        return;
+      }
+      fetch(`/api/search?q=${encodeURIComponent(query.trim())}`, {
+        signal: controller.signal,
+      })
+        .then(async (response) => {
+          if (!response.ok) throw new Error();
+          return response.json();
+        })
+        .then((result) => setSearchMatches(result.items.slice(0, 7)))
+        .catch(() => {
+          if (!controller.signal.aborted) setSearchMatches([]);
+        });
+    }, 200);
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [query]);
+  const matches = query.trim() ? searchMatches : [];
   const groups = RESULT_GROUPS.map((group) => ({
     ...group,
     items: matches.filter((item) => item.type === group.type),

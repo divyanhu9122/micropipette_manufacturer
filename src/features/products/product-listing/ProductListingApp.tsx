@@ -9,9 +9,7 @@ import ProductGrid from "./ProductGrid";
 import ProductPagination from "./ProductPagination";
 import { useReveal } from "./useReveal";
 import {
-  productFamilies,
-  productBrands,
-  productListItems,
+  type ProductListItem,
   type ProductBrand,
   type ProductFamily,
   type SortValue,
@@ -20,23 +18,40 @@ import {
 const FILTERS_ID = "productFilters";
 const ITEMS_PER_PAGE = 6;
 
-function ProductListingContent() {
+function ProductListingContent({
+  products,
+}: {
+  products: readonly ProductListItem[];
+}) {
+  const productListItems = products;
+  const productFamilies = Array.from(
+    new Set(products.map((item) => item.family)),
+  );
+  const productBrands = Array.from(
+    new Set(products.map((item) => item.brandLabel)),
+  );
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get("category");
   const initialBrand = searchParams.get("brand");
-  const initialSearch = searchParams.get("q") || searchParams.get("search") || "";
+  const initialSearch =
+    searchParams.get("q") || searchParams.get("search") || "";
 
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [sortValue, setSortValue] = useState<SortValue>("featured");
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState(initialSearch);
 
-  const [selectedFamilies, setSelectedFamilies] = useState<ProductFamily[]>(() => {
-    if (initialCategory && productFamilies.includes(initialCategory as ProductFamily)) {
-      return [initialCategory as ProductFamily];
-    }
-    return [];
-  });
+  const [selectedFamilies, setSelectedFamilies] = useState<ProductFamily[]>(
+    () => {
+      if (
+        initialCategory &&
+        productFamilies.includes(initialCategory as ProductFamily)
+      ) {
+        return [initialCategory as ProductFamily];
+      }
+      return [];
+    },
+  );
 
   const [selectedBrands, setSelectedBrands] = useState<ProductBrand[]>(() => {
     if (initialBrand && productBrands.includes(initialBrand as ProductBrand)) {
@@ -46,7 +61,9 @@ function ProductListingContent() {
   });
 
   const [selectedChannels, setSelectedChannels] = useState<string[]>([]);
-  const [selectedVolumeRanges, setSelectedVolumeRanges] = useState<string[]>([]);
+  const [selectedVolumeRanges, setSelectedVolumeRanges] = useState<string[]>(
+    [],
+  );
 
   const resultsScrollRef = useRef<HTMLDivElement>(null);
   const { ref: resultsHeadRef, isVisible: isResultsHeadVisible } =
@@ -63,46 +80,48 @@ function ProductListingContent() {
   }, []);
 
   // Counts across the dataset
-  const familyCounts = useMemo(() => {
-    const counts = {} as Record<ProductFamily, number>;
-    for (const f of productFamilies) {
-      counts[f] = productListItems.filter((item) => item.family === f).length;
-    }
-    return counts;
-  }, []);
+  const familyCounts = Object.fromEntries(
+    productFamilies.map((family) => [
+      family,
+      products.filter((item) => item.family === family).length,
+    ]),
+  );
 
-  const brandCounts = useMemo(() => {
-    const counts = {} as Record<ProductBrand, number>;
-    for (const b of productBrands) {
-      counts[b] = productListItems.filter((item) => item.brandLabel === b).length;
-    }
-    return counts;
-  }, []);
+  const brandCounts = Object.fromEntries(
+    productBrands.map((brand) => [
+      brand,
+      products.filter((item) => item.brandLabel === brand).length,
+    ]),
+  );
 
   const handleToggleFamily = (family: ProductFamily) => {
     setSelectedFamilies((prev) =>
-      prev.includes(family) ? prev.filter((f) => f !== family) : [...prev, family]
+      prev.includes(family)
+        ? prev.filter((f) => f !== family)
+        : [...prev, family],
     );
     setCurrentPage(1);
   };
 
   const handleToggleBrand = (brand: ProductBrand) => {
     setSelectedBrands((prev) =>
-      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
+      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand],
     );
     setCurrentPage(1);
   };
 
   const handleToggleChannel = (channel: string) => {
     setSelectedChannels((prev) =>
-      prev.includes(channel) ? prev.filter((c) => c !== channel) : [...prev, channel]
+      prev.includes(channel)
+        ? prev.filter((c) => c !== channel)
+        : [...prev, channel],
     );
     setCurrentPage(1);
   };
 
   const handleToggleVolumeRange = (vr: string) => {
     setSelectedVolumeRanges((prev) =>
-      prev.includes(vr) ? prev.filter((v) => v !== vr) : [...prev, vr]
+      prev.includes(vr) ? prev.filter((v) => v !== vr) : [...prev, vr],
     );
     setCurrentPage(1);
   };
@@ -135,7 +154,7 @@ function ProductListingContent() {
           p.description.toLowerCase().includes(q) ||
           p.brandLabel.toLowerCase().includes(q) ||
           p.family.toLowerCase().includes(q) ||
-          p.specs.some((s) => s.toLowerCase().includes(q))
+          p.specs.some((s) => s.toLowerCase().includes(q)),
       );
     }
 
@@ -148,16 +167,15 @@ function ProductListingContent() {
     }
 
     if (selectedChannels.length > 0) {
-      list = list.filter((p) => p.channelType && selectedChannels.includes(p.channelType));
+      list = list.filter(
+        (p) => p.channelType && selectedChannels.includes(p.channelType),
+      );
     }
 
     if (selectedVolumeRanges.length > 0) {
       list = list.filter((p) => {
         if (!p.volumeRange) return false;
-        return selectedVolumeRanges.some((vr) => {
-          const key = vr.split(" ")[0]; // e.g. "0.5" or "10"
-          return p.volumeRange?.includes(key);
-        });
+        return selectedVolumeRanges.includes(p.volumeRange);
       });
     }
 
@@ -169,6 +187,7 @@ function ProductListingContent() {
 
     return list;
   }, [
+    productListItems,
     searchQuery,
     selectedFamilies,
     selectedBrands,
@@ -177,7 +196,10 @@ function ProductListingContent() {
     sortValue,
   ]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / ITEMS_PER_PAGE));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredProducts.length / ITEMS_PER_PAGE),
+  );
   const paginatedProducts = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
     return filteredProducts.slice(start, start + ITEMS_PER_PAGE);
@@ -223,6 +245,15 @@ function ProductListingContent() {
           activeFilterCount={activeFilterCount}
           familyCounts={familyCounts}
           brandCounts={brandCounts}
+          volumeOptions={Array.from(
+            new Set(
+              products
+                .map((item) => item.volumeRange)
+                .filter((range): range is string =>
+                  Boolean(range && range !== "Not specified"),
+                ),
+            ),
+          )}
         />
 
         <section className={styles.resultsBlock} aria-labelledby="resultTitle">
@@ -238,7 +269,14 @@ function ProductListingContent() {
           </div>
 
           {activeFilterCount > 0 && (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, margin: "8px 0 16px" }}>
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 8,
+                margin: "8px 0 16px",
+              }}
+            >
               {selectedFamilies.map((f) => (
                 <button
                   key={f}
@@ -378,11 +416,25 @@ function ProductListingContent() {
                 margin: "24px 0",
               }}
             >
-              <h3 style={{ fontSize: "20px", color: "var(--midnight-navy, #051f44)", marginBottom: "8px" }}>
+              <h3
+                style={{
+                  fontSize: "20px",
+                  color: "var(--midnight-navy, #051f44)",
+                  marginBottom: "8px",
+                }}
+              >
                 No Products Match Your Filter
               </h3>
-              <p style={{ color: "#62758d", fontSize: "14px", maxWidth: "480px", margin: "0 auto 20px" }}>
-                There are currently no products matching your active criteria. Try clearing or expanding your category and brand selections.
+              <p
+                style={{
+                  color: "#62758d",
+                  fontSize: "14px",
+                  maxWidth: "480px",
+                  margin: "0 auto 20px",
+                }}
+              >
+                There are currently no products matching your active criteria.
+                Try clearing or expanding your category and brand selections.
               </p>
               <button
                 type="button"
@@ -413,15 +465,31 @@ function ProductListingContent() {
   );
 }
 
-function ProductListingWrapper() {
+function ProductListingWrapper({
+  products,
+}: {
+  products: readonly ProductListItem[];
+}) {
   const searchParams = useSearchParams();
-  return <ProductListingContent key={searchParams.toString()} />;
+  return (
+    <ProductListingContent key={searchParams.toString()} products={products} />
+  );
 }
 
-export default function ProductListingApp() {
+export default function ProductListingApp({
+  products,
+}: {
+  products: readonly ProductListItem[];
+}) {
   return (
-    <Suspense fallback={<div style={{ padding: "40px", textAlign: "center" }}>Loading products...</div>}>
-      <ProductListingWrapper />
+    <Suspense
+      fallback={
+        <div style={{ padding: "40px", textAlign: "center" }}>
+          Loading products...
+        </div>
+      }
+    >
+      <ProductListingWrapper products={products} />
     </Suspense>
   );
 }

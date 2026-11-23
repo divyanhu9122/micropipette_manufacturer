@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { submitEnquiry } from "@/features/enquiries/submit-enquiry";
+import { useSiteNavigation } from "@/features/site/SiteSettings";
 import Link from "next/link";
 import styles from "./ProductEnquiry.module.css";
 import {
   COUNTRY_CALLING_CODES,
   COUNTRIES,
-  PREFERRED_BRANDS,
   REQUIREMENT_TYPES,
 } from "./product-enquiry.data";
 import type { ProductDetailItem } from "../product-detail/product-detail.data";
@@ -15,9 +16,20 @@ interface ProductEnquiryFormProps {
   product: ProductDetailItem;
 }
 
-export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps) {
+export default function ProductEnquiryForm({
+  product,
+}: ProductEnquiryFormProps) {
+  const navigation = useSiteNavigation();
+  const preferredBrands = Array.from(
+    new Set([
+      product.brand,
+      ...navigation.brands.map((brand) => brand.name),
+      "No preference",
+    ]),
+  ).filter(Boolean);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState("");
   const [formData, setFormData] = useState<{
     contactPerson: string;
     companyName: string;
@@ -39,40 +51,55 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
     phoneNumber: "",
     country: "",
     quantity: "10",
-    preferredBrand: (product.brand as string) || "SSCIENCES",
+    preferredBrand: product.brand || "No preference",
     requirementType: "Standard Product Purchase",
     targetDate: "",
     message: "",
     consent: false,
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    const selectedReference = new FormData(
+      event.currentTarget as HTMLFormElement,
+    ).get("referenceFile");
+    const referenceFile =
+      selectedReference instanceof File && selectedReference.size
+        ? selectedReference
+        : undefined;
+    if (submitting) return;
     setSubmitting(true);
-
+    setSubmissionError("");
     try {
-      await fetch("/api/enquiries", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      await submitEnquiry(
+        {
           name: formData.contactPerson,
           company: formData.companyName,
           email: formData.email,
-          phone: `${formData.phoneCode} ${formData.phoneNumber}`,
+          phone: formData.phoneNumber
+            ? `${formData.phoneCode} ${formData.phoneNumber}`
+            : undefined,
           country: formData.country || "Not specified",
           type: "Product Quote",
           product: `${product.title} (${product.productCode || product.slug})`,
+          productSlug: product.slug,
           quantity: formData.quantity,
-          message:
-            formData.message ||
-            `Quotation request for ${product.title}. Requirement: ${formData.requirementType}. Target Date: ${formData.targetDate || "Immediate"}`,
-        }),
-      });
-    } catch (err) {
-      console.warn("API submission error, showing confirmation state:", err);
+          message: [
+            formData.message || `Quotation request for ${product.title}.`,
+            `Requirement: ${formData.requirementType}. Target date: ${formData.targetDate || "Immediate"}. Preferred brand: ${formData.preferredBrand}.`,
+          ].join("\n"),
+        },
+        referenceFile,
+      );
+      setSubmitted(true);
+    } catch (cause) {
+      setSubmissionError(
+        cause instanceof Error
+          ? cause.message
+          : "Your enquiry could not be saved. Please try again.",
+      );
     } finally {
       setSubmitting(false);
-      setSubmitted(true);
     }
   };
 
@@ -85,10 +112,19 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
           </div>
           <h3>Enquiry Submitted Successfully</h3>
           <p>
-            Thank you, <strong>{formData.contactPerson}</strong>. Your quotation request for{" "}
-            <strong>{product.title}</strong> has been logged. Our commercial sales team will review your specifications and respond shortly.
+            Thank you, <strong>{formData.contactPerson}</strong>. Your quotation
+            request for <strong>{product.title}</strong> has been logged. Our
+            commercial sales team will review your specifications and respond
+            shortly.
           </p>
-          <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "12px",
+              justifyContent: "center",
+              flexWrap: "wrap",
+            }}
+          >
             <button
               type="button"
               className={styles.btnPrimary}
@@ -96,7 +132,11 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
             >
               Submit Another Request
             </button>
-            <Link href={`/products/${product.slug}`} className={styles.btnSecondary} style={{ color: "var(--midnight-navy)", borderColor: "#d5e1f0" }}>
+            <Link
+              href={`/products/${product.slug}`}
+              className={styles.btnSecondary}
+              style={{ color: "var(--midnight-navy)", borderColor: "#d5e1f0" }}
+            >
               Back to Product Details
             </Link>
           </div>
@@ -110,10 +150,18 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
       <div className={styles.rqHead}>
         <span className={styles.typeTag}>Product enquiry</span>
         <h2>Tell Us Your Requirement</h2>
-        <p>Share your contact and requirement details. Fields marked with * are required.</p>
+        <p>
+          Share your contact and requirement details. Fields marked with * are
+          required.
+        </p>
       </div>
 
       <form className={styles.rqForm} onSubmit={handleSubmit}>
+        {submissionError && (
+          <p role="alert" style={{ color: "#b42318", padding: "12px 0" }}>
+            {submissionError}
+          </p>
+        )}
         <div className={styles.rqGrid}>
           <label>
             <span>Contact Person *</span>
@@ -122,7 +170,9 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
               placeholder="Enter full name"
               required
               value={formData.contactPerson}
-              onChange={(e) => setFormData({ ...formData, contactPerson: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, contactPerson: e.target.value })
+              }
             />
           </label>
 
@@ -133,7 +183,9 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
               placeholder="Enter company name"
               required
               value={formData.companyName}
-              onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, companyName: e.target.value })
+              }
             />
           </label>
 
@@ -144,7 +196,9 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
               placeholder="name@company.com"
               required
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
             />
           </label>
 
@@ -154,11 +208,16 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
               <select
                 aria-label="Country calling code"
                 value={formData.phoneCode}
-                onChange={(e) => setFormData({ ...formData, phoneCode: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, phoneCode: e.target.value })
+                }
               >
                 <option value="">Code</option>
                 {COUNTRY_CALLING_CODES.map((item) => (
-                  <option key={`${item.code}-${item.country}`} value={item.code}>
+                  <option
+                    key={`${item.code}-${item.country}`}
+                    value={item.code}
+                  >
                     {item.code} — {item.country}
                   </option>
                 ))}
@@ -167,7 +226,9 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
                 type="tel"
                 placeholder="Enter phone number"
                 value={formData.phoneNumber}
-                onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, phoneNumber: e.target.value })
+                }
               />
             </div>
           </label>
@@ -177,7 +238,9 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
             <select
               required
               value={formData.country}
-              onChange={(e) => setFormData({ ...formData, country: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, country: e.target.value })
+              }
             >
               <option value="" disabled>
                 Select country
@@ -198,7 +261,9 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
               placeholder="Enter quantity"
               required
               value={formData.quantity}
-              onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, quantity: e.target.value })
+              }
             />
           </label>
 
@@ -215,10 +280,12 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
             <span>Preferred Brand</span>
             <select
               value={formData.preferredBrand}
-              onChange={(e) => setFormData({ ...formData, preferredBrand: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, preferredBrand: e.target.value })
+              }
             >
               <option value="">Select brand</option>
-              {PREFERRED_BRANDS.map((b) => (
+              {preferredBrands.map((b) => (
                 <option key={b} value={b}>
                   {b}
                 </option>
@@ -230,7 +297,9 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
             <span>Requirement Type</span>
             <select
               value={formData.requirementType}
-              onChange={(e) => setFormData({ ...formData, requirementType: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, requirementType: e.target.value })
+              }
             >
               {REQUIREMENT_TYPES.map((rt) => (
                 <option key={rt} value={rt}>
@@ -245,7 +314,9 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
             <input
               type="date"
               value={formData.targetDate}
-              onChange={(e) => setFormData({ ...formData, targetDate: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, targetDate: e.target.value })
+              }
             />
           </label>
 
@@ -255,14 +326,23 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
               rows={5}
               placeholder="Tell us about volume range, quantity, branding, packaging, target market or any technical requirement..."
               value={formData.message}
-              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, message: e.target.value })
+              }
             />
           </label>
 
           <label className={styles.span2}>
             <span>Attach Reference File</span>
-            <input type="file" />
-            <small>Optional — requirement sheet, logo artwork, drawings or supporting document.</small>
+            <input
+              type="file"
+              name="referenceFile"
+              accept="application/pdf,image/png,image/jpeg,image/webp"
+            />
+            <small>
+              Optional — requirement sheet, logo artwork, drawings or supporting
+              document.
+            </small>
           </label>
         </div>
 
@@ -272,9 +352,13 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
               type="checkbox"
               required
               checked={formData.consent}
-              onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
+              onChange={(e) =>
+                setFormData({ ...formData, consent: e.target.checked })
+              }
             />
-            <span>I agree to be contacted regarding this quotation enquiry.</span>
+            <span>
+              I agree to be contacted regarding this quotation enquiry.
+            </span>
           </label>
         </div>
 
@@ -284,7 +368,11 @@ export default function ProductEnquiryForm({ product }: ProductEnquiryFormProps)
             <span>✓ B2B enquiry workflow</span>
             <span>✓ CMS-ready structure</span>
           </div>
-          <button className={styles.btnPrimary} type="submit" disabled={submitting}>
+          <button
+            className={styles.btnPrimary}
+            type="submit"
+            disabled={submitting}
+          >
             {submitting ? "Submitting..." : "Submit Enquiry →"}
           </button>
         </div>

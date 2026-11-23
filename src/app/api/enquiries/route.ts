@@ -1,119 +1,70 @@
-import { NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { createPrivilegedSupabaseClient } from "@/lib/cms/admin";
+import { persistEnquiry } from "@/lib/enquiries/persistence";
+import { deliverEnquiryNotifications } from "@/lib/enquiries/notifications";
+import { mintAttachmentToken } from "@/lib/enquiries/attachment-token";
+import { HttpError } from "@/lib/http/errors";
+import { getClientIp } from "@/lib/http/client-ip";
+import { enforceEnquiryRateLimit } from "@/lib/http/rate-limit";
+import { assertSameOrigin, readJsonObject } from "@/lib/http/request";
+import { errorResponse, privateJson } from "@/lib/http/responses";
 import { validateEnquiryPayload } from "@/lib/validation/enquiry";
-import { supabaseAdmin } from "@/lib/cms/client";
-
-// In-memory rate limiting map (IP -> timestamp array) for basic DOS / spam mitigation
-const rateLimitMap = new Map<string, number[]>();
-const RATE_LIMIT_WINDOW_MS = 60 * 1000; // 1 minute
-const MAX_REQUESTS_PER_WINDOW = 5; // max 5 submissions per minute per IP
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const timestamps = rateLimitMap.get(ip) || [];
-  const validTimestamps = timestamps.filter((t) => now - t < RATE_LIMIT_WINDOW_MS);
-
-  if (validTimestamps.length >= MAX_REQUESTS_PER_WINDOW) {
-    return true;
-  }
-
-  validTimestamps.push(now);
-  rateLimitMap.set(ip, validTimestamps);
-  return false;
-}
 
 export async function POST(request: NextRequest) {
   try {
-    // 1. IP Rate Limiting Check
-    const ip =
-      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-      request.headers.get("x-real-ip") ||
-      "unknown-ip";
-
-    if (isRateLimited(ip)) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Too many submission attempts. Please wait a minute and try again.",
-        },
-        { status: 429 }
-      );
-    }
-
-    // 2. Parse Body
-    const body = await request.json();
-
-    // 3. Spam Honeypot Check (if bot filled invisible field)
+    assertSameOrigin(request, true);
+    const body = await readJsonObject(request);
     if (body.website_hp || body.hp_check) {
-      console.warn(`[Spam Guard] Honeypot triggered from IP ${ip}`);
-      // Return 200 to confuse bots without actually processing
-      return NextResponse.json(
-        { success: true, message: "Enquiry received." },
-        { status: 200 }
-      );
+      // A bot trap deliberately receives no receipt ID; the UI requires a confirmed ID.
+      return privateJson({ success: true, message: "Enquiry received." });
     }
-
-    // 4. Server-side Validation
     const validation = validateEnquiryPayload(body);
     if (!validation.isValid || !validation.sanitizedData) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Validation failed. Please correct the highlighted fields.",
-          fieldErrors: validation.errors,
-        },
-        { status: 400 }
+      throw new HttpError(
+        400,
+        "VALIDATION_FAILED",
+        "Please correct the highlighted fields.",
+        validation.errors,
       );
     }
-
-    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
-    const enquiryId = `ENQ-${Date.now().toString().slice(-6)}-${randomSuffix}`;
-
-    const validated = {
-      ...validation.sanitizedData,
-      productSlug: (body.productSlug || body.product_slug) as string | undefined,
-      productTitle: (body.productTitle || body.product_title || validation.sanitizedData.product) as string | undefined,
-      enquiryType: (body.enquiryType || body.enquiry_type || (validation.sanitizedData.type === 'Product Quote' ? 'product' : validation.sanitizedData.type === 'OEM / Private Label' ? 'oem' : validation.sanitizedData.type === 'Technical Resource' ? 'contact' : 'universal')) as 'product' | 'universal' | 'oem' | 'contact',
-    };
-
-    // Persist enquiry to Supabase
-    const { error: dbError } = await supabaseAdmin
-      .from('enquiries')
-      .insert({
-        enquiry_id: enquiryId,
-        name: validated.name,
-        email: validated.email,
-        phone: validated.phone ?? null,
-        company: validated.company ?? null,
-        country: validated.country ?? null,
-        message: validated.message,
-        product_slug: validated.productSlug ?? null,
-        product_title: validated.productTitle ?? null,
-        enquiry_type: validated.enquiryType,
-        ip_address: ip,
-      });
-
-    if (dbError) {
-      // Log server-side only — never expose DB errors to client
-      console.error('[Enquiry DB Insert]', dbError.message);
+    const client = createPrivilegedSupabaseClient();
+    const idempotencyKey = request.headers.get("idempotency-key") || undefined;
+    if (
+      idempotencyKey &&
+      !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(
+        idempotencyKey,
+      )
+    )
+      throw new HttpError(
+        400,
+        "INVALID_INPUT",
+        "The submission reference is invalid. Refresh the form and try again.",
+      );
+    const ip = getClientIp(request);
+    await enforceEnquiryRateLimit(client, ip);
+    const enquiryId = await persistEnquiry(
+      client,
+      validation.sanitizedData,
+      ip,
+      idempotencyKey,
+    );
+    // A delivery failure never changes a successfully stored enquiry into an error.
+    try {
+      await deliverEnquiryNotifications(client, enquiryId);
+    } catch {
+      console.error("[Notifications] Delivery deferred to the durable queue");
     }
-
-    return NextResponse.json(
+    return privateJson(
       {
         success: true,
         message:
-          "Thank you for your enquiry. Our technical sales team will review your specifications and respond shortly.",
-        enquiryId: enquiryId,
+          "Thank you for your enquiry. Our team will review your request and respond shortly.",
+        enquiryId,
+        attachmentToken: mintAttachmentToken(enquiryId),
       },
-      { status: 200 }
+      201,
     );
   } catch (error) {
-    console.error("[API /api/enquiries] Unexpected error:", error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: "An unexpected server error occurred while processing your request.",
-      },
-      { status: 500 }
-    );
+    return errorResponse(error, "submit enquiry");
   }
 }

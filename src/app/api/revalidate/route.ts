@@ -1,25 +1,43 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { createHash, timingSafeEqual } from "node:crypto";
 
 export async function POST(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const secret = searchParams.get("secret");
+    const secret =
+      request.headers.get("authorization")?.match(/^Bearer (.+)$/i)?.[1] ||
+      searchParams.get("secret");
     const tag = searchParams.get("tag");
     const path = searchParams.get("path");
 
     const expectedSecret =
-      process.env.REVALIDATE_SECRET || process.env.CMS_API_TOKEN;
+      process.env.REVALIDATION_TOKEN ||
+      process.env.REVALIDATE_SECRET ||
+      process.env.CMS_API_TOKEN;
 
-    if (!expectedSecret || secret !== expectedSecret) {
+    if (
+      !expectedSecret ||
+      !secret ||
+      /^(generate-a-|your-|placeholder)/i.test(expectedSecret) ||
+      !timingSafeEqual(
+        createHash("sha256").update(secret).digest(),
+        createHash("sha256").update(expectedSecret).digest(),
+      )
+    ) {
       return NextResponse.json(
         { success: false, message: "Unauthorized revalidation token." },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
     if (tag) {
-      revalidateTag(tag, "default");
+      if (tag !== "public-cms")
+        return NextResponse.json(
+          { success: false, error: "Unsupported cache tag." },
+          { status: 400 },
+        );
+      revalidateTag(tag, { expire: 0 });
       return NextResponse.json({
         revalidated: true,
         tag,
@@ -28,6 +46,11 @@ export async function POST(request: NextRequest) {
     }
 
     if (path) {
+      if (!/^\/(?!\/)/.test(path) || path.length > 1024 || path.includes("\\"))
+        return NextResponse.json(
+          { success: false, error: "Invalid page path." },
+          { status: 400 },
+        );
       revalidatePath(path);
       return NextResponse.json({
         revalidated: true,
@@ -37,18 +60,18 @@ export async function POST(request: NextRequest) {
     }
 
     // Default: revalidate homepage and products catalog
-    revalidatePath("/");
-    revalidatePath("/products");
+    revalidateTag("public-cms", { expire: 0 });
+    revalidatePath("/", "layout");
     return NextResponse.json({
       revalidated: true,
       scope: "global",
       timestamp: new Date().toISOString(),
     });
-  } catch (error) {
-    console.error("[API /api/revalidate] Error:", error);
+  } catch {
+    console.error("[API /api/revalidate] Cache refresh failed");
     return NextResponse.json(
       { success: false, error: "Failed to revalidate cache." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

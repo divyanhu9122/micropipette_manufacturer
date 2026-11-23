@@ -1,20 +1,18 @@
-import type { Metadata } from "next";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import PublicFrame from "@/components/layout/PublicFrame";
+import { getPublicContent } from "@/lib/cms/public";
 import ProductListing from "@/components/products/ProductListing";
-
-export const metadata: Metadata = {
-  title: "Scientific Products | MicropipetteManufacturer.com",
-  description:
-    "Explore precision laboratory instruments and consumables from LABXE, SSCIENCES and DANWER. Browse by category and brand to find the right solution for your laboratory.",
+import { productListItem } from "@/lib/cms/presentation";
+export const revalidate = 60;
+export const metadata = {
+  title: "Scientific products",
+  description: "Explore our published laboratory product catalogue.",
+  alternates: { canonical: "/products" },
 };
-
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  const { products } = await getPublicContent();
   return (
-    <main>
-      <Header />
-      <ProductListing />
-      <Footer />
-    </main>
+    <PublicFrame>
+      <ProductListing products={products.map(productListItem)} />
+    </PublicFrame>
   );
 }

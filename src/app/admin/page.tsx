@@ -1,5 +1,7 @@
+import { redirect } from "next/navigation";
+import { requireStaffPage } from "@/lib/auth/page";
 import type { Metadata } from "next";
-import AdminDashboardApp from "@/features/admin/dashboard/AdminDashboardApp";
+import Dashboard from "@/features/admin/cms/Dashboard";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard — Operations & CMS",
@@ -10,6 +12,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AdminDashboardPage() {
-  return <AdminDashboardApp />;
+export default async function AdminDashboardPage() {
+  const { staff } = await requireStaffPage("staff:access");
+  if (staff.role === "editor") redirect("/admin/products");
+  if (staff.role === "sales") redirect("/admin/enquiries");
+  return <Dashboard />;
 }

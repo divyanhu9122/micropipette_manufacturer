@@ -36,18 +36,18 @@ export default function ProductDownloads({
                   {doc.format} • {doc.size}
                 </span>
               </div>
-              <a
-                href="#"
-                className={styles.downloadBtn}
-                onClick={(e) => {
-                  e.preventDefault();
-                  alert(
-                    `Downloading ${doc.title} (${doc.format}, ${doc.size})...`,
-                  );
-                }}
-              >
-                Download
-              </a>
+              {doc.url ? (
+                <a
+                  href={doc.url}
+                  className={styles.downloadBtn}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Download
+                </a>
+              ) : (
+                <span>File pending</span>
+              )}
             </article>
           ))}
         </div>
