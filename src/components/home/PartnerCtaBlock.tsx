@@ -27,7 +27,7 @@ export default function PartnerCtaBlock({ onOpenQuote }: PartnerCtaBlockProps) {
                   Request Partnership Call →
                 </button>
                 <Link className="btn secondary" href="/resources">
-                  Download Catalog & Specifications ↓
+                  Catalogues & Specifications →
                 </Link>
               </div>
 

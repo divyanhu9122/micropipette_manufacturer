@@ -87,7 +87,16 @@ function parseFields(
   for (const [key, value] of Object.entries(body)) {
     if (!Object.hasOwn(fields, key))
       invalid(`The field '${key}' cannot be changed by this operation.`);
-    result[key] = fields[key](value);
+    try {
+      result[key] = fields[key](value);
+    } catch (error) {
+      if (error instanceof HttpError) {
+        throw new HttpError(error.status, error.code, error.message, {
+          [key]: error.message,
+        });
+      }
+      throw error;
+    }
   }
   for (const key of required)
     if (!Object.hasOwn(result, key)) invalid(`The field '${key}' is required.`);
@@ -141,7 +150,12 @@ export function parseProductInput(
     typeof result.volume_max === "number" &&
     result.volume_max < result.volume_min
   )
-    invalid("Maximum volume must be at least the minimum volume.");
+    throw new HttpError(
+      400,
+      "INVALID_INPUT",
+      "Maximum volume must be at least the minimum volume.",
+      { volume_max: "Maximum volume must be at least the minimum volume." },
+    );
   if (creating && !Object.hasOwn(result, "is_active")) result.is_active = false;
   return result;
 }
@@ -281,9 +295,19 @@ export function parseSettingsInput(
       favicon: nullable(url),
     },
     contact: {
-      email: text(254, true),
+      email: (value) => {
+        const parsed = text(254, true)(value);
+        if (
+          parsed &&
+          (typeof parsed !== "string" ||
+            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(parsed))
+        )
+          invalid("Enter a valid contact email address.");
+        return parsed;
+      },
       phone: text(80, true),
       address: text(1_000, true),
+      businessHours: text(255, true),
       linkedin: nullable(url),
       twitter: nullable(url),
     },

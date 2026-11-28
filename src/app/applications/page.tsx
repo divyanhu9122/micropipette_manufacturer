@@ -11,13 +11,7 @@ const defaultMetadata: Metadata = {
   description:
     "Explore precision liquid handling applications across molecular biology, clinical diagnostics, pharmaceutical research, food testing, environmental analysis, and academic laboratories.",
   alternates: {
-    canonical: "https://micropipettemanufacturer.in/applications",
-  },
-  openGraph: {
-    title: "Laboratory Applications | MicropipetteManufacturer.in",
-    description:
-      "Explore liquid handling workflows and certified micropipette instrumentation across life science and analytical domains.",
-    url: "https://micropipettemanufacturer.in/applications",
+    canonical: "/applications",
   },
 };
 

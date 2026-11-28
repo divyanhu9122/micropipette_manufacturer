@@ -40,6 +40,7 @@ export default function AdminSidebar({
       />
 
       <aside
+        id="admin-navigation"
         className={`${styles.sidebar} ${isOpen ? styles.sidebarOpen : ""}`}
         aria-label="Admin navigation"
       >

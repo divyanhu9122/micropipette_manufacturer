@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useDialog } from "./use-dialog";
 import { useSiteNavigation } from "@/features/site/SiteSettings";
 import { submitEnquiry } from "@/features/enquiries/submit-enquiry";
 
@@ -18,6 +19,7 @@ export default function QuoteModal(props: QuoteModalProps) {
 }
 
 function QuoteModalContent({ onClose, defaultProduct = "" }: QuoteModalProps) {
+  const dialogRef = useDialog<HTMLDivElement>(true, onClose);
   const navigation = useSiteNavigation();
   const productOptions = Array.from(
     new Set([
@@ -26,6 +28,7 @@ function QuoteModalContent({ onClose, defaultProduct = "" }: QuoteModalProps) {
       defaultProduct,
     ]),
   ).filter(Boolean);
+  const [receipt, setReceipt] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState("");
@@ -35,7 +38,7 @@ function QuoteModalContent({ onClose, defaultProduct = "" }: QuoteModalProps) {
     email: "",
     phone: "",
     productInterest: defaultProduct || "General product enquiry",
-    quantity: "11-50 Units",
+    quantity: "",
     message: "",
   });
 
@@ -45,7 +48,7 @@ function QuoteModalContent({ onClose, defaultProduct = "" }: QuoteModalProps) {
     setSubmitting(true);
     setSubmissionError("");
     try {
-      await submitEnquiry({
+      const reference = await submitEnquiry({
         name: formData.name,
         company: formData.company,
         email: formData.email,
@@ -53,11 +56,12 @@ function QuoteModalContent({ onClose, defaultProduct = "" }: QuoteModalProps) {
         country: "Not specified",
         type: "Product Quote",
         product: formData.productInterest,
-        quantity: formData.quantity,
+        quantity: formData.quantity || undefined,
         message:
           formData.message ||
           `Quote request for ${formData.productInterest}. Estimated quantity: ${formData.quantity}.`,
       });
+      setReceipt(reference);
       setSubmitted(true);
     } catch (cause) {
       setSubmissionError(
@@ -73,6 +77,8 @@ function QuoteModalContent({ onClose, defaultProduct = "" }: QuoteModalProps) {
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div
+        ref={dialogRef}
+        tabIndex={-1}
         className="modal-content"
         role="dialog"
         aria-modal="true"
@@ -123,6 +129,9 @@ function QuoteModalContent({ onClose, defaultProduct = "" }: QuoteModalProps) {
               Thank you, <strong>{formData.name}</strong>. Our commercial and
               technical team will review your request for{" "}
               <strong>{formData.productInterest}</strong> and respond shortly.
+            </p>
+            <p>
+              Your reference: <strong>{receipt}</strong>
             </p>
             <button
               className="btn primary"
@@ -350,6 +359,7 @@ function QuoteModalContent({ onClose, defaultProduct = "" }: QuoteModalProps) {
                       background: "#fff",
                     }}
                   >
+                    <option value="">Not specified</option>
                     <option value="1-10 Units (Evaluation)">
                       1-10 Units (Evaluation)
                     </option>

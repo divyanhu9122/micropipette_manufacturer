@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import ContentManager from "@/features/admin/cms/ContentManager";
 
 export const metadata: Metadata = {
-  title: "Blog Management | Admin / CMS Prototype",
+  title: "Blog Management | Admin",
   description:
     "Create and maintain articles supporting the public Blog Listing and Blog Article Detail prototypes.",
 };

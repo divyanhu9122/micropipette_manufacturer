@@ -96,24 +96,29 @@ export default function BrandDetailApp({ brand }: BrandDetailAppProps) {
                 ))}
               </div>
               <div className={styles.bdFacts}>
-                {brand.facts.map((fact) => (
-                  <div key={fact.label}>
-                    <span>{fact.label}</span>
-                    <strong>
-                      {fact.label === "Official Website" ? (
-                        <a
-                          href={fact.value}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {fact.value.replace("https://", "")} ↗
-                        </a>
-                      ) : (
-                        fact.value
-                      )}
-                    </strong>
-                  </div>
-                ))}
+                {brand.facts
+                  .filter(
+                    (fact) =>
+                      fact.label !== "Official Website" || Boolean(fact.value),
+                  )
+                  .map((fact) => (
+                    <div key={fact.label}>
+                      <span>{fact.label}</span>
+                      <strong>
+                        {fact.label === "Official Website" ? (
+                          <a
+                            href={fact.value}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {fact.value.replace("https://", "")} ↗
+                          </a>
+                        ) : (
+                          fact.value
+                        )}
+                      </strong>
+                    </div>
+                  ))}
               </div>
             </div>
           </section>
@@ -124,7 +129,10 @@ export default function BrandDetailApp({ brand }: BrandDetailAppProps) {
               className={`${styles.bdSectionHead} ${styles.bdSectionHeadRow}`}
             >
               <h2 className={styles.bdSectionTitle}>FEATURED PRODUCTS</h2>
-              <Link href="/products" className={styles.bdSectionLink}>
+              <Link
+                href={`/products?brand=${encodeURIComponent(brand.name)}`}
+                className={styles.bdSectionLink}
+              >
                 View All {brand.name} Products →
               </Link>
             </div>
@@ -211,7 +219,7 @@ export default function BrandDetailApp({ brand }: BrandDetailAppProps) {
                         handleOpenCatalogue();
                       }}
                     >
-                      Download
+                      {res.url ? "Download" : "Request document"}
                     </button>
                   </article>
                 ))}
@@ -247,14 +255,17 @@ export default function BrandDetailApp({ brand }: BrandDetailAppProps) {
               >
                 Request Quote →
               </button>
-              <a
-                className={`btn secondary ${styles.bdCtaSecondary}`}
-                href={brand.officialWebsiteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Visit Official Website ↗
-              </a>
+              {brand.officialWebsiteUrl && (
+                <a
+                  className={`btn secondary ${styles.bdCtaSecondary}`}
+
+                  href={brand.officialWebsiteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Visit Official Website ↗
+                </a>
+              )}
             </div>
           </section>
         </div>

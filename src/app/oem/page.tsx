@@ -11,7 +11,7 @@ const defaultMetadata: Metadata = {
   description:
     "Custom logo printing, private-label packaging, bespoke volume ranges, and ISO 8655 gravimetric certified contract micropipette manufacturing for global brands and distributors.",
   alternates: {
-    canonical: "https://micropipettemanufacturer.in/oem",
+    canonical: "/oem",
   },
 };
 

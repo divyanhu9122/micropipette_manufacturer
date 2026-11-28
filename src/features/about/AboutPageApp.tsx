@@ -1,7 +1,8 @@
+import type { Brand } from "@/types/cms";
 import Link from "next/link";
 import styles from "./About.module.css";
 
-export default function AboutPageApp() {
+export default function AboutPageApp({ brands }: { brands: Brand[] }) {
   return (
     <div className={styles.aboutPage}>
       {/* Hero Section with extreme-left breadcrumb */}
@@ -17,8 +18,8 @@ export default function AboutPageApp() {
             <h1>About Us</h1>
             <p>
               MicropipetteManufacturer.com brings together laboratory,
-              liquid-handling and scientific-instrument capabilities across LABXE,
-              SSCIENCES and DANWER in one focused B2B product-discovery
+              liquid-handling and scientific-instrument capabilities across
+              LABXE, SSCIENCES and DANWER in one focused B2B product-discovery
               platform.
             </p>
           </div>
@@ -62,57 +63,7 @@ export default function AboutPageApp() {
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
               <polyline points="9 22 9 12 15 12 15 22" />
             </svg>
-            <span>[COMPANY / FACTORY / LAB IMAGE]</span>
-          </div>
-        </div>
-      </section>
-
-      {/* LEADERSHIP */}
-      <section className={styles.aboutSection}>
-        <div className={`wrap ${styles.aboutPanel}`}>
-          <h2 className={styles.aboutTitle}>LEADERSHIP</h2>
-
-          <div className={styles.aboutLeadership}>
-            <div className={styles.aboutLeaderPhoto}>
-              <svg
-                className={styles.aboutLeaderPhotoIcon}
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-              <span>[CHAIRMAN / MANAGING DIRECTOR PHOTO]</span>
-            </div>
-
-            <div className={styles.aboutLeaderCopy}>
-              <span className={styles.aboutLeaderTag}>
-                CHAIRMAN / MANAGING DIRECTOR
-              </span>
-
-              <h3>[OWNER / MD NAME]</h3>
-
-              <p className={styles.leadershipIntro}>
-                [Short verified introduction covering the leader&apos;s role,
-                business journey and involvement in scientific instruments,
-                liquid handling, manufacturing and customer-focused growth.]
-              </p>
-
-              <blockquote>
-                “[Short verified leadership message or vision statement.]”
-              </blockquote>
-
-              <p>
-                [A concise 3–5 line summary of the leader&apos;s approach to
-                product quality, manufacturing, innovation, customer
-                relationships and long-term development of the business.]
-              </p>
-            </div>
+            <span>Precision liquid handling</span>
           </div>
         </div>
       </section>
@@ -132,8 +83,8 @@ export default function AboutPageApp() {
             <article className={styles.aboutBox}>
               <h3>In-House Manufacturing Support</h3>
               <p>
-                LABXE states that its liquid-handling operations are supported by
-                in-house molding, assembly and calibration facilities.
+                LABXE states that its liquid-handling operations are supported
+                by in-house molding, assembly and calibration facilities.
               </p>
             </article>
             <article className={styles.aboutBox}>
@@ -159,81 +110,30 @@ export default function AboutPageApp() {
         <div className={`wrap ${styles.aboutPanel}`}>
           <h2 className={styles.aboutTitle}>OUR BRAND PORTFOLIO</h2>
           <div className={styles.aboutGrid3}>
-            <article className={styles.aboutBox}>
-              <div className={styles.aboutBrandLogo}>
-                <span className={styles.brandLogoLabxe}>
-                  LAB<b>XE</b>
-                </span>
-              </div>
-              <h3>LABXE</h3>
-              <p>
-                Scientific and laboratory equipment with a strong
-                liquid-handling focus and in-house manufacturing support.
-              </p>
-              <div className={styles.aboutActions}>
-                <Link className="btn primary" href="/brands/labxe">
-                  Explore Brand
-                </Link>
-                <a
-                  className="btn secondary"
-                  href="https://labxe.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Official Website →
-                </a>
-              </div>
-            </article>
-
-            <article className={styles.aboutBox}>
-              <div className={styles.aboutBrandLogo}>
-                <span className={styles.brandLogoSsciences}>
-                  S<b>SCIENCES</b>
-                </span>
-              </div>
-              <h3>SSCIENCES</h3>
-              <p>
-                Scientific instruments and liquid-handling systems for
-                laboratory, research and technical applications.
-              </p>
-              <div className={styles.aboutActions}>
-                <Link className="btn primary" href="/brands/ssciences">
-                  Explore Brand
-                </Link>
-                <a
-                  className="btn secondary"
-                  href="https://www.ssciences.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Official Website →
-                </a>
-              </div>
-            </article>
-
-            <article className={styles.aboutBox}>
-              <div className={styles.aboutBrandLogo}>
-                <span className={styles.brandLogoDanwer}>DANWER</span>
-              </div>
-              <h3>DANWER</h3>
-              <p>
-                Weighing balances, micropipettes and laboratory equipment with
-                emphasis on precision, quality and support.
-              </p>
-              <div className={styles.aboutActions}>
-                <Link className="btn primary" href="/brands/danwer">
-                  Explore Brand
-                </Link>
-                <a
-                  className="btn secondary"
-                  href="https://danwer.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Official Website →
-                </a>
-              </div>
-            </article>
+            {brands.map((brand) => (
+              <article key={brand.id} className={styles.aboutBox}>
+                <h3>{brand.name}</h3>
+                <p>{brand.description || brand.tagline}</p>
+                <div className={styles.aboutActions}>
+                  <Link className="btn primary" href={`/brands/${brand.slug}`}>
+                    Explore Brand
+                  </Link>
+                  {brand.website && (
+                    <a
+                      className="btn secondary"
+                      href={brand.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Official Website →
+                    </a>
+                  )}
+                </div>
+              </article>
+            ))}
+            {brands.length === 0 && (
+              <p>Contact our team for brand and product information.</p>
+            )}
           </div>
         </div>
       </section>

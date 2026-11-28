@@ -7,101 +7,30 @@ import styles from "./UniversalQuote.module.css";
 import {
   COUNTRIES,
   BUYER_TYPES,
-  PREFERRED_BRANDS,
   QUOTE_TYPES,
 } from "../product-enquiry/product-enquiry.data";
 
-interface ProductOption {
+export interface ProductOption {
   id: string;
   name: string;
   category: string;
   brand: string;
 }
 
-const AVAILABLE_PRODUCTS: ProductOption[] = [
-  {
-    id: "sp-v010",
-    name: "Science Plus Variable Volume (0.5–10 µL)",
-    category: "Micropipettes",
-    brand: "SSCIENCES",
-  },
-  {
-    id: "sp-v020",
-    name: "Science Plus Variable Volume (2–20 µL)",
-    category: "Micropipettes",
-    brand: "SSCIENCES",
-  },
-  {
-    id: "sp-v100",
-    name: "Science Plus Variable Volume (10–100 µL)",
-    category: "Micropipettes",
-    brand: "SSCIENCES",
-  },
-  {
-    id: "sp-v200",
-    name: "Science Plus Variable Volume (20–200 µL)",
-    category: "Micropipettes",
-    brand: "SSCIENCES",
-  },
-  {
-    id: "sp-v1000",
-    name: "Science Plus Variable Volume (100–1000 µL)",
-    category: "Micropipettes",
-    brand: "SSCIENCES",
-  },
-  {
-    id: "sp-v5000",
-    name: "Science Plus Variable Volume (0.5–5 mL)",
-    category: "Micropipettes",
-    brand: "SSCIENCES",
-  },
-  {
-    id: "sp-v10000",
-    name: "Science Plus Variable Volume (1–10 mL)",
-    category: "Micropipettes",
-    brand: "SSCIENCES",
-  },
-  {
-    id: "mc-8ch",
-    name: "Multichannel 8-Channel Micropipette (5–50 µL)",
-    category: "Micropipettes",
-    brand: "SSCIENCES",
-  },
-  {
-    id: "fac-plus",
-    name: "FAC Plus Fully Autoclavable Pipette",
-    category: "Micropipettes",
-    brand: "LABXE",
-  },
-  {
-    id: "btd-reg",
-    name: "Bottle Top Dispenser Regular (0.5–50 mL)",
-    category: "Bottle Top Dispensers",
-    brand: "SSCIENCES",
-  },
-  {
-    id: "btd-prem",
-    name: "Bottle Top Dispenser Premium Dual-Valve",
-    category: "Bottle Top Dispensers",
-    brand: "LABXE",
-  },
-  {
-    id: "bal-prec",
-    name: "Precision Analytical Balance Series",
-    category: "Balances",
-    brand: "DANWER",
-  },
-];
-
-const CATEGORIES = [
-  "Micropipettes",
-  "Bottle Top Dispensers",
-  "Balances",
-  "Other Laboratory Instruments",
-];
-
-export default function UniversalQuoteApp() {
-  const [summaryOpen, setSummaryOpen] = useState(true);
+export default function UniversalQuoteApp({
+  products,
+  categories,
+  brands,
+}: {
+  products: ProductOption[];
+  categories: string[];
+  brands: string[];
+}) {
+  const AVAILABLE_PRODUCTS = products;
+  const CATEGORIES = categories;
+  const PREFERRED_BRANDS = brands;
+  const [summaryOpen, setSummaryOpen] = useState(false);
+  const [receipt, setReceipt] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState("");
@@ -114,16 +43,12 @@ export default function UniversalQuoteApp() {
   const [country, setCountry] = useState("");
   const [buyerType, setBuyerType] = useState("");
 
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([
-    "Micropipettes",
-  ]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [preferredBrand, setPreferredBrand] = useState("");
   const [productSearch, setProductSearch] = useState("");
   const [selectedProducts, setSelectedProducts] = useState<
     Record<string, number>
-  >({
-    "sp-v010": 10,
-  });
+  >({});
 
   const [requiredDate, setRequiredDate] = useState("");
   const [destinationCountry, setDestinationCountry] = useState("");
@@ -145,7 +70,7 @@ export default function UniversalQuoteApp() {
       if (copy[prodId]) {
         delete copy[prodId];
       } else {
-        copy[prodId] = 10;
+        copy[prodId] = 1;
       }
       return copy;
     });
@@ -200,10 +125,10 @@ export default function UniversalQuoteApp() {
       const products = selectedProductList
         .map(
           (product) =>
-            `${product.name} (Qty: ${selectedProducts[product.id] || 1})`,
+            `${product.name} [${product.id}] (Qty: ${selectedProducts[product.id] || 1})`,
         )
         .join("; ");
-      await submitEnquiry(
+      const reference = await submitEnquiry(
         {
           name: contactPerson,
           company: companyName,
@@ -211,16 +136,18 @@ export default function UniversalQuoteApp() {
           phone,
           country: country || "Not specified",
           type: "Universal / General",
-          product: products || "Multiple products",
+          product: products || "General product enquiry",
           quantity: `${selectedProductList.length} models`,
           message: [
-            message || `Quote request for ${products || "catalogue items"}.`,
+            message ||
+              `Quote request for ${products || "product information"}.`,
             `Buyer: ${buyerType || "Not specified"}. Brand: ${preferredBrand || "Any"}. Categories: ${selectedCategories.join(", ")}.`,
             `Required date: ${requiredDate || "Not specified"}. Destination: ${destinationCountry || country || "Not specified"}. Quote type: ${quoteType}.`,
           ].join("\n"),
         },
         referenceFile,
       );
+      setReceipt(reference);
       setSubmitted(true);
     } catch (cause) {
       setSubmissionError(
@@ -380,6 +307,10 @@ export default function UniversalQuoteApp() {
                   </div>
                   <h3>Quote Request Received</h3>
                   <p>
+                    Reference: <strong>{receipt}</strong>. Keep this reference
+                    when following up.
+                  </p>
+                  <p>
                     Thank you, <strong>{contactPerson}</strong>. Your universal
                     quotation request for{" "}
                     <strong>{selectedProductList.length} product(s)</strong> has
@@ -514,7 +445,9 @@ export default function UniversalQuoteApp() {
                         <h3>Product & Brand Requirement</h3>
                         <p>
                           Select one or multiple categories and products.
-                          Multi-selection is fully supported.
+                          Category filters only change the available choices;
+                          your selected items stay in the request until you
+                          remove them.
                         </p>
                       </div>
                     </div>
@@ -523,7 +456,7 @@ export default function UniversalQuoteApp() {
                       {/* Category Chips */}
                       <div className={styles.uqField}>
                         <span className={styles.uqLabel}>
-                          Product Categories *
+                          Filter by category
                         </span>
                         <div className={styles.categoryChipGrid}>
                           {CATEGORIES.map((cat) => {
@@ -569,10 +502,18 @@ export default function UniversalQuoteApp() {
                             type="search"
                             className={styles.productSearchInput}
                             placeholder="Search product or model..."
+                            aria-label="Search published products or models"
                             value={productSearch}
                             onChange={(e) => setProductSearch(e.target.value)}
                           />
                           <div className={styles.productCheckList}>
+                            {filteredProducts.length === 0 && (
+                              <p role="status">
+                                {products.length === 0
+                                  ? "Our catalogue is being updated. Describe the product and quantity you need in your message below."
+                                  : "No products match this search. Change the search or category filter."}
+                              </p>
+                            )}
                             {filteredProducts.map((p) => {
                               const isSelected =
                                 selectedProducts[p.id] !== undefined;
@@ -617,6 +558,9 @@ export default function UniversalQuoteApp() {
                                   <input
                                     type="number"
                                     min="1"
+                                    max="1000000"
+                                    step="1"
+                                    aria-label={`Quantity for ${p.name}`}
                                     value={selectedProducts[p.id]}
                                     onChange={(e) =>
                                       updateQuantity(
@@ -629,6 +573,7 @@ export default function UniversalQuoteApp() {
                                     type="button"
                                     className={styles.uqQtyRemove}
                                     title="Remove item"
+                                    aria-label={`Remove ${p.name}`}
                                     onClick={() => removeProduct(p.id)}
                                   >
                                     ✕

@@ -98,6 +98,6 @@ export const getPublicContent = unstable_cache(
       settings,
     };
   },
-  ["public-cms-v1", process.env.NEXT_PUBLIC_SUPABASE_URL || "unconfigured"],
+  ["public-cms-v2", process.env.NEXT_PUBLIC_SUPABASE_URL || "unconfigured"],
   { revalidate: 60, tags: ["public-cms"] },
 );

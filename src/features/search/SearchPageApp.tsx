@@ -1,6 +1,7 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useState, type FormEvent } from "react";
+import { Suspense, useMemo, useState, type FormEvent } from "react";
+import { useSearchResults } from "./use-search-results";
 import Link from "next/link";
 import { useSiteNavigation } from "@/features/site/SiteSettings";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -31,29 +32,18 @@ function SearchPageContent() {
   const initialQuery = searchParams.get("q") || "";
 
   const [inputVal, setInputVal] = useState(initialQuery);
+  const [previousQuery, setPreviousQuery] = useState(initialQuery);
+  if (previousQuery !== initialQuery) {
+    setPreviousQuery(initialQuery);
+    setInputVal(initialQuery);
+  }
   const [activeTab, setActiveTab] = useState<"All" | SearchContentType>("All");
 
-  const [allMatching, setAllMatching] = useState<SearchItem[]>([]);
-  const [searchError, setSearchError] = useState("");
-  useEffect(() => {
-    const controller = new AbortController();
-    if (initialQuery.trim())
-      fetch(`/api/search?q=${encodeURIComponent(initialQuery)}`, {
-        signal: controller.signal,
-      })
-        .then(async (response) => {
-          if (!response.ok) throw new Error();
-          return response.json();
-        })
-        .then((result) => setAllMatching(result.items))
-        .catch(() => {
-          if (!controller.signal.aborted)
-            setSearchError(
-              "Search is temporarily unavailable. Try again shortly.",
-            );
-        });
-    return () => controller.abort();
-  }, [initialQuery]);
+  const {
+    items: allMatching,
+    loading,
+    error: searchError,
+  } = useSearchResults(initialQuery);
 
   const filteredResults = useMemo(() => {
     if (activeTab === "All") return allMatching;
@@ -97,7 +87,11 @@ function SearchPageContent() {
           </h1>
           <p className={styles.heroSubtitle}>
             {initialQuery.trim()
-              ? `Found ${allMatching.length} matching ${allMatching.length === 1 ? "entry" : "entries"} across products, series, categories, and brands.`
+              ? loading
+                ? "Searching the catalogue…"
+                : searchError
+                  ? "Search could not load."
+                  : `Found ${allMatching.length} matching ${allMatching.length === 1 ? "entry" : "entries"} across products, series, categories, and brands.`
               : "Search public products, series, categories, brands, specifications, and technical pages."}
           </p>
         </div>
@@ -193,6 +187,10 @@ function SearchPageContent() {
                 ))}
               </div>
             </div>
+          ) : loading ? (
+            <p role="status">Searching the catalogue…</p>
+          ) : searchError ? (
+            <p>Check your connection and try searching again shortly.</p>
           ) : filteredResults.length === 0 ? (
             /* No Results State */
             <div className={styles.emptyBox}>

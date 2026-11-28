@@ -11,13 +11,7 @@ const defaultMetadata: Metadata = {
   description:
     "Find quick answers about products, product selection, calibration and support, OEM/private-label requirements, resources and business enquiries.",
   alternates: {
-    canonical: "https://micropipettemanufacturer.in/faq",
-  },
-  openGraph: {
-    title: "Frequently Asked Questions (FAQs) | MicropipetteManufacturer.in",
-    description:
-      "Frequently asked questions regarding micropipettes, liquid handling instrumentation, calibration, and OEM manufacturing.",
-    url: "https://micropipettemanufacturer.in/faq",
+    canonical: "/faq",
   },
 };
 

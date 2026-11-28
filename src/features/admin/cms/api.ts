@@ -7,6 +7,15 @@ export type ContentPage = {
   hasMore: boolean;
 };
 
+export class CmsRequestError extends Error {
+  constructor(
+    message: string,
+    public fieldErrors: Record<string, string> = {},
+  ) {
+    super(message);
+  }
+}
+
 export async function cmsRequest<T>(
   url: string,
   options: RequestInit = {},
@@ -22,10 +31,11 @@ export async function cmsRequest<T>(
   });
   const data = await response.json().catch(() => null);
   if (!response.ok || data === null)
-    throw new Error(
+    throw new CmsRequestError(
       typeof data?.error === "string"
         ? data.error
         : "The request failed. Please try again.",
+      data?.fieldErrors || {},
     );
   return data as T;
 }

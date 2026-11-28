@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import ContentManager from "@/features/admin/cms/ContentManager";
 
 export const metadata: Metadata = {
-  title: "Category & Taxonomy Management | Admin / CMS Prototype",
+  title: "Category & Taxonomy Management | Admin",
   description:
     "Maintain the hierarchy used for product discovery and catalogue navigation.",
 };

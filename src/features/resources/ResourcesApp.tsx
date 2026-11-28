@@ -73,10 +73,9 @@ export default function ResourcesApp({
               Product Catalogues, Datasheets, Protocols & Quality Certificates
             </h2>
             <p>
-              Access certified technical documentation across our manufacturing
-              portfolio. Download official product catalogues, ISO 8655
-              gravimetric protocols, chemical resistance charts, and operation
-              manuals for LABXE, SSCIENCES, and DANWER liquid handling systems.
+              Browse available product catalogues, datasheets and operating
+              manuals. If the document you need is not listed, contact our team
+              with the product model and your requirement.
             </p>
           </div>
 
@@ -85,10 +84,8 @@ export default function ResourcesApp({
             <div className={styles.featuredContent}>
               <h3>Request the product catalogue</h3>
               <p>
-                Get the unified multi-brand liquid handling instrument guide
-                covering variable pipettes, multichannel units, dispensers, and
-                private-label manufacturing options in one high-resolution PDF
-                package.
+                Tell us the products and brands you need. Our team will confirm
+                the documents available for your requirement.
               </p>
             </div>
             <button
@@ -96,7 +93,7 @@ export default function ResourcesApp({
               className="btn primary"
               onClick={() => handleOpenCatalogueModal()}
             >
-              Request Full Catalogue Pack →
+              Request a Catalogue →
             </button>
           </div>
 
@@ -225,7 +222,7 @@ export default function ResourcesApp({
                         <polyline points="7 10 12 15 17 10" />
                         <line x1="12" y1="15" x2="12" y2="3" />
                       </svg>
-                      Download
+                      {item.url ? "Download" : "Request document"}
                     </button>
                   </div>
                 </article>
@@ -233,37 +230,48 @@ export default function ResourcesApp({
             </div>
           ) : (
             <div className={styles.emptyState}>
-              <h3>No matching documents found</h3>
+              <h3>
+                {resources.length
+                  ? "No matching documents found"
+                  : "Request product documentation"}
+              </h3>
               <p>
-                Try refining your search keyword or clearing the active filters.
+                {resources.length
+                  ? "Try another keyword or clear the filters."
+                  : "Our download library is being updated. Tell us the product model and the document you need."}
               </p>
-              <button
-                type="button"
-                className="btn secondary"
-                style={{ marginTop: 16 }}
-                onClick={() => {
-                  setSearchQuery("");
-                  setSelectedCategory("all");
-                  setSelectedBrand("all");
-                }}
-              >
-                Reset Filters
-              </button>
+              <Link href="/contact" className="btn primary">
+                Request a document
+              </Link>
+              {resources.length > 0 && (
+                <button
+                  type="button"
+                  className="btn secondary"
+                  style={{ marginTop: 16 }}
+                  onClick={() => {
+                    setSearchQuery("");
+                    setSelectedCategory("all");
+                    setSelectedBrand("all");
+                  }}
+                >
+                  Reset Filters
+                </button>
+              )}
             </div>
           )}
 
           {/* Custom Documentation CTA */}
           <div className={styles.customCta}>
             <div className={styles.customCtaContent}>
-              <h3>Need Custom Calibration Reports or Regulatory Dossiers?</h3>
+              <h3>Need a Specific Technical Document?</h3>
               <p>
-                Our laboratory quality team provides tailored batch inspection
-                records, ISO 8655 conformity certificates, and OEM compliance
-                documentation on demand.
+                Send the product model and the manual, calibration report or
+                certificate you need. Our team will review availability and
+                respond to your request.
               </p>
             </div>
             <Link href="/contact" className="btn secondary">
-              Contact Compliance Team →
+              Request Documentation →
             </Link>
           </div>
         </div>

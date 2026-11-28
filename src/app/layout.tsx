@@ -59,6 +59,15 @@ export async function generateMetadata(): Promise<Metadata> {
       settings.seo?.description ||
       settings.site?.description ||
       baseMetadata.description,
+    icons: { icon: settings.site?.favicon || "/favicon.ico" },
+    openGraph: {
+      siteName: name,
+      images: settings.seo?.image ? [settings.seo.image] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: settings.seo?.image ? [settings.seo.image] : undefined,
+    },
     authors: [{ name }],
     creator: name,
     publisher: name,

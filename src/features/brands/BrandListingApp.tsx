@@ -29,9 +29,8 @@ export default function BrandListingApp({
             <h2>Scientific Brands Under One Manufacturing Network</h2>
             <p>
               Explore our brand portfolio. Each brand page works as a compact
-              B2B landing page with dedicated catalogues, specifications, and
-              direct inquiry routing, backed by unified ISO 8655 gravimetric
-              manufacturing and global export quality assurance.
+              place to explore available products, request specifications and
+              contact our team.
             </p>
           </div>
 
@@ -70,14 +69,14 @@ export default function BrandListingApp({
                   )}
                   <span className={styles.brandLogoSubtitle}>
                     {item.isFuturePlaceholder
-                      ? "CMS Pre-Configured Slot"
+                      ? "Brand information"
                       : "Precision Liquid Handling"}
                   </span>
                 </div>
 
                 <div className={styles.brandContent}>
                   <span className={styles.brandTag}>
-                    {item.isFuturePlaceholder ? "CMS-READY" : item.name}
+                    {item.isFuturePlaceholder ? "Brand portfolio" : item.name}
                   </span>
                   <h2>{item.name}</h2>
                   <p>{item.shortIntro}</p>
@@ -104,7 +103,7 @@ export default function BrandListingApp({
                         disabled
                         style={{ opacity: 0.65, cursor: "not-allowed" }}
                       >
-                        CMS Slot Reserved
+                        Details coming soon
                       </button>
                     )}
                   </div>
@@ -113,18 +112,17 @@ export default function BrandListingApp({
             ))}
           </div>
 
-          {/* Built for Future Brand Expansion Banner */}
+          {/* Find the Right Brand for Your Requirement Banner */}
           <section className={styles.brandFuture}>
             <div>
               <span className={styles.typeTag} style={{ color: "#ff8469" }}>
-                CMS-DRIVEN ARCHITECTURE
+                PRODUCT AND BRAND SUPPORT
               </span>
-              <h2>Built for Future Brand Expansion</h2>
+              <h2>Find the Right Brand for Your Requirement</h2>
               <p>
-                Additional brands can be integrated directly through the CMS
-                using our approved reusable brand-detail template, complete with
-                automated product filtering, catalogue downloads, and dedicated
-                quote routing without requiring frontend rebuilds.
+                Tell us your application, preferred brand, volume range and
+                quantity. Our team can help you identify suitable products and
+                request the documentation you need.
               </p>
             </div>
           </section>

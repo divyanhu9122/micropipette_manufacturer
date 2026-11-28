@@ -14,9 +14,10 @@
     "content:import-drafts": "node --import tsx scripts/import-prototype.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "node --conditions=react-server --import tsx --test tests/backend.test.ts tests/config.test.mjs tests/database.test.mjs tests/workflows.test.ts",
+    "test": "node --conditions=react-server --import tsx --test tests/backend.test.ts tests/config.test.mjs tests/database.test.mjs tests/workflows.test.ts && npm run test:ui",
     "test:integration": "node scripts/test-integration.mjs",
-    "test:smoke": "node tests/smoke.mjs"
+    "test:smoke": "node tests/smoke.mjs",
+    "test:ui": "node --require ./tests/ui-setup.cjs --import tsx --test tests/ui.test.tsx"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.7",

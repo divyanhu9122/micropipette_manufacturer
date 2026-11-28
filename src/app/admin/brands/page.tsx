@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import ContentManager from "@/features/admin/cms/ContentManager";
 
 export const metadata: Metadata = {
-  title: "Brand Management | Admin / CMS Prototype",
+  title: "Brand Management | Admin",
   description:
     "Manage the three confirmed brands in the current project scope.",
 };

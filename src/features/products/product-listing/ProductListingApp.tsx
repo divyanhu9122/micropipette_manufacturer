@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import styles from "./ProductListing.module.css";
@@ -423,7 +424,9 @@ function ProductListingContent({
                   marginBottom: "8px",
                 }}
               >
-                No Products Match Your Filter
+                {products.length
+                  ? "No products match your filters"
+                  : "Tell us what you need"}
               </h3>
               <p
                 style={{
@@ -433,17 +436,23 @@ function ProductListingContent({
                   margin: "0 auto 20px",
                 }}
               >
-                There are currently no products matching your active criteria.
-                Try clearing or expanding your category and brand selections.
+                {products.length
+                  ? "Try another search or clear your category and brand filters."
+                  : "Our catalogue is being updated. Send your product requirements, volume range and quantity for assistance."}
               </p>
-              <button
-                type="button"
-                className="btn primary"
-                onClick={handleClearAll}
-                style={{ display: "inline-flex", margin: "0 auto" }}
-              >
-                Reset All Filters
-              </button>
+              <Link href="/request-quote" className="btn primary">
+                Request product information
+              </Link>
+              {products.length > 0 && (
+                <button
+                  type="button"
+                  className="btn secondary"
+                  onClick={handleClearAll}
+                  style={{ display: "inline-flex", margin: "0 auto" }}
+                >
+                  Reset All Filters
+                </button>
+              )}
             </div>
           ) : (
             <>

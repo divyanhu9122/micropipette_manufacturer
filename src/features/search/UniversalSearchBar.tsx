@@ -12,7 +12,8 @@ import Link from "next/link";
 import { useSiteNavigation } from "@/features/site/SiteSettings";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./UniversalSearchBar.module.css";
-import type { SearchItem, SearchContentType } from "./search.data";
+import { useSearchResults } from "./use-search-results";
+import type { SearchContentType } from "./search.data";
 
 interface UniversalSearchBarProps {
   id?: string;
@@ -93,32 +94,12 @@ export default function UniversalSearchBar({
       document.removeEventListener("pointerdown", handleOutsideClick);
   }, []);
 
-  const [searchMatches, setSearchMatches] = useState<SearchItem[]>([]);
-  useEffect(() => {
-    const controller = new AbortController();
-    const timer = setTimeout(() => {
-      if (!query.trim()) {
-        setSearchMatches([]);
-        return;
-      }
-      fetch(`/api/search?q=${encodeURIComponent(query.trim())}`, {
-        signal: controller.signal,
-      })
-        .then(async (response) => {
-          if (!response.ok) throw new Error();
-          return response.json();
-        })
-        .then((result) => setSearchMatches(result.items.slice(0, 7)))
-        .catch(() => {
-          if (!controller.signal.aborted) setSearchMatches([]);
-        });
-    }, 200);
-    return () => {
-      clearTimeout(timer);
-      controller.abort();
-    };
-  }, [query]);
-  const matches = query.trim() ? searchMatches : [];
+  const {
+    items: searchMatches,
+    loading,
+    error: searchError,
+  } = useSearchResults(query, 200);
+  const matches = searchMatches.slice(0, 7);
   const groups = RESULT_GROUPS.map((group) => ({
     ...group,
     items: matches.filter((item) => item.type === group.type),
@@ -127,7 +108,8 @@ export default function UniversalSearchBar({
   const suggestions = query.trim()
     ? POPULAR_SUGGESTIONS.slice(0, 4)
     : POPULAR_SUGGESTIONS;
-  const choices = results.length > 0 ? results : suggestions;
+  const choices =
+    loading || searchError ? [] : results.length > 0 ? results : suggestions;
   const activeOptionId =
     isOpen && activeIndex >= 0 && activeIndex < choices.length
       ? `${id}-option-${activeIndex}`
@@ -324,6 +306,14 @@ export default function UniversalSearchBar({
                 ))}
               </div>
             </div>
+          ) : loading ? (
+            <p role="status" className={styles.noResults}>
+              Searching…
+            </p>
+          ) : searchError ? (
+            <p role="alert" className={styles.noResults}>
+              {searchError}
+            </p>
           ) : results.length > 0 ? (
             /* Live Results */
             <>

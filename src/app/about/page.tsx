@@ -10,13 +10,7 @@ const defaultMetadata: Metadata = {
   description:
     "Learn about MicropipetteManufacturer.in, bringing together laboratory, liquid-handling and scientific-instrument capabilities across LABXE, SSCIENCES and DANWER in one focused B2B product-discovery platform.",
   alternates: {
-    canonical: "https://micropipettemanufacturer.in/about",
-  },
-  openGraph: {
-    title: "About Us | MicropipetteManufacturer.in",
-    description:
-      "Precision liquid handling manufacturing and scientific instrument discovery across LABXE, SSCIENCES, and DANWER.",
-    url: "https://micropipettemanufacturer.in/about",
+    canonical: "/about",
   },
 };
 
@@ -47,7 +41,7 @@ export default async function AboutPage() {
   return (
     <main>
       <Header />
-      <AboutPageApp />
+      <AboutPageApp brands={content.brands} />
       <Footer />
     </main>
   );

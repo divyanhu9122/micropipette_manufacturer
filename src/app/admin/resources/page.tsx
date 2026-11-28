@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import ContentManager from "@/features/admin/cms/ContentManager";
 
 export const metadata: Metadata = {
-  title: "Resource & Document Management | Admin / CMS Prototype",
+  title: "Resource & Document Management | Admin",
   description:
     "One central document library for catalogues, brochures, datasheets, manuals, certificates and other technical files.",
 };

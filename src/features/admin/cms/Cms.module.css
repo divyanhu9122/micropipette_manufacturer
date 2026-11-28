@@ -53,3 +53,27 @@
   display: grid;
   gap: 16px;
 }
+
+.objectFields {
+  display: grid;
+  gap: 12px;
+}
+.objectFields label {
+  display: block;
+  margin-bottom: 6px;
+}
+.fieldError {
+  color: #a32030;
+  font-size: 14px;
+}
+.mediaPreviews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.mediaPreviews img {
+  object-fit: contain;
+  background: #f5f7fa;
+  border: 1px solid #ccd7e4;
+  border-radius: 8px;
+}

@@ -3,6 +3,10 @@
 import { useState, type FormEvent, type ChangeEvent } from "react";
 import Link from "next/link";
 import { submitEnquiry } from "@/features/enquiries/submit-enquiry";
+import {
+  useSiteSettings,
+  useSiteNavigation,
+} from "@/features/site/SiteSettings";
 import InnerPageHero from "@/components/layout/InnerPageHero";
 import styles from "./Contact.module.css";
 import CatalogueModal from "@/components/ui/CatalogueModal";
@@ -30,6 +34,9 @@ interface FormErrors {
 }
 
 export default function ContactPageApp() {
+  const contact = useSiteSettings().contact || {};
+  const navigation = useSiteNavigation();
+  const [receipt, setReceipt] = useState("");
   const [formData, setFormData] = useState<FormState>({
     contactPerson: "",
     companyName: "",
@@ -111,7 +118,7 @@ export default function ContactPageApp() {
     setIsSubmitting(true);
     setSubmissionError("");
     try {
-      await submitEnquiry(
+      const reference = await submitEnquiry(
         {
           name: formData.contactPerson,
           company: formData.companyName,
@@ -124,6 +131,7 @@ export default function ContactPageApp() {
         },
         referenceFile,
       );
+      setReceipt(reference);
       setIsSubmitted(true);
     } catch (cause) {
       setSubmissionError(
@@ -218,18 +226,38 @@ export default function ContactPageApp() {
             </div>
 
             <div className={styles.contactDirect}>
-              <div>
-                <span>Email</span>
-                <strong>[PRIMARY EMAIL FROM CMS]</strong>
-              </div>
-              <div>
-                <span>Phone / WhatsApp</span>
-                <strong>[PRIMARY PHONE FROM CMS]</strong>
-              </div>
-              <div>
-                <span>Business Hours</span>
-                <strong>[VERIFY BUSINESS HOURS]</strong>
-              </div>
+              {contact.email && (
+                <div>
+                  <span>Email</span>
+                  <a href={`mailto:${contact.email}`}>{contact.email}</a>
+                </div>
+              )}
+              {contact.phone && (
+                <div>
+                  <span>Phone / WhatsApp</span>
+                  <a href={`tel:${contact.phone.replace(/[^+0-9]/g, "")}`}>
+                    {contact.phone}
+                  </a>
+                </div>
+              )}
+              {contact.businessHours && (
+                <div>
+                  <span>Business hours</span>
+                  <strong>{contact.businessHours}</strong>
+                </div>
+              )}
+              {contact.address && (
+                <div>
+                  <span>Address</span>
+                  <p>{contact.address}</p>
+                </div>
+              )}
+              {!contact.email && !contact.phone && (
+                <p>
+                  Send your enquiry using this form. Our team will review it and
+                  contact you using the details you provide.
+                </p>
+              )}
             </div>
           </aside>
 
@@ -250,6 +278,10 @@ export default function ContactPageApp() {
                   ✓
                 </div>
                 <h3>Enquiry Submitted Successfully</h3>
+                <p>
+                  Your reference: <strong>{receipt}</strong>. Keep it when
+                  following up.
+                </p>
                 <p>
                   Thank you for contacting us. Your details have been received,
                   and our technical and commercial team will review your request
@@ -465,9 +497,11 @@ export default function ContactPageApp() {
                       onChange={handleChange}
                     >
                       <option value="">Select brand</option>
-                      <option value="LABXE">LABXE</option>
-                      <option value="SSCIENCES">SSCIENCES</option>
-                      <option value="DANWER">DANWER</option>
+                      {navigation.brands.map((brand) => (
+                        <option key={brand.slug} value={brand.name}>
+                          {brand.name}
+                        </option>
+                      ))}
                       <option value="Not Sure / Any Suitable Brand">
                         Not Sure / Any Suitable Brand
                       </option>

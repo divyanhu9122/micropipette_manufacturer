@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useDialog } from "./use-dialog";
 import { submitEnquiry } from "@/features/enquiries/submit-enquiry";
 import styles from "@/features/resources/catalogue-modal/CatalogueModal.module.css";
 import { COUNTRIES } from "@/features/products/product-enquiry/product-enquiry.data";
@@ -14,7 +15,17 @@ interface CatalogueModalProps {
   downloadUrl?: string;
 }
 
-export default function CatalogueModal({
+export default function CatalogueModal(props: CatalogueModalProps) {
+  if (!props.isOpen) return null;
+  return (
+    <CatalogueModalContent
+      key={`${props.catalogueTitle || "catalogue"}:${props.downloadUrl || "request"}`}
+      {...props}
+    />
+  );
+}
+
+function CatalogueModalContent({
   isOpen,
   onClose,
   catalogueTitle = "Product catalogue",
@@ -22,6 +33,7 @@ export default function CatalogueModal({
   fileSize = "PDF",
   downloadUrl,
 }: CatalogueModalProps) {
+  const [receipt, setReceipt] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submissionError, setSubmissionError] = useState("");
@@ -34,24 +46,7 @@ export default function CatalogueModal({
     message: "",
   });
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
-    };
-
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isOpen, onClose]);
+  const dialogRef = useDialog<HTMLElement>(isOpen, onClose);
 
   if (!isOpen) return null;
 
@@ -61,13 +56,14 @@ export default function CatalogueModal({
     setSubmitting(true);
     setSubmissionError("");
     try {
-      await submitEnquiry({
+      const reference = await submitEnquiry({
         ...formData,
         country: formData.country || "Not specified",
         type: "Technical Resource",
         product: catalogueTitle,
         message: formData.message || `Catalogue request for ${catalogueTitle}`,
       });
+      setReceipt(reference);
       setSubmitted(true);
     } catch (cause) {
       setSubmissionError(
@@ -93,6 +89,8 @@ export default function CatalogueModal({
       role="presentation"
     >
       <section
+        ref={dialogRef}
+        tabIndex={-1}
         className={styles.catalogModal}
         role="dialog"
         aria-modal="true"
@@ -100,8 +98,14 @@ export default function CatalogueModal({
       >
         <div className={styles.catalogModalHead}>
           <div>
-            <span className={styles.typeTag}>Catalogue download</span>
-            <h2 id="catalogModalTitle">Get the Complete Catalogue</h2>
+            <span className={styles.typeTag}>
+              {downloadUrl ? "Catalogue download" : "Catalogue request"}
+            </span>
+            <h2 id="catalogModalTitle">
+              {downloadUrl
+                ? "Get the Complete Catalogue"
+                : "Request a Catalogue"}
+            </h2>
             <p>
               Share your contact details to request the catalogue from our team.
             </p>
@@ -261,6 +265,9 @@ export default function CatalogueModal({
                   flexWrap: "wrap",
                 }}
               >
+                <p>
+                  Your reference: <strong>{receipt}</strong>
+                </p>
                 {downloadUrl && (
                   <a className={styles.btnPrimary} href={downloadUrl} download>
                     Download Catalogue ↓

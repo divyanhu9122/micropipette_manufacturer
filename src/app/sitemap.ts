@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 import { getPublicContent } from "@/lib/cms/public";
 import { getSiteOrigin } from "@/lib/config/site";
-export const revalidate = 60;
+// Avoid a second route cache hiding freshly invalidated CMS entries.
+export const dynamic = "force-dynamic";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const origin = getSiteOrigin();
   const data = await getPublicContent();

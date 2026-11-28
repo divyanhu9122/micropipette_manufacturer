@@ -21,6 +21,9 @@ import {
 } from "@/app/api/admin/brands/route";
 import { GET as getEnquiries } from "@/app/api/admin/enquiries/route";
 import { PATCH as patchEnquiry } from "@/app/api/admin/enquiries/[id]/route";
+import { DELETE as discardMedia } from "@/app/api/admin/media/route";
+import { pendingMediaLocation } from "@/lib/cms/pending-media";
+import { parseSettingsInput } from "@/lib/validation/admin";
 import { GET as getSession } from "@/app/api/auth/session/route";
 import { POST as postEnquiry } from "@/app/api/enquiries/route";
 import { submitEnquiry } from "@/features/enquiries/submit-enquiry";
@@ -99,6 +102,8 @@ interface FakeOptions {
   insertError?: boolean;
   noReceipt?: boolean;
   emptyProducts?: boolean;
+  mediaReference?: "products" | "settings";
+  mediaReferenceError?: boolean;
 }
 
 function fakeSupabase(options: FakeOptions = {}) {
@@ -172,6 +177,25 @@ function fakeSupabase(options: FakeOptions = {}) {
         201,
       );
     }
+    if (
+      url.pathname === "/storage/v1/object/images" &&
+      incoming.method === "DELETE"
+    )
+      return json([]);
+    if (url.pathname === "/rest/v1/settings" && options.mediaReferenceError)
+      return json({ message: "Private failure" }, 503);
+    if (
+      url.pathname === "/rest/v1/settings" &&
+      options.mediaReference === "settings"
+    )
+      return json([
+        { value: { logo: `/api/media/images/${userId}/${recordId}.png` } },
+      ]);
+    if (
+      url.pathname === "/rest/v1/products" &&
+      options.mediaReference === "products"
+    )
+      return json([{ id: recordId }]);
     if (url.pathname.startsWith("/rest/v1/"))
       return json(
         options.emptyProducts
@@ -627,5 +651,134 @@ test("rate-limit identity trusts Vercel headers only on the Vercel runtime", () 
   assert.throws(
     () => getClientIp(incoming, { vercel: false, production: true }),
     HttpError,
+  );
+});
+
+const pendingImage = `/api/media/images/${userId}/${recordId}.png`;
+test("pending-media cleanup rejects anonymous, sales and password-only sessions", async () => {
+  fakeSupabase();
+  assert.equal(
+    (
+      await discardMedia(
+        request("/api/admin/media", "DELETE", { files: [pendingImage] }),
+      )
+    ).status,
+    401,
+  );
+  fakeSupabase({ role: "sales" });
+  assert.equal(
+    (
+      await discardMedia(
+        request("/api/admin/media", "DELETE", { files: [pendingImage] }, jwt()),
+      )
+    ).status,
+    403,
+  );
+  fakeSupabase();
+  assert.equal(
+    (
+      await discardMedia(
+        request(
+          "/api/admin/media",
+          "DELETE",
+          { files: [pendingImage] },
+          jwt("aal1"),
+        ),
+      )
+    ).status,
+    403,
+  );
+});
+test("pending-media cleanup accepts only the current owner's generated upload paths", () => {
+  assert.equal(pendingMediaLocation(pendingImage, userId).bucket, "images");
+  for (const path of [
+    pendingImage.replace(userId, recordId),
+    pendingImage.replace("images", "documents"),
+    "/api/media/images/../private.pdf",
+    "https://other.example/image.png",
+    42,
+  ]) {
+    assert.throws(() => pendingMediaLocation(path, userId), HttpError);
+  }
+});
+test("unreferenced uploads can be removed through the restricted staff endpoint", async () => {
+  const calls = fakeSupabase({ role: "editor" });
+  const response = await discardMedia(
+    request("/api/admin/media", "DELETE", { files: [pendingImage] }, jwt()),
+  );
+  assert.equal(response.status, 200);
+  const deletion = calls.find(
+    (call) => call.path === "/storage/v1/object/images",
+  );
+  assert.deepEqual(deletion?.body, { prefixes: [`${userId}/${recordId}.png`] });
+});
+for (const mediaReference of ["products", "settings"] as const)
+  test(`cleanup preserves uploads referenced by ${mediaReference}`, async () => {
+    const calls = fakeSupabase({ mediaReference });
+    assert.equal(
+      (
+        await discardMedia(
+          request(
+            "/api/admin/media",
+            "DELETE",
+            { files: [pendingImage] },
+            jwt(),
+          ),
+        )
+      ).status,
+      200,
+    );
+    assert.equal(
+      calls.some((call) => call.path.startsWith("/storage/")),
+      false,
+    );
+  });
+test("cleanup fails closed when references cannot be checked", async () => {
+  const calls = fakeSupabase({ mediaReferenceError: true });
+  assert.equal(
+    (
+      await discardMedia(
+        request("/api/admin/media", "DELETE", { files: [pendingImage] }, jwt()),
+      )
+    ).status,
+    503,
+  );
+  assert.equal(
+    calls.some((call) => call.path.startsWith("/storage/")),
+    false,
+  );
+});
+test("contact settings validate email and support verified business hours", () => {
+  const valid = parseSettingsInput(
+    {
+      key: "contact",
+      value: { email: "sales@example.test", businessHours: "Mon–Fri, 9am–5pm" },
+    },
+    true,
+  );
+  assert.deepEqual(valid.value, {
+    email: "sales@example.test",
+    businessHours: "Mon–Fri, 9am–5pm",
+  });
+  assert.throws(
+    () =>
+      parseSettingsInput(
+        { key: "contact", value: { email: "invalid-email" } },
+        true,
+      ),
+    (error: unknown) =>
+      error instanceof HttpError && Boolean(error.fieldErrors?.value),
+  );
+});
+test("product validation identifies the field that needs correction", () => {
+  assert.throws(
+    () => parseProductInput({ slug: "BAD SLUG" }),
+    (error: unknown) =>
+      error instanceof HttpError && Boolean(error.fieldErrors?.slug),
+  );
+  assert.throws(
+    () => parseProductInput({ volume_min: 20, volume_max: 10 }),
+    (error: unknown) =>
+      error instanceof HttpError && Boolean(error.fieldErrors?.volume_max),
   );
 });

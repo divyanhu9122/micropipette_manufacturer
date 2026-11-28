@@ -11,6 +11,7 @@ interface AdminTopbarProps {
   title: string;
   contextText?: string;
   onToggleSidebar: () => void;
+  sidebarOpen: boolean;
 }
 
 export default function AdminTopbar({
@@ -18,6 +19,7 @@ export default function AdminTopbar({
   title,
   contextText = "Micropipette Central Management",
   onToggleSidebar,
+  sidebarOpen,
 }: AdminTopbarProps) {
   const router = useRouter();
   const [signOutError, setSignOutError] = useState("");
@@ -40,6 +42,9 @@ export default function AdminTopbar({
           type="button"
           className={styles.menuToggle}
           onClick={onToggleSidebar}
+          id="admin-menu-toggle"
+          aria-expanded={sidebarOpen}
+          aria-controls="admin-navigation"
           aria-label="Toggle navigation menu"
         >
           <svg viewBox="0 0 24 24">
