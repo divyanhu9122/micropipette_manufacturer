@@ -1,0 +1,95 @@
+.page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+  background: #f5f9fe;
+  color: #051f44;
+}
+
+.card {
+  width: min(100%, 460px);
+  padding: clamp(24px, 5vw, 40px);
+  border: 1px solid #d5e1f0;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 20px 60px #051f4410;
+}
+
+.card h1 {
+  margin: 0 0 12px;
+  font-size: 30px;
+}
+.card h2 {
+  font-size: 20px;
+}
+.card p {
+  line-height: 1.6;
+}
+.card label {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0;
+  font-weight: 600;
+}
+.card input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #b5c9e1;
+  border-radius: 8px;
+  font: inherit;
+}
+.card input:focus-visible,
+.card button:focus-visible,
+.card a:focus-visible {
+  outline: 3px solid #2d8df4;
+  outline-offset: 3px;
+}
+.card button {
+  width: 100%;
+  padding: 13px;
+  border: 0;
+  border-radius: 9px;
+  background: #0a529b;
+  color: white;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.card button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+.card a {
+  display: inline-block;
+  margin-top: 24px;
+  color: #0a529b;
+}
+.card .secondary {
+  margin-top: 14px;
+  background: #eaf2fb;
+  color: #051f44;
+}
+.eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+.error,
+.notice {
+  padding: 12px;
+  border-radius: 8px;
+}
+.error {
+  background: #fff0ee;
+  color: #a52714;
+}
+.notice {
+  background: #edf5ff;
+}
+.secret {
+  display: block;
+  overflow-wrap: anywhere;
+  padding: 12px 0;
+}

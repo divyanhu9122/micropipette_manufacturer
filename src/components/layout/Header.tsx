@@ -3,7 +3,8 @@
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useSiteSettings } from "@/features/site/SiteSettings";
 import UniversalSearchBar from "@/features/search/UniversalSearchBar";
 
 interface HeaderProps {
@@ -11,6 +12,10 @@ interface HeaderProps {
 }
 
 export default function Header({ onOpenQuote }: HeaderProps) {
+  const router = useRouter();
+  const settings = useSiteSettings();
+  const contact = settings.contact || {};
+  const site = settings.site || {};
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -142,17 +147,22 @@ export default function Header({ onOpenQuote }: HeaderProps) {
             B2B Scientific & Laboratory Equipment Platform
           </span>
           <div className="topbar-actions">
-            <a href="mailto:sales@micropipettemanufacturer.com">
-              <span aria-hidden="true">✉</span>{" "}
-              sales@micropipettemanufacturer.com
-            </a>
-            <a href="tel:+18005550199">
-              <span aria-hidden="true">☎</span> +1 (800) 555-0199
-            </a>
+            {contact.email && (
+              <a href={`mailto:${contact.email}`}>
+                <span aria-hidden="true">✉</span> {contact.email}
+              </a>
+            )}
+            {contact.phone && (
+              <a href={`tel:${contact.phone.replace(/[^+0-9]/g, "")}`}>
+                <span aria-hidden="true">☎</span> {contact.phone}
+              </a>
+            )}
             <button
               className="topbar-quote"
               type="button"
-              onClick={onOpenQuote}
+              onClick={() =>
+                onOpenQuote ? onOpenQuote() : router.push("/request-quote")
+              }
             >
               Request a Quote
             </button>
@@ -168,8 +178,11 @@ export default function Header({ onOpenQuote }: HeaderProps) {
           <Link href="/" className="logo">
             <Image
               className="logo-image"
-              src="/images/brand/micropipette-manufacturer-logo.png"
-              alt="Micropipette Manufacturer logo"
+              unoptimized
+              src={
+                site.logo || "/images/brand/micropipette-manufacturer-logo.png"
+              }
+              alt={site.name || "Micropipette Manufacturer logo"}
               width={866}
               height={288}
               priority

@@ -1,3 +1,6 @@
+import { getPublicContent } from "@/lib/cms/public";
+import { getSiteOrigin } from "@/lib/config/site";
+import { SiteSettingsProvider } from "@/features/site/SiteSettings";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Inter, Manrope } from "next/font/google";
@@ -16,8 +19,8 @@ const manrope = Manrope({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://micropipettemanufacturer.in"),
+const baseMetadata: Metadata = {
+  metadataBase: new URL(getSiteOrigin()),
   title: {
     default:
       "Micropipette Manufacturer — Precision Liquid Handling & OEM Solutions",
@@ -42,10 +45,63 @@ export const metadata: Metadata = {
   publisher: "MicropipetteManufacturer.in",
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export async function generateMetadata(): Promise<Metadata> {
+  const content = await getPublicContent();
+  const settings = Object.fromEntries(
+    content.settings.map((row) => [row.key, row.value]),
+  );
+  const name = settings.site?.name || "Micropipette Manufacturer";
+  return {
+    ...baseMetadata,
+    metadataBase: new URL(getSiteOrigin()),
+    title: { default: settings.seo?.title || name, template: `%s | ${name}` },
+    description:
+      settings.seo?.description ||
+      settings.site?.description ||
+      baseMetadata.description,
+    icons: { icon: settings.site?.favicon || "/favicon.ico" },
+    openGraph: {
+      siteName: name,
+      images: settings.seo?.image ? [settings.seo.image] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: settings.seo?.image ? [settings.seo.image] : undefined,
+    },
+    authors: [{ name }],
+    creator: name,
+    publisher: name,
+  };
+}
+export default async function RootLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const content = await getPublicContent();
+  const settings = Object.fromEntries(
+    content.settings.map((row) => [row.key, row.value]),
+  );
   return (
     <html lang="en" className={`${inter.variable} ${manrope.variable}`}>
-      <body>{children}</body>
+      <body>
+        <SiteSettingsProvider
+          value={settings}
+          navigation={{
+            products: content.products.map(({ slug, title }) => ({
+              slug,
+              title,
+            })),
+            brands: content.brands.map(({ slug, name }) => ({ slug, name })),
+            categories: content.categories.map(({ slug, name }) => ({
+              slug,
+              name,
+            })),
+          }}
+        >
+          {children}
+        </SiteSettingsProvider>
+      </body>
     </html>
   );
 }

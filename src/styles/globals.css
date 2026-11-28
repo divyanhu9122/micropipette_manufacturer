@@ -13,7 +13,12 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(180deg, var(--ice-blue) 0%, #eaf3ff 40%, #f1f7ff 100%);
+  background: linear-gradient(
+    180deg,
+    var(--ice-blue) 0%,
+    #eaf3ff 40%,
+    #f1f7ff 100%
+  );
   color: var(--dark-blue-gray);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
   line-height: 1.45;
@@ -198,7 +203,9 @@ textarea {
   backdrop-filter: blur(10px);
   border-color: rgba(240, 74, 42, 0.38);
   color: var(--cool-white);
-  box-shadow: 0 -2px 10px rgba(240, 74, 42, 0.2), -5px 0 12px rgba(240, 74, 42, 0.18);
+  box-shadow:
+    0 -2px 10px rgba(240, 74, 42, 0.2),
+    -5px 0 12px rgba(240, 74, 42, 0.18);
   outline: none;
   transform: translateY(-1px);
 }
@@ -385,7 +392,9 @@ textarea {
   border-radius: var(--radius-nav-shell);
   background: var(--dark-corporate-navy);
   border: 1px solid rgba(251, 253, 255, 0.14);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 8px 18px rgba(0, 0, 0, 0.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 8px 18px rgba(0, 0, 0, 0.16);
   overflow: visible;
 }
 
@@ -417,7 +426,9 @@ textarea {
   backdrop-filter: blur(10px);
   border-color: rgba(240, 74, 42, 0.38);
   color: var(--cool-white);
-  box-shadow: 0 -2px 10px rgba(240, 74, 42, 0.2), -5px 0 12px rgba(240, 74, 42, 0.18);
+  box-shadow:
+    0 -2px 10px rgba(240, 74, 42, 0.2),
+    -5px 0 12px rgba(240, 74, 42, 0.18);
   outline: none;
 }
 
@@ -457,7 +468,10 @@ textarea {
   transform: translateY(-1px);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  box-shadow: 0 -2px 10px rgba(251, 253, 255, 0.1), 6px 6px 16px rgba(0, 0, 0, 0.2), 0 12px 18px rgba(0, 0, 0, 0.14);
+  box-shadow:
+    0 -2px 10px rgba(251, 253, 255, 0.1),
+    6px 6px 16px rgba(0, 0, 0, 0.2),
+    0 12px 18px rgba(0, 0, 0, 0.14);
 }
 
 .btn.primary {
@@ -468,7 +482,10 @@ textarea {
 }
 
 .btn.primary:hover {
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1), 6px 6px 16px rgba(0, 0, 0, 0.28), 0 12px 18px rgba(0, 0, 0, 0.16);
+  box-shadow:
+    0 -2px 10px rgba(0, 0, 0, 0.1),
+    6px 6px 16px rgba(0, 0, 0, 0.28),
+    0 12px 18px rgba(0, 0, 0, 0.16);
 }
 
 .btn.secondary {
@@ -478,7 +495,10 @@ textarea {
 }
 
 .btn.secondary:hover {
-  box-shadow: 0 -2px 10px rgba(13, 65, 138, 0.14), 6px 6px 16px rgba(13, 65, 138, 0.3), 0 12px 18px rgba(13, 65, 138, 0.16);
+  box-shadow:
+    0 -2px 10px rgba(13, 65, 138, 0.14),
+    6px 6px 16px rgba(13, 65, 138, 0.3),
+    0 12px 18px rgba(13, 65, 138, 0.16);
 }
 
 .btn.ghost {
@@ -513,7 +533,9 @@ textarea {
 .hero-slider-full {
   position: relative;
   width: 100%;
-  min-height: calc(100vh - var(--topbar-height, 40px) - var(--navbar-height, 86px));
+  min-height: calc(
+    100vh - var(--topbar-height, 40px) - var(--navbar-height, 86px)
+  );
   min-height: max(620px, calc(100vh - 126px));
 }
 
@@ -522,7 +544,9 @@ textarea {
   inset: 0;
   opacity: 0;
   visibility: hidden;
-  transition: opacity var(--transition-hero), visibility var(--transition-hero);
+  transition:
+    opacity var(--transition-hero),
+    visibility var(--transition-hero);
   display: flex;
   align-items: center;
 }
@@ -584,7 +608,6 @@ textarea {
   );
 }
 
-
 /* ==========================================
    HERO TEXT STYLING
    Maintain readability on illuminated area
@@ -602,7 +625,6 @@ textarea {
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.35);
 }
 
-
 /* ==========================================
    HERO BUTTON STYLING
 ========================================== */
@@ -612,7 +634,6 @@ textarea {
   background: rgba(245, 247, 248, 0.9);
   border-color: var(--lab-corporate-blue);
 }
-
 
 /* ==========================================
    SLIDER NAVIGATION
@@ -626,7 +647,6 @@ textarea {
 .hero-lab-background .hero-slider-nav:hover {
   background: var(--lab-midnight);
 }
-
 
 /* ==========================================
    RESPONSIVE DESIGN
@@ -656,7 +676,6 @@ textarea {
     );
   }
 }
-
 
 /* ==========================================
    MOBILE BACKGROUND ADJUSTMENT
@@ -862,7 +881,9 @@ textarea {
 .testimonial-card,
 .cert,
 .highlight {
-  transition: transform 150ms cubic-bezier(0, 0, 0.2, 1), box-shadow 150ms cubic-bezier(0, 0, 0.2, 1);
+  transition:
+    transform 150ms cubic-bezier(0, 0, 0.2, 1),
+    box-shadow 150ms cubic-bezier(0, 0, 0.2, 1);
   will-change: transform, box-shadow;
 }
 
@@ -1010,10 +1031,20 @@ textarea {
   border-radius: 0 0 8px 8px;
 }
 
-.tips-icon span:nth-child(1) { height: 64px; background: #e8f2ff; }
-.tips-icon span:nth-child(2) { height: 50px; background: #d7ebff; }
-.tips-icon span:nth-child(3) { height: 72px; }
-.tips-icon span:nth-child(4) { height: 58px; }
+.tips-icon span:nth-child(1) {
+  height: 64px;
+  background: #e8f2ff;
+}
+.tips-icon span:nth-child(2) {
+  height: 50px;
+  background: #d7ebff;
+}
+.tips-icon span:nth-child(3) {
+  height: 72px;
+}
+.tips-icon span:nth-child(4) {
+  height: 58px;
+}
 
 .mini-pipette {
   display: flex;
@@ -1068,10 +1099,20 @@ textarea {
   border-radius: 0 0 10px 10px;
 }
 
-.prototype-tips span:nth-child(1) { height: 80px; background: #e8f2ff; }
-.prototype-tips span:nth-child(2) { height: 66px; background: #d7ebff; }
-.prototype-tips span:nth-child(3) { height: 92px; }
-.prototype-tips span:nth-child(4) { height: 74px; }
+.prototype-tips span:nth-child(1) {
+  height: 80px;
+  background: #e8f2ff;
+}
+.prototype-tips span:nth-child(2) {
+  height: 66px;
+  background: #d7ebff;
+}
+.prototype-tips span:nth-child(3) {
+  height: 92px;
+}
+.prototype-tips span:nth-child(4) {
+  height: 74px;
+}
 
 .prototype-rack {
   width: 96px;
@@ -1174,7 +1215,11 @@ textarea {
    ============================================================ */
 .brand-section {
   margin-top: 24px;
-  background: linear-gradient(180deg, var(--deep-navy-blue), var(--midnight-navy));
+  background: linear-gradient(
+    180deg,
+    var(--deep-navy-blue),
+    var(--midnight-navy)
+  );
   padding: 26px 20px;
   border-radius: var(--radius-panel);
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -1256,7 +1301,11 @@ textarea {
 }
 
 .oem-panel {
-  background: linear-gradient(180deg, var(--deep-navy-blue), var(--dark-corporate-navy));
+  background: linear-gradient(
+    180deg,
+    var(--deep-navy-blue),
+    var(--dark-corporate-navy)
+  );
   color: #ffffff;
   border-radius: 20px;
   padding: 28px;
@@ -1536,7 +1585,11 @@ textarea {
    QUALITY & CERTIFICATIONS BAR
    ============================================================ */
 .quality-bar {
-  background: linear-gradient(180deg, var(--deep-navy-blue), var(--midnight-navy));
+  background: linear-gradient(
+    180deg,
+    var(--deep-navy-blue),
+    var(--midnight-navy)
+  );
   border-radius: var(--radius-panel);
   color: #ffffff;
   padding: 24px 20px;
@@ -1613,9 +1666,20 @@ textarea {
 .partner-marquee-mask {
   width: 100%;
   overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
-
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
 }
 
 .partner-marquee-track {
@@ -1727,7 +1791,12 @@ textarea {
    ============================================================ */
 .partner-wrap {
   margin-top: 32px;
-  background: linear-gradient(135deg, var(--midnight-navy) 0%, var(--dark-corporate-navy) 64%, var(--deep-navy-blue) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--midnight-navy) 0%,
+    var(--dark-corporate-navy) 64%,
+    var(--deep-navy-blue) 100%
+  );
   border-radius: var(--radius-partner);
   padding: 38px 32px;
   color: #ffffff;
@@ -2131,8 +2200,6 @@ footer a:hover {
   }
 }
 
-
-
 @media (max-width: 640px) {
   .hero-eyebrow::before {
     flex-shrink: 0;
@@ -2280,5 +2347,11 @@ footer a:hover {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-full-slide {
+    transition: none !important;
   }
 }

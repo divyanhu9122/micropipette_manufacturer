@@ -24,21 +24,22 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: "products",
     question: "How do I choose the right micropipette for my application?",
     answer:
-      "Start with the required volume range, single-channel or multichannel format, and whether your workflow needs a variable-volume, fixed-volume, mechanical or electronic model. Product pages should provide the technical specifications needed for comparison.",
+      "Start with the required volume range, single-channel or multichannel format, and whether your workflow needs a variable-volume, fixed-volume, mechanical or electronic model. Check the published specifications or ask our team to confirm the requirements for your application.",
   },
   {
     id: "faq-2",
     category: "products",
-    question: "Can I compare micropipettes from different brands on this website?",
+    question:
+      "Can I compare micropipettes from different brands on this website?",
     answer:
-      "The website is structured to help users browse products by category, subcategory and brand. Final comparison fields should be generated from verified product data stored in the CMS.",
+      "Browse published products by category and brand, then review their volume ranges, channels and specifications. Contact us if you need help comparing models.",
   },
   {
     id: "faq-3",
     category: "support",
     question: "Where can I find calibration or service information?",
     answer:
-      "Calibration, service and technical-support information should be available on the relevant product page or through the support/contact workflow. Any model-specific service instructions should come from verified product documentation.",
+      "Check the product documentation or contact our team with the model number and your calibration or service question. Follow the instructions supplied for your specific model.",
   },
   {
     id: "faq-4",
@@ -73,7 +74,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     category: "resources",
     question: "Are all documents available for every product?",
     answer:
-      "Availability depends on the product and the verified documents uploaded in the CMS. Only current and approved files should be displayed for download.",
+      "Available documents are listed in Resources. If a document is not listed, send us the product model and the catalogue, certificate or manual you need.",
   },
   {
     id: "faq-9",

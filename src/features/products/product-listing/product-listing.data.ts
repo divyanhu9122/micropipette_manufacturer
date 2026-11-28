@@ -2,20 +2,9 @@
 // MicropipetteManufacturer_Phase3_Product_Listing_Refined_v17_Sort_Above_Results.html
 // Unified product data with verified catalog items across categories and brands.
 
-export type ProductFamily =
-  | "Micropipette"
-  | "Bottle Top Dispenser"
-  | "Pipette Controller"
-  | "Lab Plasticware"
-  | "Lab Balances"
-  | "Laboratory Instruments";
+export type ProductFamily = string;
 
-export type ProductBrand =
-  | "LABXE"
-  | "SSCIENCES"
-  | "DANWER"
-  | "dr.pipette"
-  | "sscientific";
+export type ProductBrand = string;
 
 export type SortValue = "featured" | "az" | "za";
 
@@ -25,6 +14,7 @@ export interface SortOption {
 }
 
 export interface ProductListItem {
+  imageUrl?: string;
   id: string;
   slug: string;
   brandLabel: ProductBrand;

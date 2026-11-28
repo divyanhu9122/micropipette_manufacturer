@@ -3,8 +3,6 @@
 import Link from "next/link";
 import styles from "./ProductListing.module.css";
 import {
-  productBrands,
-  productFamilies,
   productFamilyRoutes,
   type ProductBrand,
   type ProductFamily,
@@ -25,16 +23,10 @@ interface ProductFiltersProps {
   activeFilterCount: number;
   familyCounts: Record<ProductFamily, number>;
   brandCounts: Record<ProductBrand, number>;
+  volumeOptions: string[];
 }
 
 const CHANNEL_OPTIONS = ["Single Channel", "Multichannel"] as const;
-const VOLUME_OPTIONS = [
-  "0.5 – 10 µL",
-  "10 – 100 µL",
-  "20 – 200 µL",
-  "100 – 1000 µL",
-  "1 – 10 mL",
-] as const;
 
 export default function ProductFilters({
   id,
@@ -51,14 +43,24 @@ export default function ProductFilters({
   activeFilterCount,
   familyCounts,
   brandCounts,
+  volumeOptions,
 }: ProductFiltersProps) {
+  const productFamilies = Object.keys(familyCounts);
+  const productBrands = Object.keys(brandCounts);
   return (
     <aside
       className={`${styles.filter} ${isOpen ? styles.filterOpen : ""}`}
       id={id}
       aria-label="Product filter options"
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: 14,
+        }}
+      >
         <h2 style={{ margin: 0 }}>Filter Products</h2>
         {activeFilterCount > 0 && (
           <button
@@ -107,7 +109,9 @@ export default function ProductFilters({
                   view page ↗
                 </Link>
               )}
-              <span style={{ fontSize: 11, color: "#62758d", marginLeft: 4 }}>({count})</span>
+              <span style={{ fontSize: 11, color: "#62758d", marginLeft: 4 }}>
+                ({count})
+              </span>
             </label>
           );
         })}
@@ -156,7 +160,7 @@ export default function ProductFilters({
       {/* 4. Volume Range */}
       <div className={styles.filterGroup}>
         <h3>Volume Range</h3>
-        {VOLUME_OPTIONS.map((vr) => {
+        {volumeOptions.map((vr) => {
           const isChecked = selectedVolumeRanges.includes(vr);
           return (
             <label className={styles.check} key={vr}>

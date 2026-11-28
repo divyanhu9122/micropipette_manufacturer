@@ -5,7 +5,7 @@ import Link from "next/link";
 import InnerPageHero from "@/components/layout/InnerPageHero";
 import InnerPageHeroVisual from "@/components/layout/InnerPageHeroVisual";
 import styles from "./Blog.module.css";
-import { BLOG_POSTS, BLOG_CATEGORIES } from "./blog.data";
+import type { BlogPost } from "./blog.data";
 
 /** Inline article icon used for card and featured visuals */
 function ArticleIcon() {
@@ -35,7 +35,12 @@ function formatDate(dateStr: string): string {
   });
 }
 
-export default function BlogListingApp() {
+export default function BlogListingApp({ posts = [] }: { posts?: BlogPost[] }) {
+  const BLOG_POSTS = posts;
+  const BLOG_CATEGORIES = [
+    "All",
+    ...Array.from(new Set(posts.map((post) => post.category))),
+  ];
   const [activeCategory, setActiveCategory] = useState("All");
 
   const filteredPosts =

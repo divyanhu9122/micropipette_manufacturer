@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useDialog } from "./use-dialog";
+import { submitEnquiry } from "@/features/enquiries/submit-enquiry";
 import styles from "@/features/resources/catalogue-modal/CatalogueModal.module.css";
 import { COUNTRIES } from "@/features/products/product-enquiry/product-enquiry.data";
 
@@ -10,16 +12,31 @@ interface CatalogueModalProps {
   catalogueTitle?: string;
   categoryOrBrand?: string;
   fileSize?: string;
+  downloadUrl?: string;
 }
 
-export default function CatalogueModal({
+export default function CatalogueModal(props: CatalogueModalProps) {
+  if (!props.isOpen) return null;
+  return (
+    <CatalogueModalContent
+      key={`${props.catalogueTitle || "catalogue"}:${props.downloadUrl || "request"}`}
+      {...props}
+    />
+  );
+}
+
+function CatalogueModalContent({
   isOpen,
   onClose,
-  catalogueTitle = "Complete Micropipette & Lab Instruments Catalogue 2026",
-  categoryOrBrand = "LABXE • SSCIENCES • DANWER",
-  fileSize = "PDF [VERIFY FILE SIZE]",
+  catalogueTitle = "Product catalogue",
+  categoryOrBrand = "Laboratory instruments",
+  fileSize = "PDF",
+  downloadUrl,
 }: CatalogueModalProps) {
+  const [receipt, setReceipt] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -29,48 +46,34 @@ export default function CatalogueModal({
     message: "",
   });
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose();
-      }
-    };
-
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isOpen, onClose]);
+  const dialogRef = useDialog<HTMLElement>(isOpen, onClose);
 
   if (!isOpen) return null;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
+    setSubmissionError("");
     try {
-      await fetch("/api/enquiries", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.name,
-          company: formData.company,
-          email: formData.email,
-          phone: formData.phone,
-          country: formData.country || "Not specified",
-          type: "Technical Resource",
-          product: catalogueTitle,
-          message: formData.message || `Catalogue download request for ${catalogueTitle}`,
-        }),
+      const reference = await submitEnquiry({
+        ...formData,
+        country: formData.country || "Not specified",
+        type: "Technical Resource",
+        product: catalogueTitle,
+        message: formData.message || `Catalogue request for ${catalogueTitle}`,
       });
-    } catch (err) {
-      console.warn("API submission error, showing confirmation:", err);
+      setReceipt(reference);
+      setSubmitted(true);
+    } catch (cause) {
+      setSubmissionError(
+        cause instanceof Error
+          ? cause.message
+          : "Your request could not be saved. Please try again.",
+      );
+    } finally {
+      setSubmitting(false);
     }
-    setSubmitted(true);
   };
 
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -86,6 +89,8 @@ export default function CatalogueModal({
       role="presentation"
     >
       <section
+        ref={dialogRef}
+        tabIndex={-1}
         className={styles.catalogModal}
         role="dialog"
         aria-modal="true"
@@ -93,10 +98,16 @@ export default function CatalogueModal({
       >
         <div className={styles.catalogModalHead}>
           <div>
-            <span className={styles.typeTag}>Catalogue download</span>
-            <h2 id="catalogModalTitle">Get the Complete Catalogue</h2>
+            <span className={styles.typeTag}>
+              {downloadUrl ? "Catalogue download" : "Catalogue request"}
+            </span>
+            <h2 id="catalogModalTitle">
+              {downloadUrl
+                ? "Get the Complete Catalogue"
+                : "Request a Catalogue"}
+            </h2>
             <p>
-              Share your basic contact details and the catalogue will be available immediately after submission.
+              Share your contact details to request the catalogue from our team.
             </p>
           </div>
           <button
@@ -124,6 +135,11 @@ export default function CatalogueModal({
 
           {!submitted ? (
             <form onSubmit={handleSubmit}>
+              {submissionError && (
+                <p role="alert" style={{ color: "#b42318", padding: "12px 0" }}>
+                  {submissionError}
+                </p>
+              )}
               <div className={styles.catalogFormGrid}>
                 <label className={styles.catalogField}>
                   <span>Name *</span>
@@ -212,10 +228,16 @@ export default function CatalogueModal({
 
               <div className={styles.catalogActions}>
                 <small>
-                  Required fields are marked with *. Catalogue access is shown immediately after successful submission.
+                  Required fields are marked with *. Our team will help with
+                  your catalogue request.
                 </small>
-                <button className={styles.btnPrimary} type="submit">
-                  Submit & Continue →
+                <button
+                  className={styles.btnPrimary}
+                  type="submit"
+                  disabled={submitting}
+                  aria-busy={submitting}
+                >
+                  {submitting ? "Submitting…" : "Submit & Continue →"}
                 </button>
               </div>
             </form>
@@ -224,25 +246,42 @@ export default function CatalogueModal({
               <div className={styles.catalogSuccessIcon} aria-hidden="true">
                 ✓
               </div>
-              <h3>Your catalogue is ready</h3>
+              <h3>
+                {downloadUrl
+                  ? "Your catalogue is ready"
+                  : "Catalogue request received"}
+              </h3>
               <p>
-                Thank you, <strong>{formData.name}</strong>. You can now download the requested PDF catalogue for {categoryOrBrand}.
+                Thank you, <strong>{formData.name}</strong>.{" "}
+                {downloadUrl
+                  ? "You can download your requested catalogue below."
+                  : "Our team will contact you with the requested catalogue."}
               </p>
-              <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
-                <a
-                  className={styles.btnPrimary}
-                  href="#download"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    alert("Download started for: " + catalogueTitle);
-                  }}
-                >
-                  Download Catalogue ↓
-                </a>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "12px",
+                  justifyContent: "center",
+                  flexWrap: "wrap",
+                }}
+              >
+                <p>
+                  Your reference: <strong>{receipt}</strong>
+                </p>
+                {downloadUrl && (
+                  <a className={styles.btnPrimary} href={downloadUrl} download>
+                    Download Catalogue ↓
+                  </a>
+                )}
                 <button
                   type="button"
                   className={styles.btnPrimary}
-                  style={{ background: "transparent", color: "var(--deep-navy-blue)", border: "1px solid #d5e1f0", boxShadow: "none" }}
+                  style={{
+                    background: "transparent",
+                    color: "var(--deep-navy-blue)",
+                    border: "1px solid #d5e1f0",
+                    boxShadow: "none",
+                  }}
                   onClick={() => {
                     setSubmitted(false);
                     onClose();

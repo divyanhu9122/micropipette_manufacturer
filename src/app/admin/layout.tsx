@@ -1,29 +1,15 @@
-"use client";
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
+import { requireStaffPage } from "@/lib/auth/page";
+import AdminShell from "@/features/admin/components/AdminShell";
 
-import { useState, type ReactNode } from "react";
-import AdminSidebar from "@/features/admin/components/AdminSidebar";
-import AdminTopbar from "@/features/admin/components/AdminTopbar";
-import styles from "@/features/admin/Admin.module.css";
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
-export default function AdminLayout({ children }: { children: ReactNode }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  return (
-    <div className={styles.app}>
-      <AdminSidebar
-        isOpen={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-      />
-
-      <div className={styles.main}>
-        <AdminTopbar
-          title="Micropipette Operations & CMS"
-          contextText="Phase 4 Production Prototype Workspace"
-          onToggleSidebar={() => setSidebarOpen((prev) => !prev)}
-        />
-
-        <main>{children}</main>
-      </div>
-    </div>
-  );
+export default async function AdminLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const { staff } = await requireStaffPage();
+  return <AdminShell staff={staff}>{children}</AdminShell>;
 }

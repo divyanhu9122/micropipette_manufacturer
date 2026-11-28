@@ -1,7 +1,11 @@
 /* ===== FAQ page styles — scoped CSS Module ===== */
 
 .faqHero {
-  background: linear-gradient(135deg, var(--midnight-navy), var(--deep-navy-blue));
+  background: linear-gradient(
+    135deg,
+    var(--midnight-navy),
+    var(--deep-navy-blue)
+  );
   color: #fff;
 }
 
@@ -85,7 +89,7 @@
   border: 1px solid var(--mist-blue);
   border-radius: 24px;
   background: linear-gradient(180deg, var(--pale-sky-blue), #dcedff);
-  box-shadow: 0 12px 28px rgba(18, 58, 112, 0.10);
+  box-shadow: 0 12px 28px rgba(18, 58, 112, 0.1);
 }
 
 .faqLayout {
@@ -186,7 +190,11 @@
   margin-top: 18px;
   padding: 16px;
   border-radius: 17px;
-  background: linear-gradient(135deg, var(--midnight-navy), var(--dark-corporate-navy));
+  background: linear-gradient(
+    135deg,
+    var(--midnight-navy),
+    var(--dark-corporate-navy)
+  );
   color: #fff;
 }
 
@@ -250,7 +258,9 @@
   border: 1px solid rgba(188, 211, 238, 0.72);
   border-radius: 16px;
   background: #fff;
-  transition: border-color 170ms ease, box-shadow 170ms ease;
+  transition:
+    border-color 170ms ease,
+    box-shadow 170ms ease;
 }
 
 .faqItem:hover {
@@ -297,7 +307,10 @@
   color: var(--corporate-blue);
   font-size: 18px;
   line-height: 1;
-  transition: transform 180ms ease, background 180ms ease, color 180ms ease;
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    color 180ms ease;
 }
 
 .faqItem.isOpen .faqQuestion b {
@@ -395,4 +408,8 @@
   .faqItem.isOpen .faqAnswerContent {
     padding: 0 14px 14px;
   }
+}
+
+.faqAnswer[hidden] {
+  display: none;
 }

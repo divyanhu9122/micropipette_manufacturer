@@ -1,14 +1,12 @@
 "use client";
 
 import { Suspense, useMemo, useState, type FormEvent } from "react";
+import { useSearchResults } from "./use-search-results";
 import Link from "next/link";
+import { useSiteNavigation } from "@/features/site/SiteSettings";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./SearchPage.module.css";
-import {
-  searchItems,
-  type SearchItem,
-  type SearchContentType,
-} from "./search.data";
+import { type SearchItem, type SearchContentType } from "./search.data";
 
 const TABS: Array<{ label: string; value: "All" | SearchContentType }> = [
   { label: "All", value: "All" },
@@ -20,28 +18,32 @@ const TABS: Array<{ label: string; value: "All" | SearchContentType }> = [
   { label: "Information Pages", value: "Page" },
 ];
 
-const SUGGESTIONS = [
-  { label: "Micropipettes", href: "/products/micropipettes" },
-  { label: "Lab Plasticware", href: "/products?category=Lab+Plasticware" },
-  { label: "Science Plus", href: "/products/micropipettes#science-plus" },
-  { label: "FAC Plus", href: "/products/micropipettes#fac-plus" },
-  { label: "LABXE", href: "/brands/labxe" },
-  { label: "SSCIENCES", href: "/brands/ssciences" },
-  { label: "dr.pipette", href: "/brands/dr-pipette" },
-  { label: "sscientific", href: "/brands/sscientific" },
-];
-
 function SearchPageContent() {
+  const navigation = useSiteNavigation();
+  const SUGGESTIONS = [
+    { label: "All products", href: "/products" },
+    { label: "Technical resources", href: "/resources" },
+    ...navigation.brands
+      .slice(0, 6)
+      .map((brand) => ({ label: brand.name, href: `/brands/${brand.slug}` })),
+  ];
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
 
   const [inputVal, setInputVal] = useState(initialQuery);
+  const [previousQuery, setPreviousQuery] = useState(initialQuery);
+  if (previousQuery !== initialQuery) {
+    setPreviousQuery(initialQuery);
+    setInputVal(initialQuery);
+  }
   const [activeTab, setActiveTab] = useState<"All" | SearchContentType>("All");
 
-  const allMatching = useMemo(() => {
-    return initialQuery.trim() ? searchItems(initialQuery) : [];
-  }, [initialQuery]);
+  const {
+    items: allMatching,
+    loading,
+    error: searchError,
+  } = useSearchResults(initialQuery);
 
   const filteredResults = useMemo(() => {
     if (activeTab === "All") return allMatching;
@@ -65,6 +67,11 @@ function SearchPageContent() {
 
   return (
     <div className={styles.page}>
+      {searchError && (
+        <p role="alert" className="wrap">
+          {searchError}
+        </p>
+      )}
       {/* Hero Header */}
       <section className={styles.hero}>
         <div className={styles.wrap}>
@@ -80,7 +87,11 @@ function SearchPageContent() {
           </h1>
           <p className={styles.heroSubtitle}>
             {initialQuery.trim()
-              ? `Found ${allMatching.length} matching ${allMatching.length === 1 ? "entry" : "entries"} across products, series, categories, and brands.`
+              ? loading
+                ? "Searching the catalogue…"
+                : searchError
+                  ? "Search could not load."
+                  : `Found ${allMatching.length} matching ${allMatching.length === 1 ? "entry" : "entries"} across products, series, categories, and brands.`
               : "Search public products, series, categories, brands, specifications, and technical pages."}
           </p>
         </div>
@@ -176,6 +187,10 @@ function SearchPageContent() {
                 ))}
               </div>
             </div>
+          ) : loading ? (
+            <p role="status">Searching the catalogue…</p>
+          ) : searchError ? (
+            <p>Check your connection and try searching again shortly.</p>
           ) : filteredResults.length === 0 ? (
             /* No Results State */
             <div className={styles.emptyBox}>

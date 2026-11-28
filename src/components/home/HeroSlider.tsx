@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 
 interface HeroSliderProps {
   onOpenQuote?: () => void;
@@ -9,7 +9,7 @@ interface HeroSliderProps {
 const slides = [
   {
     id: 1,
-    image: "/images/hero/Bottle%20Top%20Dispenser%20Easy%20Drop1.webp",
+    image: "/images/hero/Micropipette%20DuraX%20%20banner.webp",
     eyebrow: "PRECISION ENGINEERED. GLOBALLY TRUSTED.",
     isEyebrow: true,
     title: "Global Micropipette Manufacturing & Laboratory Solutions",
@@ -17,8 +17,8 @@ const slides = [
       "Advanced micropipettes and lab instruments for distributors, laboratories, institutions and OEM partners worldwide.",
     primaryCta: "Get Quote →",
     primaryAction: "quote",
-    secondaryCta: "Download Catalog ↓",
-    secondaryHref: "#resources",
+    secondaryCta: "Catalogues & Documents →",
+    secondaryHref: "/resources",
   },
   {
     id: 2,
@@ -30,8 +30,8 @@ const slides = [
       "Explore organized product categories, technical information and faster enquiry paths from one unified manufacturer platform.",
     primaryCta: "Explore Products →",
     primaryAction: "categories",
-    secondaryCta: "Download Catalog ↓",
-    secondaryHref: "#resources",
+    secondaryCta: "Catalogues & Documents →",
+    secondaryHref: "/resources",
   },
   {
     id: 3,
@@ -43,8 +43,8 @@ const slides = [
       "Three focused brands connected through one global platform for product discovery, OEM enquiries and distributor partnerships.",
     primaryCta: "Browse Brands →",
     primaryAction: "brands",
-    secondaryCta: "Download Catalog ↓",
-    secondaryHref: "#resources",
+    secondaryCta: "Catalogues & Documents →",
+    secondaryHref: "/resources",
   },
   {
     id: 4,
@@ -56,14 +56,13 @@ const slides = [
       "Custom company-name printing, logo branding, private-label packaging and structured OEM support for global buyers.",
     primaryCta: "OEM Inquiries →",
     primaryAction: "quote",
-    secondaryCta: "Download Catalog ↓",
-    secondaryHref: "#resources",
+    secondaryCta: "Catalogues & Documents →",
+    secondaryHref: "/resources",
   },
 ];
 
 export default function HeroSlider({ onOpenQuote }: HeroSliderProps) {
   const [current, setCurrent] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
 
   const nextSlide = useCallback(() => {
     setCurrent((prev) => (prev + 1) % slides.length);
@@ -73,19 +72,9 @@ export default function HeroSlider({ onOpenQuote }: HeroSliderProps) {
     setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
   }, []);
 
-  useEffect(() => {
-    if (isPaused) return;
-    const timer = setInterval(() => {
-      nextSlide();
-    }, 2800);
-    return () => clearInterval(timer);
-  }, [isPaused, nextSlide]);
-
   return (
     <section
       className="hero hero-full-slider hero-lab-background"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
       aria-label="Micropipette Manufacturing Hero Slideshow"
     >
       <div className="hero-slider-full">
@@ -96,6 +85,7 @@ export default function HeroSlider({ onOpenQuote }: HeroSliderProps) {
               key={slide.id}
               className={`hero-full-slide ${isActive ? "active" : ""}`}
               aria-hidden={!isActive}
+              inert={!isActive}
             >
               <div
                 className="hero-slide-image"
@@ -122,7 +112,14 @@ export default function HeroSlider({ onOpenQuote }: HeroSliderProps) {
                         {slide.primaryCta}
                       </button>
                     ) : (
-                      <a className="btn primary" href={`#${slide.primaryAction}`}>
+                      <a
+                        className="btn primary"
+                        href={
+                          slide.primaryAction === "categories"
+                            ? "/products"
+                            : "/brands"
+                        }
+                      >
                         {slide.primaryCta}
                       </a>
                     )}

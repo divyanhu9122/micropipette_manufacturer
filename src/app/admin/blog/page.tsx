@@ -1,12 +1,14 @@
+import { requireStaffPage } from "@/lib/auth/page";
 import { Metadata } from "next";
-import BlogManagement from "@/features/admin/blog/BlogManagement";
+import ContentManager from "@/features/admin/cms/ContentManager";
 
 export const metadata: Metadata = {
-  title: "Blog Management | Admin / CMS Prototype",
+  title: "Blog Management | Admin",
   description:
     "Create and maintain articles supporting the public Blog Listing and Blog Article Detail prototypes.",
 };
 
-export default function AdminBlogPage() {
-  return <BlogManagement />;
+export default async function AdminBlogPage() {
+  const { staff } = await requireStaffPage("content:read");
+  return <ContentManager entity="blog" role={staff.role} />;
 }

@@ -1,105 +1,125 @@
-// ============================================================
-// B2B ENQUIRY VALIDATION UTILITY (STAGE 12 PREPARATION)
-// Strict sanitization and validation for quotation requests
-// ============================================================
-
-import { CmsEnquiryPayload } from "@/types/cms";
+import type { CmsEnquiryPayload } from "@/types/cms";
 
 export interface ValidationError {
   field: keyof CmsEnquiryPayload;
   message: string;
 }
 
+export interface ValidatedEnquiry extends CmsEnquiryPayload {
+  productSlug?: string;
+  productTitle?: string;
+  enquiryType: "product" | "universal" | "oem" | "contact";
+}
+
 export interface ValidationResult {
   isValid: boolean;
   errors: Record<string, string>;
-  sanitizedData?: CmsEnquiryPayload;
+  sanitizedData?: ValidatedEnquiry;
 }
 
 const EMAIL_REGEX =
   /^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
+const allowedTypes = [
+  "Product Quote",
+  "Universal / General",
+  "OEM / Private Label",
+  "Technical Resource",
+] as const;
+const enquiryTypes = ["product", "universal", "oem", "contact"] as const;
 
 export function validateEnquiryPayload(
-  raw: Partial<CmsEnquiryPayload>
+  raw: Partial<CmsEnquiryPayload> | Record<string, unknown>,
 ): ValidationResult {
   const errors: Record<string, string> = {};
-
-  const name = String(raw.name || "").trim();
-  const email = String(raw.email || "").trim().toLowerCase();
-  const company = String(raw.company || "").trim();
-  const country = String(raw.country || "").trim();
-  const message = String(raw.message || "").trim();
-  const type = raw.type;
-
-  // Name validation
-  if (!name) {
-    errors.name = "Full name is required.";
-  } else if (name.length < 2) {
-    errors.name = "Full name must be at least 2 characters.";
-  } else if (name.length > 120) {
-    errors.name = "Full name cannot exceed 120 characters.";
-  }
-
-  // Email validation
-  if (!email) {
-    errors.email = "Email address is required.";
-  } else if (!EMAIL_REGEX.test(email)) {
-    errors.email = "Please provide a valid corporate or academic email address.";
-  }
-
-  // Company validation
-  if (!company) {
-    errors.company = "Company, hospital, or institutional name is required.";
-  } else if (company.length < 2) {
-    errors.company = "Company name must be at least 2 characters.";
-  }
-
-  // Country validation
-  if (!country) {
-    errors.country = "Destination country is required.";
-  }
-
-  // Message validation
-  if (!message) {
-    errors.message = "Specification or message details are required.";
-  } else if (message.length < 10) {
-    errors.message = "Please provide at least 10 characters detailing your requirement.";
-  } else if (message.length > 5000) {
-    errors.message = "Requirement message cannot exceed 5000 characters.";
-  }
-
-  // Enquiry type check
-  const allowedTypes: CmsEnquiryPayload["type"][] = [
-    "Product Quote",
-    "Universal / General",
-    "OEM / Private Label",
-    "Technical Resource",
-  ];
-
-  if (!type || !allowedTypes.includes(type)) {
+  const input = raw as Record<string, unknown>;
+  const read = (field: string, label: string, max: number, min = 0) => {
+    const value = input[field];
+    if (value === undefined || value === null || value === "") {
+      if (min) errors[field] = `${label} is required.`;
+      return "";
+    }
+    if (typeof value !== "string") {
+      errors[field] = `${label} must be text.`;
+      return "";
+    }
+    const trimmed = value.trim();
+    if (trimmed.length < min)
+      errors[field] = `${label} must be at least ${min} characters.`;
+    if (trimmed.length > max)
+      errors[field] = `${label} cannot exceed ${max} characters.`;
+    return trimmed;
+  };
+  const name = read("name", "Full name", 120, 2);
+  const email = read("email", "Email address", 254, 1).toLowerCase();
+  if (email && !EMAIL_REGEX.test(email))
+    errors.email = "Please provide a valid email address.";
+  const company = read("company", "Company name", 150, 2);
+  const country = read("country", "Destination country", 80, 2);
+  const message = read("message", "Requirement message", 5_000, 10);
+  const phone = read("phone", "Phone number", 60);
+  const product = read("product", "Requested products", 3_000);
+  const quantity = read("quantity", "Quantity", 200);
+  const oemSpecifications = read(
+    "oemSpecifications",
+    "OEM specifications",
+    5_000,
+  );
+  const type = input.type;
+  if (!allowedTypes.some((allowed) => allowed === type))
     errors.type = "Please select a valid enquiry channel.";
-  }
 
-  const isValid = Object.keys(errors).length === 0;
+  const slugValue = input.productSlug ?? input.product_slug;
+  const productSlug =
+    typeof slugValue === "string" ? slugValue.trim() : undefined;
+  if (
+    slugValue !== undefined &&
+    (!productSlug ||
+      productSlug.length > 160 ||
+      !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(productSlug))
+  )
+    errors.productSlug = "The product reference is invalid.";
+  const titleValue = input.productTitle ?? input.product_title;
+  const productTitle =
+    typeof titleValue === "string" ? titleValue.trim() : undefined;
+  if (
+    titleValue !== undefined &&
+    (!productTitle || productTitle.length > 3_000)
+  )
+    errors.productTitle = "The product title is invalid.";
+  const explicitType = input.enquiryType ?? input.enquiry_type;
+  if (
+    explicitType !== undefined &&
+    !enquiryTypes.some((allowed) => allowed === explicitType)
+  )
+    errors.enquiryType = "The enquiry type is invalid.";
+  const enquiryType =
+    explicitType ??
+    (type === "Product Quote"
+      ? "product"
+      : type === "OEM / Private Label"
+        ? "oem"
+        : type === "Technical Resource"
+          ? "contact"
+          : "universal");
 
+  if (Object.keys(errors).length) return { isValid: false, errors };
   return {
-    isValid,
+    isValid: true,
     errors,
-    sanitizedData: isValid
-      ? {
-          name,
-          email,
-          phone: raw.phone ? String(raw.phone).trim() : undefined,
-          company,
-          country,
-          type: type as CmsEnquiryPayload["type"],
-          product: raw.product ? String(raw.product).trim() : undefined,
-          quantity: raw.quantity ? String(raw.quantity).trim() : undefined,
-          message,
-          oemSpecifications: raw.oemSpecifications
-            ? String(raw.oemSpecifications).trim()
-            : undefined,
-        }
-      : undefined,
+    sanitizedData: {
+      name,
+      email,
+      company,
+      country,
+      message,
+      type: type as CmsEnquiryPayload["type"],
+      phone: phone || undefined,
+      product: product || undefined,
+      quantity: quantity || undefined,
+      oemSpecifications: oemSpecifications || undefined,
+      productSlug,
+      productTitle,
+      enquiryType: enquiryType as ValidatedEnquiry["enquiryType"],
+    },
   };
 }

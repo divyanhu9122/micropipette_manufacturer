@@ -4,18 +4,27 @@ import { useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import HeroSlider from "@/components/home/HeroSlider";
-import CategoriesSection from "@/components/home/CategoriesSection";
-import BrandShowcase from "@/components/home/BrandShowcase";
+import {
+  CmsCategories,
+  CmsBrands,
+  CmsFeaturedProducts,
+} from "./CmsHomeSections";
 import OemSection from "@/components/home/OemSection";
 import ApplicationsSection from "@/components/home/ApplicationsSection";
-import FeaturedProductsCarousel from "@/components/home/FeaturedProductsCarousel";
-import QualityBar from "@/components/home/QualityBar";
-import PartnerMarquee from "@/components/home/PartnerMarquee";
-import TestimonialsCarousel from "@/components/home/TestimonialsCarousel";
 import PartnerCtaBlock from "@/components/home/PartnerCtaBlock";
 import QuoteModal from "@/components/ui/QuoteModal";
+import type { Category, Brand } from "@/types/cms";
+import type { ProductListItem } from "@/features/products/product-listing/product-listing.data";
 
-export default function HomePageApp() {
+export default function HomePageApp({
+  categories = [],
+  brands = [],
+  products = [],
+}: {
+  categories?: Category[];
+  brands?: Brand[];
+  products?: ProductListItem[];
+}) {
   const [quoteModalOpen, setQuoteModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState("");
 
@@ -30,21 +39,15 @@ export default function HomePageApp() {
 
       <HeroSlider onOpenQuote={() => handleOpenQuote()} />
 
-      <CategoriesSection />
+      <CmsCategories categories={categories} />
 
-      <BrandShowcase />
+      <CmsBrands brands={brands} />
 
       <OemSection />
 
       <ApplicationsSection />
 
-      <FeaturedProductsCarousel />
-
-      <QualityBar />
-
-      <PartnerMarquee />
-
-      <TestimonialsCarousel />
+      <CmsFeaturedProducts products={products} />
 
       <PartnerCtaBlock onOpenQuote={() => handleOpenQuote()} />
 

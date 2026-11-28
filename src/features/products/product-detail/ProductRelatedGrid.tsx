@@ -2,16 +2,18 @@ import Link from "next/link";
 import featuredStyles from "@/features/home/featured-products/FeaturedProducts.module.css";
 import productCardStyles from "@/features/home/product-categories/ProductCategories.module.css";
 import styles from "./ProductDetail.module.css";
-import { getProductBySlug } from "./product-detail.data";
+import type { ProductDetailItem } from "./product-detail.data";
 
 interface ProductRelatedGridProps {
   relatedSlugs: string[];
+  products?: ProductDetailItem[];
 }
 
 export default function ProductRelatedGrid({
-  relatedSlugs,
+  products = [],
 }: ProductRelatedGridProps) {
-  const relatedProducts = relatedSlugs.map((slug) => getProductBySlug(slug));
+  const relatedProducts = products;
+  if (!relatedProducts.length) return null;
 
   return (
     <section

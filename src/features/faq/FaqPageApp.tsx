@@ -41,8 +41,8 @@ export default function FaqPageApp() {
             <h1>Frequently Asked Questions</h1>
             <p>
               Find quick answers about products, product selection, calibration
-              and support, OEM/private-label requirements, resources and business
-              enquiries.
+              and support, OEM/private-label requirements, resources and
+              business enquiries.
             </p>
           </div>
         </div>
@@ -58,9 +58,8 @@ export default function FaqPageApp() {
                 <span className={styles.faqTag}>FAQ GUIDE</span>
                 <h2>Browse by Topic</h2>
                 <p>
-                  These FAQs are designed as a central support layer.
-                  Product-specific FAQs can also appear on individual product
-                  pages where relevant.
+                  Choose a topic to find answers about product selection,
+                  documentation, OEM requirements and business enquiries.
                 </p>
 
                 <div className={styles.faqSideLinks}>
@@ -144,6 +143,8 @@ export default function FaqPageApp() {
                           <div
                             id={`faq-answer-${item.id}`}
                             role="region"
+                            hidden={!isOpen}
+                            aria-hidden={!isOpen}
                             aria-labelledby={`faq-question-${item.id}`}
                             className={styles.faqAnswer}
                           >

@@ -24,6 +24,7 @@ export interface BrandCapability {
 }
 
 export interface BrandResource {
+  url?: string;
   id: string;
   title: string;
   format: string;
@@ -48,6 +49,7 @@ export interface BrandDetailItem {
 }
 
 export interface BrandListingCard {
+  logoUrl?: string;
   id: string;
   slug?: string;
   name: string;
@@ -507,4 +509,3 @@ export function getAllBrandSlugs(): string[] {
 export function getBrandBySlug(slug: string): BrandDetailItem | undefined {
   return BRAND_DETAILS[slug.toLowerCase()];
 }
-

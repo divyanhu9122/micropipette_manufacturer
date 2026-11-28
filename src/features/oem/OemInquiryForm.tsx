@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { submitEnquiry } from "@/features/enquiries/submit-enquiry";
 import styles from "./Oem.module.css";
 
 const CUSTOMIZATION_OPTIONS = [
@@ -14,6 +15,8 @@ const CUSTOMIZATION_OPTIONS = [
 
 export default function OemInquiryForm() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState("");
   const [formData, setFormData] = useState({
     companyName: "",
     contactName: "",
@@ -38,32 +41,43 @@ export default function OemInquiryForm() {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
+    setSubmissionError("");
     try {
-      await fetch("/api/enquiries", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: formData.contactName,
-          company: formData.companyName,
-          email: formData.email,
-          phone: formData.phone,
-          country: formData.country || "Global Partner",
-          type: "OEM / Private Label",
-          quantity: formData.annualVolume,
-          message: formData.message || `OEM Private label inquiry for ${formData.productFamily}`,
-          oemSpecifications: `Product Family: ${formData.productFamily} | Customizations: ${formData.customizations.join(", ")}`,
-        }),
+      await submitEnquiry({
+        name: formData.contactName,
+        company: formData.companyName,
+        email: formData.email,
+        phone: formData.phone,
+        country: formData.country || "Not specified",
+        type: "OEM / Private Label",
+        quantity: formData.annualVolume,
+        message:
+          formData.message ||
+          `OEM proposal request for ${formData.productFamily}.`,
+        oemSpecifications: `Product family: ${formData.productFamily}. Customizations: ${formData.customizations.join(", ")}.`,
       });
-    } catch (err) {
-      console.warn("API submission error, displaying confirmation:", err);
+      setSubmitted(true);
+    } catch (cause) {
+      setSubmissionError(
+        cause instanceof Error
+          ? cause.message
+          : "Your enquiry could not be saved. Please try again.",
+      );
+    } finally {
+      setSubmitting(false);
     }
-    setSubmitted(true);
   };
 
   return (
-    <section id="inquiry" className={styles.inquirySection} aria-labelledby="oem-inquiry-title">
+    <section
+      id="inquiry"
+      className={styles.inquirySection}
+      aria-labelledby="oem-inquiry-title"
+    >
       <div className={styles.wrap}>
         <div className={styles.sectionHeader}>
           <div className={styles.sectionEyebrow}>Direct Factory Access</div>
@@ -87,13 +101,18 @@ export default function OemInquiryForm() {
                 Thank you for contacting our OEM division,{" "}
                 <strong>{formData.contactName || "Partner"}</strong>. Our
                 contract manufacturing team has received your inquiry for{" "}
-                <strong>{formData.companyName || "your company"}</strong>. An OEM
-                proposal and technical feasibility review will be delivered to{" "}
-                <strong>{formData.email}</strong> within 24 hours.
+                <strong>{formData.companyName || "your company"}</strong>. An
+                OEM proposal and technical feasibility review will be delivered
+                to <strong>{formData.email}</strong> within 24 hours.
               </p>
             </div>
           ) : (
             <form onSubmit={handleSubmit}>
+              {submissionError && (
+                <p role="alert" style={{ color: "#b42318", padding: "12px 0" }}>
+                  {submissionError}
+                </p>
+              )}
               <div className={styles.formGrid}>
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel} htmlFor="oem-company">
@@ -191,10 +210,18 @@ export default function OemInquiryForm() {
                       setFormData({ ...formData, annualVolume: e.target.value })
                     }
                   >
-                    <option value="50-200">50 – 200 units (Standard OEM)</option>
-                    <option value="200-500">200 – 500 units (Custom Packaging)</option>
-                    <option value="500-2000">500 – 2,000 units (Full Custom Tooling)</option>
-                    <option value="2000+">2,000+ units (High Volume Contract)</option>
+                    <option value="50-200">
+                      50 – 200 units (Standard OEM)
+                    </option>
+                    <option value="200-500">
+                      200 – 500 units (Custom Packaging)
+                    </option>
+                    <option value="500-2000">
+                      500 – 2,000 units (Full Custom Tooling)
+                    </option>
+                    <option value="2000+">
+                      2,000+ units (High Volume Contract)
+                    </option>
                   </select>
                 </div>
 
@@ -207,7 +234,10 @@ export default function OemInquiryForm() {
                     className={styles.formSelect}
                     value={formData.productFamily}
                     onChange={(e) =>
-                      setFormData({ ...formData, productFamily: e.target.value })
+                      setFormData({
+                        ...formData,
+                        productFamily: e.target.value,
+                      })
                     }
                   >
                     <option value="Variable Volume Micropipettes">
@@ -266,7 +296,12 @@ export default function OemInquiryForm() {
                 </div>
               </div>
 
-              <button type="submit" className={styles.formSubmitBtn}>
+              <button
+                type="submit"
+                className={styles.formSubmitBtn}
+                disabled={submitting}
+                aria-busy={submitting}
+              >
                 Submit OEM Inquiry →
               </button>
             </form>

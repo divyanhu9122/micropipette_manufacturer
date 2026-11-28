@@ -4,17 +4,11 @@ import Footer from "@/components/layout/Footer";
 import TermsApp from "@/features/legal/TermsApp";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | MicropipetteManufacturer.in",
+  title: "Terms & Conditions",
   description:
     "Review standard commercial terms, quotation validity, OEM private label conditions, ISO 8655 calibration guarantees, and international shipping terms for MicropipetteManufacturer.com.",
   alternates: {
-    canonical: "https://micropipettemanufacturer.in/terms",
-  },
-  openGraph: {
-    title: "Terms & Conditions | MicropipetteManufacturer.in",
-    description:
-      "Commercial purchase terms, OEM manufacturing agreements, and laboratory instrument warranty specifications.",
-    url: "https://micropipettemanufacturer.in/terms",
+    canonical: "/terms",
   },
 };
 

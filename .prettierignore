@@ -13,3 +13,10 @@ next-env.d.ts
 AGENTS.md
 CLAUDE.md
 **/*.html
+micropipette manufacturer/
+micropipette_codex_context_pack/
+scratch/
+
+# Historical source/planning documents retain their original layout.
+CMS_DATA_ARCHITECTURE.md
+PROJECT_STATUS.md

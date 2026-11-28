@@ -1,5 +1,6 @@
+import { requireStaffPage } from "@/lib/auth/page";
 import type { Metadata } from "next";
-import AdminProductsApp from "@/features/admin/products/AdminProductsApp";
+import ContentManager from "@/features/admin/cms/ContentManager";
 
 export const metadata: Metadata = {
   title: "Products Catalog — Admin",
@@ -11,6 +12,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AdminProductsPage() {
-  return <AdminProductsApp />;
+export default async function AdminProductsPage() {
+  const { staff } = await requireStaffPage("content:read");
+  return <ContentManager entity="products" role={staff.role} />;
 }

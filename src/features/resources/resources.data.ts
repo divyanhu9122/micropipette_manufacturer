@@ -1,8 +1,9 @@
 export interface ResourceItem {
+  url?: string;
   id: string;
   title: string;
   category: "catalogue" | "datasheet" | "manual" | "quality" | "guide";
-  brand: "all" | "labxe" | "ssciences" | "danwer";
+  brand: string;
   format: "PDF" | "XLSX" | "DOCX";
   fileSize: string;
   description: string;
@@ -39,7 +40,8 @@ export const RESOURCES_DATA: ResourceItem[] = [
   },
   {
     id: "res-02",
-    title: "SSCIENCES Master Laboratory Pipettes & Bottle Top Dispensers Catalogue",
+    title:
+      "SSCIENCES Master Laboratory Pipettes & Bottle Top Dispensers Catalogue",
     category: "catalogue",
     brand: "ssciences",
     format: "PDF",
@@ -50,7 +52,8 @@ export const RESOURCES_DATA: ResourceItem[] = [
   },
   {
     id: "res-03",
-    title: "DANWER Industrial Analytical Micro-Weighing & Electronic Pipetting Catalogue",
+    title:
+      "DANWER Industrial Analytical Micro-Weighing & Electronic Pipetting Catalogue",
     category: "catalogue",
     brand: "danwer",
     format: "PDF",
@@ -61,7 +64,8 @@ export const RESOURCES_DATA: ResourceItem[] = [
   },
   {
     id: "res-04",
-    title: "OEM & Private Label Manufacturing Capabilities & Technical Specifications Guide",
+    title:
+      "OEM & Private Label Manufacturing Capabilities & Technical Specifications Guide",
     category: "catalogue",
     brand: "all",
     format: "PDF",
@@ -72,7 +76,8 @@ export const RESOURCES_DATA: ResourceItem[] = [
   },
   {
     id: "res-05",
-    title: "LABXE Precision Series Single-Channel Variable Micropipettes Datasheet",
+    title:
+      "LABXE Precision Series Single-Channel Variable Micropipettes Datasheet",
     category: "datasheet",
     brand: "labxe",
     format: "PDF",
@@ -92,7 +97,8 @@ export const RESOURCES_DATA: ResourceItem[] = [
   },
   {
     id: "res-07",
-    title: "DANWER Digital Motorized Stepper Electronic Pipette Technical Datasheet",
+    title:
+      "DANWER Digital Motorized Stepper Electronic Pipette Technical Datasheet",
     category: "datasheet",
     brand: "danwer",
     format: "PDF",
@@ -102,7 +108,8 @@ export const RESOURCES_DATA: ResourceItem[] = [
   },
   {
     id: "res-08",
-    title: "High-Density 8-Channel & 12-Channel Micropipette Manifold Datasheet",
+    title:
+      "High-Density 8-Channel & 12-Channel Micropipette Manifold Datasheet",
     category: "datasheet",
     brand: "all",
     format: "PDF",
@@ -122,7 +129,8 @@ export const RESOURCES_DATA: ResourceItem[] = [
   },
   {
     id: "res-10",
-    title: "ISO 8655 Gravimetric Calibration, Verification & Maintenance Protocol",
+    title:
+      "ISO 8655 Gravimetric Calibration, Verification & Maintenance Protocol",
     category: "manual",
     brand: "all",
     format: "PDF",
@@ -153,7 +161,8 @@ export const RESOURCES_DATA: ResourceItem[] = [
   },
   {
     id: "res-13",
-    title: "Bottle-Top Dispenser Priming, Reagent Recirculation & Cleaning Guide",
+    title:
+      "Bottle-Top Dispenser Priming, Reagent Recirculation & Cleaning Guide",
     category: "manual",
     brand: "ssciences",
     format: "PDF",
@@ -173,7 +182,8 @@ export const RESOURCES_DATA: ResourceItem[] = [
   },
   {
     id: "res-15",
-    title: "ISO 13485:2016 Medical Devices Quality Management Standards Summary",
+    title:
+      "ISO 13485:2016 Medical Devices Quality Management Standards Summary",
     category: "quality",
     brand: "all",
     format: "PDF",
@@ -183,7 +193,8 @@ export const RESOURCES_DATA: ResourceItem[] = [
   },
   {
     id: "res-16",
-    title: "CE Declaration of Conformity & Electromagnetic Compatibility (EMC) Summary",
+    title:
+      "CE Declaration of Conformity & Electromagnetic Compatibility (EMC) Summary",
     category: "quality",
     brand: "danwer",
     format: "PDF",
@@ -193,7 +204,8 @@ export const RESOURCES_DATA: ResourceItem[] = [
   },
   {
     id: "res-17",
-    title: "Accredited Calibration Certificate Sample & Multi-Point Test Report",
+    title:
+      "Accredited Calibration Certificate Sample & Multi-Point Test Report",
     category: "quality",
     brand: "labxe",
     format: "PDF",
@@ -214,7 +226,8 @@ export const RESOURCES_DATA: ResourceItem[] = [
   },
   {
     id: "res-19",
-    title: "Forward vs. Reverse Pipetting Techniques for Viscous & Volatile Liquids",
+    title:
+      "Forward vs. Reverse Pipetting Techniques for Viscous & Volatile Liquids",
     category: "guide",
     brand: "all",
     format: "PDF",

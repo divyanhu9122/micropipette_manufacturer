@@ -1,54 +1,39 @@
-import type { Metadata } from "next";
+import PublicFrame from "@/components/layout/PublicFrame";
+import { getPublicContent } from "@/lib/cms/public";
 import { notFound } from "next/navigation";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import SubcategoryApp from "@/features/products/subcategory/SubcategoryApp";
-import {
-  getAllSubcategorySlugs,
-  getSubcategoryBySlug,
-} from "@/features/products/subcategory/subcategory.data";
-
-type Props = {
-  params: Promise<{ subcategory: string }>;
-};
-
+import ProductListing from "@/components/products/ProductListing";
+import { productListItem } from "@/lib/cms/presentation";
+export const revalidate = 60;
+type Props = { params: Promise<{ subcategory: string }> };
 export async function generateStaticParams() {
-  const slugs = getAllSubcategorySlugs();
-  return slugs.map((subcategory) => ({ subcategory }));
+  return (await getPublicContent()).categories
+    .filter((c) => c.parent_id)
+    .map((c) => ({ subcategory: c.slug }));
 }
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props) {
   const { subcategory } = await params;
-  const config = getSubcategoryBySlug(subcategory);
-
-  if (!config) {
-    return {
-      title: "Subcategory Not Found | MicropipetteManufacturer.in",
-    };
-  }
-
+  const category = (await getPublicContent()).categories.find(
+    (c) => c.slug === subcategory,
+  );
   return {
-    title: config.metaTitle,
-    description: config.metaDescription,
-    alternates: {
-      canonical: config.canonicalUrl,
-    },
+    title: category?.name || "Category not found",
+    description: category?.description || undefined,
+    alternates: { canonical: `/products/micropipettes/${subcategory}` },
   };
 }
-
-export default async function SubcategoryPage({ params }: Props) {
+export default async function CategoryPage({ params }: Props) {
   const { subcategory } = await params;
-  const config = getSubcategoryBySlug(subcategory);
-
-  if (!config) {
-    notFound();
-  }
-
+  const { categories, products } = await getPublicContent();
+  const category = categories.find((c) => c.slug === subcategory);
+  if (!category) notFound();
   return (
-    <main>
-      <Header />
-      <SubcategoryApp config={config} />
-      <Footer />
-    </main>
+    <PublicFrame>
+      <ProductListing
+        title={category.name}
+        products={products
+          .filter((p) => p.category_id === category.id)
+          .map(productListItem)}
+      />
+    </PublicFrame>
   );
 }

@@ -1,0 +1,79 @@
+.editor {
+  padding: 24px;
+}
+.fieldset {
+  border: 0;
+  padding: 0;
+  margin: 20px 0 0;
+  min-width: 0;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  margin: 16px 0;
+}
+.actions h2 {
+  margin: 0;
+}
+.wide {
+  grid-column: 1 / -1;
+}
+.textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+.help {
+  color: #617183;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.error {
+  color: #8c1d2b;
+  background: #fff1f2;
+  border: 1px solid #fecdd3;
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+.notice {
+  color: #155e48;
+  background: #eefbf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 10px;
+  padding: 12px 16px;
+}
+.detail {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.7;
+}
+.form {
+  display: grid;
+  gap: 16px;
+}
+
+.objectFields {
+  display: grid;
+  gap: 12px;
+}
+.objectFields label {
+  display: block;
+  margin-bottom: 6px;
+}
+.fieldError {
+  color: #a32030;
+  font-size: 14px;
+}
+.mediaPreviews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.mediaPreviews img {
+  object-fit: contain;
+  background: #f5f7fa;
+  border: 1px solid #ccd7e4;
+  border-radius: 8px;
+}

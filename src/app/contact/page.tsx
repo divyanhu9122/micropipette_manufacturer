@@ -4,17 +4,11 @@ import Footer from "@/components/layout/Footer";
 import ContactPageApp from "@/features/contact/ContactPageApp";
 
 export const metadata: Metadata = {
-  title: "Contact Us | MicropipetteManufacturer.in",
+  title: "Contact Us",
   description:
     "Get in touch for product information, quotations, OEM/private-label requirements, bulk enquiries, distributor opportunities or technical assistance.",
   alternates: {
-    canonical: "https://micropipettemanufacturer.in/contact",
-  },
-  openGraph: {
-    title: "Contact Us | MicropipetteManufacturer.in",
-    description:
-      "Direct B2B enquiry and technical consultation for micropipettes, liquid handling systems, and scientific instrumentation.",
-    url: "https://micropipettemanufacturer.in/contact",
+    canonical: "/contact",
   },
 };
 

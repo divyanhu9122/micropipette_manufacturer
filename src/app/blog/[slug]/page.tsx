@@ -1,60 +1,37 @@
-import type { Metadata } from "next";
+import PublicFrame from "@/components/layout/PublicFrame";
+import { getPublicContent } from "@/lib/cms/public";
 import { notFound } from "next/navigation";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 import BlogDetailApp from "@/features/blog/BlogDetailApp";
-import { getAllBlogSlugs, getBlogPostBySlug } from "@/features/blog/blog.data";
-
-type Props = {
-  params: Promise<{ slug: string }>;
-};
-
+import { blogPost } from "@/lib/cms/presentation";
+export const revalidate = 60;
+type Props = { params: Promise<{ slug: string }> };
 export async function generateStaticParams() {
-  const slugs = getAllBlogSlugs();
-  return slugs.map((slug) => ({ slug }));
+  return (await getPublicContent()).articles.map(({ slug }) => ({ slug }));
 }
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const post = getBlogPostBySlug(slug);
-
-  if (!post) {
-    return {
-      title: "Article Not Found | MicropipetteManufacturer.in",
-    };
-  }
-
+  const post = (await getPublicContent()).articles.find((p) => p.slug === slug);
+  if (!post) notFound();
   return {
-    title: `${post.title} | MicropipetteManufacturer.in`,
-    description: post.excerpt,
-    alternates: {
-      canonical: `https://micropipettemanufacturer.in/blog/${post.slug}`,
-    },
-    openGraph: {
-      title: `${post.title} | MicropipetteManufacturer.in`,
-      description: post.excerpt,
-      url: `https://micropipettemanufacturer.in/blog/${post.slug}`,
-      type: "article",
-      publishedTime: post.publishedDate,
-      authors: [post.author.name],
-      tags: post.tags,
-    },
+    title: post.meta_title || post.title,
+    description: post.meta_description || post.excerpt || undefined,
+    alternates: { canonical: `/blog/${slug}` },
   };
 }
-
-export default async function BlogDetailPage({ params }: Props) {
+export default async function ArticlePage({ params }: Props) {
   const { slug } = await params;
-  const post = getBlogPostBySlug(slug);
-
-  if (!post) {
-    notFound();
-  }
-
+  const { articles } = await getPublicContent();
+  const post = articles.find((p) => p.slug === slug);
+  if (!post) notFound();
   return (
-    <main>
-      <Header />
-      <BlogDetailApp post={post} />
-      <Footer />
-    </main>
+    <PublicFrame>
+      <BlogDetailApp
+        post={blogPost(post)}
+        relatedPosts={articles
+          .filter((p) => p.id !== post.id)
+          .slice(0, 3)
+          .map(blogPost)}
+      />
+    </PublicFrame>
   );
 }

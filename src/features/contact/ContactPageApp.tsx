@@ -2,6 +2,11 @@
 
 import { useState, type FormEvent, type ChangeEvent } from "react";
 import Link from "next/link";
+import { submitEnquiry } from "@/features/enquiries/submit-enquiry";
+import {
+  useSiteSettings,
+  useSiteNavigation,
+} from "@/features/site/SiteSettings";
 import InnerPageHero from "@/components/layout/InnerPageHero";
 import styles from "./Contact.module.css";
 import CatalogueModal from "@/components/ui/CatalogueModal";
@@ -29,6 +34,9 @@ interface FormErrors {
 }
 
 export default function ContactPageApp() {
+  const contact = useSiteSettings().contact || {};
+  const navigation = useSiteNavigation();
+  const [receipt, setReceipt] = useState("");
   const [formData, setFormData] = useState<FormState>({
     contactPerson: "",
     companyName: "",
@@ -44,6 +52,7 @@ export default function ContactPageApp() {
   const [fileName, setFileName] = useState<string>("");
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionError, setSubmissionError] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCatalogueOpen, setIsCatalogueOpen] = useState(false);
 
@@ -79,7 +88,7 @@ export default function ContactPageApp() {
   };
 
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -96,35 +105,40 @@ export default function ContactPageApp() {
     }
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!validate()) return;
-
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    const selectedReference = new FormData(
+      event.currentTarget as HTMLFormElement,
+    ).get("referenceFile");
+    const referenceFile =
+      selectedReference instanceof File && selectedReference.size
+        ? selectedReference
+        : undefined;
+    if (isSubmitting || !validate()) return;
     setIsSubmitting(true);
+    setSubmissionError("");
     try {
-      const res = await fetch("/api/enquiries", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const reference = await submitEnquiry(
+        {
           name: formData.contactPerson,
           company: formData.companyName,
           email: formData.email,
           phone: formData.phone,
           country: formData.country,
           type: "Universal / General",
-          message: `[Enquiry Type: ${formData.enquiryType}] [Brand: ${formData.preferredBrand || "None"}] [Category: ${formData.productCategory || "None"}] ${formData.message}`,
-        }),
-      });
-
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setIsSubmitted(true);
-      } else {
-        alert(data.error || "Submission error. Please check your information.");
-      }
-    } catch (err) {
-      console.warn("API submission error, falling back to client success state:", err);
+          enquiryType: "contact",
+          message: `[Enquiry: ${formData.enquiryType}] [Brand: ${formData.preferredBrand || "Any"}] [Category: ${formData.productCategory || "Any"}] ${formData.message}`,
+        },
+        referenceFile,
+      );
+      setReceipt(reference);
       setIsSubmitted(true);
+    } catch (cause) {
+      setSubmissionError(
+        cause instanceof Error
+          ? cause.message
+          : "Your enquiry could not be saved. Please try again.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -194,8 +208,8 @@ export default function ContactPageApp() {
                 <div>
                   <strong>Distributor / Business Enquiry</strong>
                   <p>
-                    For dealership, distribution, bulk supply or long-term
-                    B2B requirements.
+                    For dealership, distribution, bulk supply or long-term B2B
+                    requirements.
                   </p>
                 </div>
               </article>
@@ -212,18 +226,38 @@ export default function ContactPageApp() {
             </div>
 
             <div className={styles.contactDirect}>
-              <div>
-                <span>Email</span>
-                <strong>[PRIMARY EMAIL FROM CMS]</strong>
-              </div>
-              <div>
-                <span>Phone / WhatsApp</span>
-                <strong>[PRIMARY PHONE FROM CMS]</strong>
-              </div>
-              <div>
-                <span>Business Hours</span>
-                <strong>[VERIFY BUSINESS HOURS]</strong>
-              </div>
+              {contact.email && (
+                <div>
+                  <span>Email</span>
+                  <a href={`mailto:${contact.email}`}>{contact.email}</a>
+                </div>
+              )}
+              {contact.phone && (
+                <div>
+                  <span>Phone / WhatsApp</span>
+                  <a href={`tel:${contact.phone.replace(/[^+0-9]/g, "")}`}>
+                    {contact.phone}
+                  </a>
+                </div>
+              )}
+              {contact.businessHours && (
+                <div>
+                  <span>Business hours</span>
+                  <strong>{contact.businessHours}</strong>
+                </div>
+              )}
+              {contact.address && (
+                <div>
+                  <span>Address</span>
+                  <p>{contact.address}</p>
+                </div>
+              )}
+              {!contact.email && !contact.phone && (
+                <p>
+                  Send your enquiry using this form. Our team will review it and
+                  contact you using the details you provide.
+                </p>
+              )}
             </div>
           </aside>
 
@@ -233,8 +267,8 @@ export default function ContactPageApp() {
               <span className={styles.contactTag}>SEND AN ENQUIRY</span>
               <h2>Tell Us What You Need</h2>
               <p>
-                Fill in the form below and select the type of enquiry that
-                best matches your requirement.
+                Fill in the form below and select the type of enquiry that best
+                matches your requirement.
               </p>
             </div>
 
@@ -245,9 +279,13 @@ export default function ContactPageApp() {
                 </div>
                 <h3>Enquiry Submitted Successfully</h3>
                 <p>
+                  Your reference: <strong>{receipt}</strong>. Keep it when
+                  following up.
+                </p>
+                <p>
                   Thank you for contacting us. Your details have been received,
-                  and our technical and commercial team will review your
-                  request and respond shortly.
+                  and our technical and commercial team will review your request
+                  and respond shortly.
                 </p>
                 <button
                   type="button"
@@ -258,7 +296,19 @@ export default function ContactPageApp() {
                 </button>
               </div>
             ) : (
-              <form className={styles.contactForm} onSubmit={handleSubmit} noValidate>
+              <form
+                className={styles.contactForm}
+                onSubmit={handleSubmit}
+                noValidate
+              >
+                {submissionError && (
+                  <p
+                    role="alert"
+                    style={{ color: "#b42318", padding: "12px 0" }}
+                  >
+                    {submissionError}
+                  </p>
+                )}
                 <div className={styles.contactFormGrid}>
                   <label htmlFor="contactPerson">
                     <span>Contact Person *</span>
@@ -418,9 +468,7 @@ export default function ContactPageApp() {
                       <option value="Distributor / Dealer Enquiry">
                         Distributor / Dealer Enquiry
                       </option>
-                      <option value="Bulk Requirement">
-                        Bulk Requirement
-                      </option>
+                      <option value="Bulk Requirement">Bulk Requirement</option>
                       <option value="Technical Assistance">
                         Technical Assistance
                       </option>
@@ -449,9 +497,11 @@ export default function ContactPageApp() {
                       onChange={handleChange}
                     >
                       <option value="">Select brand</option>
-                      <option value="LABXE">LABXE</option>
-                      <option value="SSCIENCES">SSCIENCES</option>
-                      <option value="DANWER">DANWER</option>
+                      {navigation.brands.map((brand) => (
+                        <option key={brand.slug} value={brand.name}>
+                          {brand.name}
+                        </option>
+                      ))}
                       <option value="Not Sure / Any Suitable Brand">
                         Not Sure / Any Suitable Brand
                       </option>
@@ -508,13 +558,14 @@ export default function ContactPageApp() {
                     <input
                       id="referenceFile"
                       type="file"
-                      accept=".pdf,.doc,.docx,.xls,.xlsx,.csv,.png,.jpg,.jpeg"
+                      name="referenceFile"
+                      accept="application/pdf,image/png,image/jpeg,image/webp"
                       onChange={handleFileChange}
                     />
                     <small className={styles.contactUploadNote}>
                       {fileName
                         ? `Selected: ${fileName}`
-                        : "Optional — specification, logo, product reference, purchase list or technical document."}
+                        : "Optional PDF, PNG, JPG or WebP reference file, up to 3 MB."}
                     </small>
                   </label>
                 </div>
@@ -529,7 +580,9 @@ export default function ContactPageApp() {
                     type="submit"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting ? "Submitting Enquiry..." : "Submit Enquiry →"}
+                    {isSubmitting
+                      ? "Submitting Enquiry..."
+                      : "Submit Enquiry →"}
                   </button>
                 </div>
               </form>
@@ -539,7 +592,9 @@ export default function ContactPageApp() {
       </section>
 
       {/* Bottom Cross-link Section */}
-      <section className={`${styles.contactSection} ${styles.contactBottomSection}`}>
+      <section
+        className={`${styles.contactSection} ${styles.contactBottomSection}`}
+      >
         <div className={`wrap ${styles.contactBottomGrid}`}>
           <article className={styles.contactBottomItem}>
             <span className={styles.contactTag}>PRODUCTS</span>

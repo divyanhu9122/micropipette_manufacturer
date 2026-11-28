@@ -9,9 +9,11 @@ import {
   type KeyboardEvent,
 } from "react";
 import Link from "next/link";
+import { useSiteNavigation } from "@/features/site/SiteSettings";
 import { useRouter, useSearchParams } from "next/navigation";
 import styles from "./UniversalSearchBar.module.css";
-import { searchItems, type SearchContentType } from "./search.data";
+import { useSearchResults } from "./use-search-results";
+import type { SearchContentType } from "./search.data";
 
 interface UniversalSearchBarProps {
   id?: string;
@@ -32,20 +34,6 @@ const RESULT_GROUPS: { type: SearchContentType; label: string }[] = [
   { type: "Page", label: "Pages" },
 ];
 
-const POPULAR_SUGGESTIONS = [
-  { label: "Micropipette", href: "/products/micropipettes" },
-  { label: "Lab Plasticware", href: "/products?category=Lab+Plasticware" },
-  { label: "Science Plus", href: "/products/micropipettes#science-plus" },
-  {
-    label: "FAC Plus (Autoclavable)",
-    href: "/products/micropipettes#fac-plus",
-  },
-  { label: "LABXE", href: "/brands/labxe" },
-  { label: "SSCIENCES", href: "/brands/ssciences" },
-  { label: "dr.pipette", href: "/brands/dr-pipette" },
-  { label: "sscientific", href: "/brands/sscientific" },
-];
-
 export default function UniversalSearchBar({
   id = "universal-search",
   placeholder = "Search products, series, brands...",
@@ -55,6 +43,14 @@ export default function UniversalSearchBar({
   className,
   panel = false,
 }: UniversalSearchBarProps) {
+  const navigation = useSiteNavigation();
+  const POPULAR_SUGGESTIONS = [
+    { label: "All products", href: "/products" },
+    { label: "Technical resources", href: "/resources" },
+    ...navigation.brands
+      .slice(0, 6)
+      .map((brand) => ({ label: brand.name, href: `/brands/${brand.slug}` })),
+  ];
   const router = useRouter();
   const searchParams = useSearchParams();
   const initialUrlQuery = searchParams?.get("q") || "";
@@ -98,7 +94,12 @@ export default function UniversalSearchBar({
       document.removeEventListener("pointerdown", handleOutsideClick);
   }, []);
 
-  const matches = query.trim() ? searchItems(query).slice(0, 7) : [];
+  const {
+    items: searchMatches,
+    loading,
+    error: searchError,
+  } = useSearchResults(query, 200);
+  const matches = searchMatches.slice(0, 7);
   const groups = RESULT_GROUPS.map((group) => ({
     ...group,
     items: matches.filter((item) => item.type === group.type),
@@ -107,7 +108,8 @@ export default function UniversalSearchBar({
   const suggestions = query.trim()
     ? POPULAR_SUGGESTIONS.slice(0, 4)
     : POPULAR_SUGGESTIONS;
-  const choices = results.length > 0 ? results : suggestions;
+  const choices =
+    loading || searchError ? [] : results.length > 0 ? results : suggestions;
   const activeOptionId =
     isOpen && activeIndex >= 0 && activeIndex < choices.length
       ? `${id}-option-${activeIndex}`
@@ -304,6 +306,14 @@ export default function UniversalSearchBar({
                 ))}
               </div>
             </div>
+          ) : loading ? (
+            <p role="status" className={styles.noResults}>
+              Searching…
+            </p>
+          ) : searchError ? (
+            <p role="alert" className={styles.noResults}>
+              {searchError}
+            </p>
           ) : results.length > 0 ? (
             /* Live Results */
             <>

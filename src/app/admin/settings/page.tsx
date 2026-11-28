@@ -1,12 +1,14 @@
+import { requireStaffPage } from "@/lib/auth/page";
 import { Metadata } from "next";
-import SettingsManagement from "@/features/admin/settings/SettingsManagement";
+import ContentManager from "@/features/admin/cms/ContentManager";
 
 export const metadata: Metadata = {
-  title: "SEO & Website Settings | Admin / CMS Prototype",
+  title: "SEO & Website Settings | Admin",
   description:
-    "Manage site identity, page metadata, crawl directives, structured data, sitemaps and public contact settings in one prototype workspace.",
+    "Manage site identity, page metadata, crawl directives, structured data, sitemaps and public contact settings in one workspace.",
 };
 
-export default function AdminSettingsPage() {
-  return <SettingsManagement />;
+export default async function AdminSettingsPage() {
+  const { staff } = await requireStaffPage("settings:manage");
+  return <ContentManager entity="settings" role={staff.role} />;
 }
